@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .forms import CadastroVagasForm
 
-# Create your views here.
+def create_view(request):
+    form = CadastroVagasForm()
+    return render(request, 'oportunidades_new.html', {'form': form})
