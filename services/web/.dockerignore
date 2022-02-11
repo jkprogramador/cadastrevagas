@@ -1,0 +1,6 @@
+# Excludes .git and .gitignore
+.git
+.gitignore
+
+# Excludes VS Code workspace
+*.code-workspace
