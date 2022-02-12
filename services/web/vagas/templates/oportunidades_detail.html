@@ -1,0 +1,21 @@
+{% load vagas_template_extras %}
+
+{{ vaga.empresa_nome }}
+
+{{ vaga.empresa_endereco }}
+
+{{ vaga.empresa_email | urlize }}
+
+{{ vaga.empresa_site | urlize }}
+
+{{ vaga.empresa_telefone_celular | phone_formatter }}
+
+{{ vaga.empresa_telefone_comercial | phone_formatter}}
+
+{{ vaga.cargo_titulo }}
+
+{{ vaga.cargo_descricao }}
+
+{{ vaga.site_referencia | urlize}}
+
+{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}

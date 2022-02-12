@@ -1,22 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import CadastroVagasForm
 from .models import Vaga
 
-def index(request):
-    vaga = Vaga.objects.create(
-        empresa_nome='Minha empresa',
-        empresa_endereco='Meu endereço',
-        empresa_email='meuemail@email.com',
-        empresa_site='https://meusite.com.br',
-        empresa_telefone_celular='(11) 98765-3201',
-        empresa_telefone_comercial='(11) 8765-3201',
-        cargo_titulo='Título do cargo',
-        cargo_descricao='Descrição do cargo',
-        site_referencia='https://sitereferencia.com.br',
-        data_hora_entrevista='20/01/2022 15:30',
-    )
-
-    return render(request, 'index.html', {'vaga': vaga})
+def detail_view(request, pk: int):
+    vaga = get_object_or_404(Vaga, pk=pk)
+    
+    return render(request, 'oportunidades_detail.html', {'vaga': vaga})
 
 def create_view(request):
     if 'POST' == request.method:
