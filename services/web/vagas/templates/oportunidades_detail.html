@@ -1,3 +1,9 @@
+{% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
 {% load vagas_template_extras %}
 
 {{ vaga.empresa_nome }}

@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.urls import reverse
 from .forms import CadastroVagasForm
 from .models import Vaga
 
@@ -12,7 +14,7 @@ def create_view(request):
         form = CadastroVagasForm(request.POST)
 
         if form.is_valid():
-            Vaga.objects.create(
+            vaga = Vaga.objects.create(
                 empresa_nome=form.cleaned_data['empresa_nome'],
                 empresa_endereco=form.cleaned_data['empresa_endereco'],
                 empresa_email=form.cleaned_data['empresa_email'],
@@ -24,6 +26,9 @@ def create_view(request):
                 site_referencia=form.cleaned_data['site_referencia'],
                 data_hora_entrevista=form.cleaned_data['data_hora_entrevista'],
             )
+            messages.add_message(request, messages.SUCCESS, 'Vaga registrada com sucesso.')
+            
+            return redirect(reverse('oportunidades_detail', args=[str(vaga.id)]))
     else:
         form = CadastroVagasForm()
     
