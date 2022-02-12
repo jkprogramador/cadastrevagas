@@ -4,8 +4,9 @@ from vagas.models import Vaga
 class VagaModelTest(TestCase):
     """Tests for model Vaga."""
 
-    def setUp(self) -> None:
-        self.vaga = Vaga.objects.create(
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -17,7 +18,10 @@ class VagaModelTest(TestCase):
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista='20/01/2022 15:30',
         )
-        return super().setUp()
+    
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.vaga.delete()
 
     def test_create_vaga(self) -> None:
         """
