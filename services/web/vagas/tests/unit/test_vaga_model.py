@@ -25,6 +25,7 @@ class VagaModelTest(TestCase):
 
         :return: None
         """
+        self.assertIsNotNone(self.vaga.id)
         self.assertEqual('Minha empresa', self.vaga.empresa_nome)
         self.assertEqual('Meu endereço', self.vaga.empresa_endereco)
         self.assertEqual('meuemail@email.com', self.vaga.empresa_email)
@@ -51,3 +52,21 @@ class VagaModelTest(TestCase):
         :return: None
         """
         self.assertEqual(f'/oportunidades/{str(self.vaga.id)}', self.vaga.get_absolute_url())
+    
+    def test_empresa_telefone_celular_is_stored_with_digits_only(self) -> None:
+        """
+        Ensure that field empresa_telefone_celular is stored with digits only.
+
+        :return: None
+        """
+        vaga = Vaga.objects.get(pk=self.vaga.id)
+        self.assertRegexpMatches(vaga.empresa_telefone_celular, '^\d{11}$')
+    
+    def test_empresa_telefone_comercial_is_stored_with_digits_only(self) -> None:
+        """
+        Ensure that field empresa_telefone_comercial is store with digits only.
+
+        :return: None
+        """
+        vaga = Vaga.objects.get(pk=self.vaga.id)
+        self.assertRegexpMatches(vaga.empresa_telefone_comercial, '^\d{10}$')
