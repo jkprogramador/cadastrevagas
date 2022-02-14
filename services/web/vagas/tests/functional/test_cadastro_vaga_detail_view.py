@@ -1,4 +1,6 @@
 from django.test import TestCase, Client
+from datetime import datetime as dt
+from django.utils import timezone
 from vagas.models import Vaga
 
 class CadastroVagaDetailViewTest(TestCase):
@@ -118,3 +120,12 @@ class CadastroVagaDetailViewTest(TestCase):
         :return: None
         """
         self.assertContains(self._response, self._vaga.data_hora_entrevista)
+    
+    def test_should_see_data_e_hora_do_cadastro(self) -> None:
+        """
+        THEN I should see the corresponding date and time of registration
+
+        :return: None
+        """
+        local_datetime = timezone.localtime(self._vaga.data_hora_cadastro)
+        self.assertContains(self._response, local_datetime.strftime('%d/%m/%Y %H:%M'))

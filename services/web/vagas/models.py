@@ -26,6 +26,7 @@ class Vaga(models.Model):
     cargo_descricao = models.TextField()
     site_referencia = models.URLField()
     data_hora_entrevista = DataHoraField()
+    data_hora_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         """

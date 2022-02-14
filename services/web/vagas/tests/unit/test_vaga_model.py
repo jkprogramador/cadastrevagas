@@ -1,4 +1,6 @@
 from django.test import TestCase
+from datetime import datetime as dt
+from django.utils import timezone
 from vagas.models import Vaga
 
 class VagaModelTest(TestCase):
@@ -6,6 +8,7 @@ class VagaModelTest(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        cls.now = timezone.now()
         cls.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
@@ -74,3 +77,12 @@ class VagaModelTest(TestCase):
         """
         vaga = Vaga.objects.get(pk=self.vaga.id)
         self.assertRegexpMatches(vaga.empresa_telefone_comercial, '^\d{10}$')
+    
+    def test_has_auto_filled_data_hora_cadastro_field(self) -> None:
+        """
+        Ensure model has datetime field data_hora_cadastro which is automatically filled upon creation.
+
+        :return: None
+        """
+        vaga = Vaga.objects.get(pk=self.vaga.id)
+        self.assertGreaterEqual(vaga.data_hora_cadastro, self.now)
