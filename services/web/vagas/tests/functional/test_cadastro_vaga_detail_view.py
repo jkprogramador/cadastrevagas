@@ -129,3 +129,11 @@ class CadastroVagaDetailViewTest(TestCase):
         """
         local_datetime = timezone.localtime(self._vaga.data_hora_cadastro)
         self.assertContains(self._response, local_datetime.strftime('%d/%m/%Y %H:%M'))
+    
+    def test_should_see_link_to_update_opportunity(self) -> None:
+        """
+        THEN I should see a link that goes to an update page for the corresponding job opportunity
+
+        :return: None
+        """
+        self.assertContains(self._response, f'href="/oportunidades/{self._vaga.id}/edit"')

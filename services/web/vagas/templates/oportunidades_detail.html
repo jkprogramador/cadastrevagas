@@ -16,7 +16,7 @@
 
 {{ vaga.empresa_telefone_celular | phone_formatter }}
 
-{{ vaga.empresa_telefone_comercial | phone_formatter}}
+{{ vaga.empresa_telefone_comercial | phone_formatter }}
 
 {{ vaga.cargo_titulo }}
 
@@ -27,3 +27,5 @@
 {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
 
 Oportunidade cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+
+<a href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>

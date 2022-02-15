@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import create_view, detail_view
+from .views import create_view, detail_view, edit_view
 
 urlpatterns = [
     path('new', create_view, name='oportunidades_new'),
     path('<int:pk>', detail_view, name='oportunidades_detail'),
+    path('<int:pk>/edit', edit_view, name='oportunidades_edit'),
 ]
