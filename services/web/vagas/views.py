@@ -14,6 +14,26 @@ def delete_view(request, pk: int):
 
 def edit_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)
+
+    if request.method == 'POST':
+        form = CadastroVagasForm(request.POST)
+
+        if form.is_valid():
+            vaga.empresa_nome = form.cleaned_data['empresa_nome']
+            vaga.empresa_endereco = form.cleaned_data['empresa_endereco']
+            vaga.empresa_email = form.cleaned_data['empresa_email']
+            vaga.empresa_site = form.cleaned_data['empresa_site']
+            vaga.empresa_telefone_celular = form.cleaned_data['empresa_telefone_celular']
+            vaga.empresa_telefone_comercial = form.cleaned_data['empresa_telefone_comercial']
+            vaga.cargo_titulo = form.cleaned_data['cargo_titulo']
+            vaga.cargo_descricao = form.cleaned_data['cargo_descricao']
+            vaga.site_referencia = form.cleaned_data['site_referencia']
+            vaga.data_hora_entrevista = form.cleaned_data['data_hora_entrevista']
+            vaga.save()
+            messages.add_message(request, messages.SUCCESS, 'Vaga atualizada com sucesso.')
+
+            return redirect(reverse('oportunidades_detail', args=[str(vaga.pk)]))
+
     form = CadastroVagasForm({
         'empresa_nome': vaga.empresa_nome,
         'empresa_endereco': vaga.empresa_endereco,
@@ -36,6 +56,8 @@ def detail_view(request, pk: int):
     return render(request, 'oportunidades_detail.html', {'vaga': vaga})
 
 def create_view(request):
+    form = CadastroVagasForm()
+    
     if 'POST' == request.method:
         form = CadastroVagasForm(request.POST)
 
@@ -55,7 +77,5 @@ def create_view(request):
             messages.add_message(request, messages.SUCCESS, 'Vaga registrada com sucesso.')
             
             return redirect(reverse('oportunidades_detail', args=[str(vaga.id)]))
-    else:
-        form = CadastroVagasForm()
     
     return render(request, 'oportunidades_new.html', {'form': form})
