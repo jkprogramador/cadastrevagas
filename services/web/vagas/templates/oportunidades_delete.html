@@ -1,10 +1,6 @@
-{% if messages %}
-    {% for message in messages %}
-    <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-    {% endfor %}
-{% endif %}
-
 {% load vagas_template_extras %}
+
+<h1>Tem certeza que deseja excluir este cadastro?</h1>
 
 {{ vaga.empresa_nome }}
 
@@ -26,8 +22,9 @@
 
 {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
 
-Oportunidade cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
 
-<a href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
-
-<a href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+<form action method=post>
+    {% csrf_token %}
+    <input type=submit value="Excluir cadastro">
+</form>
