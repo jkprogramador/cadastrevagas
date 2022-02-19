@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+import vagas
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('oportunidades/', include('vagas.urls')),
+    path('', vagas.views.index, name='homepage'),
 ]

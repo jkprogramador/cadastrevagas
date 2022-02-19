@@ -7,8 +7,17 @@ from .forms import CadastroVagasForm
 from .models import Vaga
 from vagas.templatetags.vagas_template_extras import phone_formatter
 
+def index(request):
+    return render(request, 'homepage.html')
+
 def delete_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)
+
+    if request.method == 'POST':
+        vaga.delete()
+        messages.add_message(request, messages.SUCCESS, 'Vaga removida com sucesso.')
+
+        return redirect(reverse('homepage'))
 
     return render(request, 'oportunidades_delete.html', {'vaga': vaga})
 
