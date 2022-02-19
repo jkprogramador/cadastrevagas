@@ -25,24 +25,6 @@ class VagaModelTest(TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         cls.vaga.delete()
-
-    def test_create_vaga(self) -> None:
-        """
-        Test creation of model Vaga.
-
-        :return: None
-        """
-        self.assertIsNotNone(self.vaga.id)
-        self.assertEqual('Minha empresa', self.vaga.empresa_nome)
-        self.assertEqual('Meu endereço', self.vaga.empresa_endereco)
-        self.assertEqual('meuemail@email.com', self.vaga.empresa_email)
-        self.assertEqual('https://meusite.com.br', self.vaga.empresa_site)
-        self.assertEqual('(11) 98765-3201', self.vaga.empresa_telefone_celular)
-        self.assertEqual('(11) 8765-3201', self.vaga.empresa_telefone_comercial)
-        self.assertEqual('Título do cargo', self.vaga.cargo_titulo)
-        self.assertEqual('Descrição do cargo', self.vaga.cargo_descricao)
-        self.assertEqual('https://sitereferencia.com.br', self.vaga.site_referencia)
-        self.assertEqual('20/01/2022 15:30', self.vaga.data_hora_entrevista)
     
     def test_str_representation(self) -> None:
         """
