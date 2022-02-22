@@ -88,3 +88,12 @@ class CadastroVagaFormTest(unittest.TestCase):
         :rtype: None
         """
         self.assertEqual('datetime', self.form.fields['data_hora_entrevista'].widget.input_type)
+    
+    def test_does_not_have_data_e_hora_cadastro_field(self) -> None:
+        """
+        Ensure form does not have field for the date and time of registration.
+
+        :rtype: None
+        """
+        with self.assertRaises(KeyError):
+            self.form.fields['data_hora_cadastro']
