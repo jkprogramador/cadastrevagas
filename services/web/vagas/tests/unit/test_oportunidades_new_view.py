@@ -1,42 +1,44 @@
 from django.test import SimpleTestCase
-from django.urls import reverse
+from django.urls import reverse, resolve
 from django.forms import Form
+from vagas.views import create_view
 
 class OportunidadesNewViewTest(SimpleTestCase):
     """Test to ensure that view for new job opportunities works."""
 
-    def test_view_url_exists_at_proper_location(self) -> None:
-        """
-        Ensure that the URL for the view exists.
-        
-        :return: None
-        """
-        response = self.client.get('/oportunidades/new')
-        self.assertEqual(200, response.status_code)
-    
-    def test_view_url_accessible_by_name(self) -> None:
-        """
-        Ensure that the URL is accessible by name.
+    def setUp(self) -> None:
+        url = reverse('oportunidades_new')
+        self.response = self.client.get(url)
 
-        :return: None
+    def test_status_code(self) -> None:
         """
-        response = self.client.get(reverse('oportunidades_new'))
-        self.assertEqual(200, response.status_code)
+        Ensure that the view returns correct status code.
+        
+        :rtype: None
+        """
+        self.assertEqual(200, self.response.status_code)
     
-    def test_view_uses_correct_template(self) -> None:
+    def test_template(self) -> None:
         """
         Ensure that the view uses the correct template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_new'))
-        self.assertTemplateUsed(response, 'oportunidades_new.html')
+        self.assertTemplateUsed(self.response, 'oportunidades_new.html')
     
-    def test_view_provides_form_object(self) -> None:
+    def test_provides_form_object(self) -> None:
         """
         Ensure that the view provides a form object to the template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_new'))
-        self.assertIsInstance(response.context['form'], Form)
+        self.assertIsInstance(self.response.context['form'], Form)
+    
+    def test_url_resolves_to_correct_view(self) -> None:
+        """
+        Ensure that the given URL path resolves to the correct view.
+
+        :rtype: None
+        """
+        view = resolve('/oportunidades/new')
+        self.assertEqual(create_view.__name__, view.func.__name__)
