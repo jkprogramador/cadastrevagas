@@ -2,7 +2,7 @@ import unittest
 from vagas.forms import CadastroVagasForm
 from django.forms import CharField, EmailField, URLField, Textarea
 
-class CadastroVagaFormTest(unittest.TestCase):
+class CadastroVagasFormTest(unittest.TestCase):
     """Test to ensure that the form for submitting job opportunities
     has the required fields."""
 
