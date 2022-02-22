@@ -1,13 +1,13 @@
-from django.test import SimpleTestCase
-from django.urls import reverse
+from django.test import TestCase
+from django.urls import reverse, resolve
 from vagas.models import Vaga
+from vagas.views import delete_view
 
-class OportunidadesDeleteViewTest(SimpleTestCase):
+class OportunidadesDeleteViewTest(TestCase):
     """Test to ensure delete view works correctly."""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.vaga = Vaga.objects.create(
+    def setUp(self) -> None:
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -19,39 +19,38 @@ class OportunidadesDeleteViewTest(SimpleTestCase):
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista='04/05/2022 09:03',
         )
+        url = reverse('oportunidades_delete', args=[str(self.vaga.pk)])
+        self.response = self.client.get(url)
     
-    def test_url_exists_at_proper_location(self) -> None:
+    def test_status_code(self) -> None:
         """
-        Ensure that the URL exists at the proper location
+        Ensure that the view returns the correct status code.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(f'/oportunidades/{self.vaga.pk}/delete')
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(200, self.response.status_code)
     
-    def test_view_url_accessible_by_name(self) -> None:
+    def test_template(self) -> None:
         """
-        Ensure that the URL is accessible by name
+        Ensure that the view uses the correct template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_delete', args=[str(self.vaga.pk)]))
-        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(self.response, 'oportunidades_delete.html')
     
-    def test_view_uses_correct_template(self) -> None:
+    def test_provides_vaga_object(self) -> None:
         """
-        Ensure that the view uses the correct template
+        Ensure that the view provides a Vaga object to the template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_delete', args=[str(self.vaga.pk)]))
-        self.assertTemplateUsed(response, 'oportunidades_delete.html')
+        self.assertIsInstance(self.response.context['vaga'], Vaga)
     
-    def test_view_provides_vaga_object(self) -> None:
+    def test_url_resolves_to_correct_view(self) -> None:
         """
-        Ensure that the view provides a Vaga object to the template
+        Ensure that the given URL path resolves to the correct view.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_delete', args=[str(self.vaga.pk)]))
-        self.assertIsInstance(response.context['vaga'], Vaga)
+        view = resolve(f'/oportunidades/{str(self.vaga.pk)}/delete')
+        self.assertEqual(delete_view.__name__, view.func.__name__)

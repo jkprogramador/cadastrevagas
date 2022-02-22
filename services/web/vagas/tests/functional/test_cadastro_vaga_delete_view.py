@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.utils import timezone
 from vagas.models import Vaga
 
@@ -11,16 +11,15 @@ class CadastroVagaDeleteViewTest(TestCase):
     So that I can safely remove a previously registered opportunity
     """
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """
         GIVEN a previously registered job opportunity
 
         WHEN I go to /oportunidades/<ID of job opportunity>/delete
 
-        :return: None
+        :rtype: None
         """
-        cls.vaga = Vaga.objects.create(
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -33,58 +32,53 @@ class CadastroVagaDeleteViewTest(TestCase):
             data_hora_entrevista='06/04/2022 09:07',
         )
 
-        cls.response = Client().get(f'/oportunidades/{cls.vaga.pk}/delete')
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.vaga.delete()
-        cls.response = None
+        self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}/delete')
     
     def test_should_see_nome_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding name of the company
+        THEN I should see the corresponding company's name
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.empresa_nome)
     
     def test_should_see_endereco_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding address of the company
+        THEN I should see the corresponding company's address
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.empresa_endereco)
     
     def test_should_see_email_da_empresa(self) -> None:
         """
-        THEN I should see a corresponding link to the company's email
+        THEN I should see the corresponding link to the company's email
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, f'href="mailto:{self.vaga.empresa_email}"')
     
     def test_should_see_site_da_empresa(self) -> None:
         """
-        THEN I should see a corresponding link to the company's website
+        THEN I should see the corresponding link to the company's website
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, f'href="{self.vaga.empresa_site}"')
     
     def test_should_see_telefone_celular_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding cellphone of the company
+        THEN I should see the corresponding company's cellphone
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.empresa_telefone_celular)
 
     def test_should_see_telefone_comercial_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding landline of the company
+        THEN I should see the corresponding company's landline
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.empresa_telefone_comercial)
     
@@ -92,7 +86,7 @@ class CadastroVagaDeleteViewTest(TestCase):
         """
         THEN I should see the corresponding job title
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.cargo_titulo)
     
@@ -100,23 +94,23 @@ class CadastroVagaDeleteViewTest(TestCase):
         """
         THEN I should see the corresponding job description
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.cargo_descricao)
     
     def test_should_see_site_referencia(self) -> None:
         """
-        THEN I should see a corresponding link to a reference website
+        THEN I should see the corresponding link to the website where the opportunity was found
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, f'href="{self.vaga.site_referencia}"')
     
     def test_should_see_data_e_hora_da_entrevista(self) -> None:
         """
-        THEN I should see the corresponding date and time of interview
+        THEN I should see the corresponding date and time of the job interview
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, self.vaga.data_hora_entrevista)
     
@@ -124,7 +118,7 @@ class CadastroVagaDeleteViewTest(TestCase):
         """
         THEN I should see the corresponding date and time of registration
 
-        :return: None
+        :rtype: None
         """
         local_datetime = timezone.localtime(self.vaga.data_hora_cadastro)
         self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
@@ -133,6 +127,6 @@ class CadastroVagaDeleteViewTest(TestCase):
         """
         THEN I should see a button for excluding the corresponding job opportunity
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, 'type=submit')
