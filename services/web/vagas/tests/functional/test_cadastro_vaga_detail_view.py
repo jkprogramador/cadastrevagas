@@ -12,16 +12,15 @@ class CadastroVagaDetailViewTest(TestCase):
     So that I can inspect details of that job opportunity
     """
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """
         GIVEN a job opportunity I've registered
 
         WHEN I go to /oportunidades/<ID of job opportunity>
         
-        :return: None
+        :rtype: None
         """
-        cls._vaga = Vaga.objects.create(
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -34,114 +33,109 @@ class CadastroVagaDetailViewTest(TestCase):
             data_hora_entrevista='06/04/2022 09:35',
         )
 
-        cls._response = Client().get(f'/oportunidades/{cls._vaga.id}')
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls._vaga.delete()
-        cls._response = None
+        self.response = Client().get(f'/oportunidades/{str(self.vaga.pk)}')
     
     def test_should_see_nome_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding name of the company
+        THEN I should see the corresponding company's name
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.empresa_nome)
+        self.assertContains(self.response, self.vaga.empresa_nome)
     
     def test_should_see_endereco_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding address of the company
+        THEN I should see the corresponding company's address
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.empresa_endereco)
+        self.assertContains(self.response, self.vaga.empresa_endereco)
     
     def test_should_see_email_da_empresa(self) -> None:
         """
         THEN I should see a corresponding link to the company's email
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, f'href="mailto:{self._vaga.empresa_email}"')
+        self.assertContains(self.response, f'href="mailto:{self.vaga.empresa_email}"')
     
     def test_should_see_site_da_empresa(self) -> None:
         """
         THEN I should see a corresponding link to the company's website
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, f'href="{self._vaga.empresa_site}"')
+        self.assertContains(self.response, f'href="{self.vaga.empresa_site}"')
     
     def test_should_see_telefone_celular_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding cellphone of the company
+        THEN I should see the corresponding company's cellphone
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.empresa_telefone_celular)
+        self.assertContains(self.response, self.vaga.empresa_telefone_celular)
 
     def test_should_see_telefone_comercial_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding landline of the company
+        THEN I should see the corresponding company's landline
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.empresa_telefone_comercial)
+        self.assertContains(self.response, self.vaga.empresa_telefone_comercial)
     
     def test_should_see_cargo_titulo(self) -> None:
         """
         THEN I should see the corresponding job title
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.cargo_titulo)
+        self.assertContains(self.response, self.vaga.cargo_titulo)
     
     def test_should_see_cargo_descricao(self) -> None:
         """
         THEN I should see the corresponding job description
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.cargo_descricao)
+        self.assertContains(self.response, self.vaga.cargo_descricao)
     
     def test_should_see_site_referencia(self) -> None:
         """
-        THEN I should see a corresponding link to a reference website
+        THEN I should see a corresponding link to the website where the opportunity was found
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, f'href="{self._vaga.site_referencia}"')
+        self.assertContains(self.response, f'href="{self.vaga.site_referencia}"')
     
     def test_should_see_data_e_hora_da_entrevista(self) -> None:
         """
-        THEN I should see the corresponding date and time of interview
+        THEN I should see the corresponding date and time of a job interview
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, self._vaga.data_hora_entrevista)
+        self.assertContains(self.response, self.vaga.data_hora_entrevista)
     
     def test_should_see_data_e_hora_do_cadastro(self) -> None:
         """
         THEN I should see the corresponding date and time of registration
 
-        :return: None
+        :rtype: None
         """
-        local_datetime = timezone.localtime(self._vaga.data_hora_cadastro)
-        self.assertContains(self._response, local_datetime.strftime('%d/%m/%Y %H:%M'))
+        local_datetime = timezone.localtime(self.vaga.data_hora_cadastro)
+        self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
     
     def test_should_see_link_to_update_opportunity(self) -> None:
         """
-        THEN I should see a link that goes to an update page for the corresponding job opportunity
+        THEN I should see a link that goes to an update page for the corresponding opportunity
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, f'href="/oportunidades/{self._vaga.id}/edit"')
+        self.assertContains(self.response, f'href="/oportunidades/{str(self.vaga.pk)}/edit"')
     
     def test_should_see_link_to_delete_opportunity(self) -> None:
         """
-        THEN I should see a link that goes to a delete page for the corresponding job opportunity
+        THEN I should see a link that goes to a delete page for the corresponding opportunity
 
-        :return: None
+        :rtype: None
         """
-        self.assertContains(self._response, f'/oportunidades/{self._vaga.id}/delete')
+        self.assertContains(self.response, f'/oportunidades/{str(self.vaga.pk)}/delete')

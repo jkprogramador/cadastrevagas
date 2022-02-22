@@ -1,13 +1,13 @@
-from django.test import SimpleTestCase
-from django.urls import reverse
+from django.test import TestCase
+from django.urls import reverse, resolve
 from vagas.models import Vaga
+from vagas.views import detail_view
 
-class OportunidadesDetailViewTest(SimpleTestCase):
+class OportunidadesDetailViewTest(TestCase):
     """Test to ensure that detail view for a job opportunity works."""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls._vaga = Vaga.objects.create(
+    def setUp(self) -> None:
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -19,43 +19,38 @@ class OportunidadesDetailViewTest(SimpleTestCase):
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista='20/01/2022 15:30',
         )
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls._vaga.delete()
+        url = reverse('oportunidades_detail', args=[str(self.vaga.pk)])
+        self.response = self.client.get(url)
 
-    def test_view_url_exists_at_proper_location(self) -> None:
+    def test_status_code(self) -> None:
         """
-        Ensure that the URL for the view exists.
+        Ensure that the view returns the correct status code.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(f'/oportunidades/{self._vaga.id}')
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(200, self.response.status_code)
     
-    def test_view_url_accessible_by_name(self) -> None:
-        """
-        Ensure that the URL is accessible by name.
-
-        :return: None
-        """
-        response = self.client.get(reverse('oportunidades_detail', args=[str(self._vaga.id)]))
-        self.assertEqual(200, response.status_code)
-    
-    def test_view_uses_correct_template(self) -> None:
+    def test_template(self) -> None:
         """
         Ensure that the view uses the correct template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_detail', args=[str(self._vaga.id)]))
-        self.assertTemplateUsed(response, 'oportunidades_detail.html')
+        self.assertTemplateUsed(self.response, 'oportunidades_detail.html')
     
-    def test_view_provides_vaga_object(self) -> None:
+    def test_provides_vaga_object(self) -> None:
         """
         Ensure that the view provides a Vaga object to the template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('oportunidades_detail', args=[str(self._vaga.id)]))
-        self.assertIsInstance(response.context['vaga'], Vaga)
+        self.assertIsInstance(self.response.context['vaga'], Vaga)
+    
+    def test_resolves_to_correct_view(self) -> None:
+        """
+        Ensure that the given URL path resolves to the correct view.
+
+        :rtype: None
+        """
+        view = resolve(f'/oportunidades/{str(self.vaga.pk)}')
+        self.assertEqual(detail_view.__name__, view.func.__name__)
