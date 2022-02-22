@@ -3,112 +3,88 @@ from vagas.forms import CadastroVagasForm
 from django.forms import CharField, EmailField, URLField, Textarea
 
 class CadastroVagaFormTest(unittest.TestCase):
-    """Test to ensure that the form for submitting job opportunities has the required fields."""
+    """Test to ensure that the form for submitting job opportunities
+    has the required fields."""
 
     def setUp(self) -> None:
         self.form = CadastroVagasForm()
-        return super().setUp()
     
     def test_has_text_field_empresa_nome(self) -> None:
         """
-        Ensure form has text field labeled "Nome da empresa".
+        Ensure form has text field for the company's name.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_nome']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('Nome da empresa', field.label)
+        self.assertIsInstance(self.form.fields['empresa_nome'], CharField)
     
     def test_has_text_field_empresa_endereco(self) -> None:
         """
-        Ensure form has text field labeled "Endereço da empresa".
+        Ensure form has text field for the company's address.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_endereco']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('Endereço da empresa', field.label)
+        self.assertIsInstance(self.form.fields['empresa_endereco'], CharField)
 
     def test_has_email_field_empresa_email(self) -> None:
         """
-        Ensure form has email field labeled "Email da empresa".
+        Ensure form has email field for the company's email address.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_email']
-        self.assertIsInstance(field, EmailField)
-        self.assertEqual('Email da empresa', field.label)
+        self.assertIsInstance(self.form.fields['empresa_email'], EmailField)
 
     def test_has_url_field_empresa_site(self) -> None:
         """
-        Ensure form has URL field labeled "Site da empresa".
+        Ensure form has URL field for the company's website.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_site']
-        self.assertIsInstance(field, URLField)
-        self.assertEqual('Site da empresa', field.label)
+        self.assertIsInstance(self.form.fields['empresa_site'], URLField)
 
     def test_has_phone_field_empresa_telefone_celular(self) -> None:
         """
-        Ensure form has phone field labeled "Telefone celular".
+        Ensure form has phone field for the company's cellphone.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_telefone_celular']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('tel', field.widget.input_type)
-        self.assertEqual('Telefone celular', field.label)
+        self.assertEqual('tel', self.form.fields['empresa_telefone_celular'].widget.input_type)
 
     def test_has_phone_field_empresa_telefone_comercial(self) -> None:
         """
-        Ensure form has phone field labeled "Telefone comercial".
+        Ensure form has phone field for the company's landline.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['empresa_telefone_comercial']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('tel', field.widget.input_type)
-        self.assertEqual('Telefone comercial', field.label)
+        self.assertEqual('tel', self.form.fields['empresa_telefone_comercial'].widget.input_type)
 
     def test_has_text_field_cargo_titulo(self) -> None:
         """
-        Ensure form has text field labeled "Título do cargo".
+        Ensure form has text field for the job title.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['cargo_titulo']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('Título do cargo', field.label)
+        self.assertIsInstance(self.form.fields['cargo_titulo'], CharField)
 
     def test_has_text_area_cargo_descricao(self) -> None:
         """
-        Ensure form has text area labeled "Descrição do cargo".
+        Ensure form has text area for the job description.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['cargo_descricao']
-        self.assertIsInstance(field, CharField)
-        self.assertIsInstance(field.widget, Textarea)
-        self.assertEqual('Descrição do cargo', field.label)
+        self.assertIsInstance(self.form.fields['cargo_descricao'].widget, Textarea)
 
     def test_has_url_field_site_referencia(self) -> None:
         """
-        Ensure form has URL field labeled "Site de referência".
+        Ensure form has URL field for the website where the opportunity was found.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['site_referencia']
-        self.assertIsInstance(field, URLField)
-        self.assertEqual('Site de referência', field.label)
+        self.assertIsInstance(self.form.fields['site_referencia'], URLField)
 
     def test_has_datetime_field_data_hora_entrevista(self) -> None:
         """
-        Ensure form has datetime field labeled "Entrevista em".
+        Ensure form has datetime field for the date and time of a job interview.
 
-        :return: None
+        :rtype: None
         """
-        field = self.form.fields['data_hora_entrevista']
-        self.assertIsInstance(field, CharField)
-        self.assertEqual('datetime', field.widget.input_type)
-        self.assertEqual('Entrevista em', field.label)
+        self.assertEqual('datetime', self.form.fields['data_hora_entrevista'].widget.input_type)
