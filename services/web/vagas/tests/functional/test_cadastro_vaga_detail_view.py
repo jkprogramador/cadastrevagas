@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from datetime import datetime as dt
 from django.utils import timezone
 from vagas.models import Vaga
@@ -33,7 +33,7 @@ class CadastroVagaDetailViewTest(TestCase):
             data_hora_entrevista='06/04/2022 09:35',
         )
 
-        self.response = Client().get(f'/oportunidades/{str(self.vaga.pk)}')
+        self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}')
     
     def test_should_see_nome_da_empresa(self) -> None:
         """
