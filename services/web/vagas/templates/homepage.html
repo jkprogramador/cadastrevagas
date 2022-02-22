@@ -15,5 +15,24 @@
         {% endfor %}
     {% endif %}
     <h1>Oportunidades de vagas</h1>
+
+    <a href="{% url 'oportunidades_new' %}">Cadastrar</a>
+
+    {% load vagas_template_extras %}
+
+    {% for vaga in vagas %}
+    <div>
+        <h3><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.empresa_nome }}</a></h3>
+        <p>{{ vaga.empresa_endereco }}</p>
+        <p>{{ vaga.empresa_site | urlize }}</p>
+        <p>{{ vaga.empresa_email | urlize }}</p>
+        <p>{{ vaga.empresa_telefone_celular | phone_formatter }}</p>
+        <p>{{ vaga.empresa_telefone_comercial | phone_formatter }}</p>
+        <p>{{ vaga.cargo_titulo }}</p>
+        <p>{{ vaga.cargo_descricao }}</p>
+        <p>{{ vaga.site_referencia | urlize }}</p>
+        <p>{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
+    </div>
+    {% endfor %}
 </body>
 </html>

@@ -1,32 +1,35 @@
-from django.test import SimpleTestCase
-from django.urls import reverse
+from django.test import TestCase
+from django.urls import reverse, resolve
+from vagas.views import index
 
-class HomepageViewTest(SimpleTestCase):
+class HomepageViewTest(TestCase):
     """Ensure that the homepage view works correctly"""
 
-    def test_view_url_exists_at_proper_location(self) -> None:
-        """
-        Ensure that the URL for the view exists.
+    def setUp(self) -> None:
+        url = reverse('homepage')
+        self.response = self.client.get(url)
 
-        :return: None
+    def test_status_code(self) -> None:
         """
-        response = self.client.get('')
-        self.assertEqual(200, response.status_code)
-    
-    def test_view_url_accessible_by_name(self) -> None:
-        """
-        Ensure that the URL is accessible by name.
+        Ensure that the view returns the correct status code.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('homepage'))
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(200, self.response.status_code)
     
-    def test_view_uses_correct_template(self) -> None:
+    def test_template(self) -> None:
         """
         Ensure that the view uses the correct template.
 
-        :return: None
+        :rtype: None
         """
-        response = self.client.get(reverse('homepage'))
-        self.assertTemplateUsed(response, 'homepage.html')
+        self.assertTemplateUsed(self.response, 'homepage.html')
+    
+    def test_url_resolves_to_correct_view(self) -> None:
+        """
+        Ensure that the given URL path resolves to the correct view.
+
+        :rtype: None
+        """
+        view = resolve('/')
+        self.assertEqual(index.__name__, view.func.__name__)

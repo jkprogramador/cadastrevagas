@@ -8,7 +8,9 @@ from .models import Vaga
 from vagas.templatetags.vagas_template_extras import phone_formatter
 
 def index(request):
-    return render(request, 'homepage.html')
+    vagas = Vaga.objects.all()
+
+    return render(request, 'homepage.html', {'vagas': vagas})
 
 def delete_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)
