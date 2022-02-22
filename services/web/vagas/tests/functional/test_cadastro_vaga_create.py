@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 from vagas.models import Vaga
@@ -14,14 +14,15 @@ class CadastroVagaCreateTest(TestCase):
     So that I can keep records of jobs I have applied for
     """
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """
         GIVEN valid job opportunity data
 
-        :return: None
+        WHEN I submit the data to /oportunidades/new
+
+        :rtype: None
         """
-        cls.data = {
+        self.data = {
             'empresa_nome': 'Minha empresa',
             'empresa_endereco': 'Meu endereço',
             'empresa_email': 'meuemail@email.com',
@@ -34,58 +35,46 @@ class CadastroVagaCreateTest(TestCase):
             'data_hora_entrevista': '07/04/2022 08:05',
         }
 
-        cls.response = Client().post('/oportunidades/new', data=cls.data, follow=True)
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.data = None
-        cls.response = None
+        self.response = self.client.post('/oportunidades/new', data=self.data, follow=True)
+        self.vaga = Vaga.objects.get(empresa_nome=self.data['empresa_nome'])
     
     def test_should_create_job_opportunity(self) -> None:
         """
-        WHEN I submit the data to /oportunidades/new
-
         THEN a job opportunity should be created
 
-        :return: None
+        :rtype: None
         """
-        vaga = Vaga.objects.get(pk=1)
-        self.assertEqual(self.data['empresa_nome'], vaga.empresa_nome)
-        self.assertEqual(self.data['empresa_endereco'], vaga.empresa_endereco)
-        self.assertEqual(self.data['empresa_email'], vaga.empresa_email)
-        self.assertEqual(self.data['empresa_site'], vaga.empresa_site)
+        self.assertEqual(self.data['empresa_nome'], self.vaga.empresa_nome)
+        self.assertEqual(self.data['empresa_endereco'], self.vaga.empresa_endereco)
+        self.assertEqual(self.data['empresa_email'], self.vaga.empresa_email)
+        self.assertEqual(self.data['empresa_site'], self.vaga.empresa_site)
         tel_regex = re.compile('\D+')
         telefone_celular = tel_regex.sub('', self.data['empresa_telefone_celular'])
-        self.assertEqual(telefone_celular, vaga.empresa_telefone_celular)
+        self.assertEqual(telefone_celular, self.vaga.empresa_telefone_celular)
         telefone_comercial = tel_regex.sub('', self.data['empresa_telefone_comercial'])
-        self.assertEqual(telefone_comercial, vaga.empresa_telefone_comercial)
-        self.assertEqual(self.data['cargo_titulo'], vaga.cargo_titulo)
-        self.assertEqual(self.data['cargo_descricao'], vaga.cargo_descricao)
-        self.assertEqual(self.data['site_referencia'], vaga.site_referencia)
+        self.assertEqual(telefone_comercial, self.vaga.empresa_telefone_comercial)
+        self.assertEqual(self.data['cargo_titulo'], self.vaga.cargo_titulo)
+        self.assertEqual(self.data['cargo_descricao'], self.vaga.cargo_descricao)
+        self.assertEqual(self.data['site_referencia'], self.vaga.site_referencia)
         data_hora_entrevista = timezone.make_aware(dt.strptime(self.data['data_hora_entrevista'], 
             "%d/%m/%Y %H:%M"))
-        self.assertEqual(data_hora_entrevista, vaga.data_hora_entrevista)
+        self.assertEqual(data_hora_entrevista, self.vaga.data_hora_entrevista)
     
     def test_should_redirect_to_detail_page(self) -> None:
         """
-        WHEN I submit the data to /oportunidades/new
-
         THEN it should redirect to the detail page of the newly registered job opportunity
 
-        :return: None
+        :rtype: None
         """
-        vaga = Vaga.objects.get(pk=1)
         self.assertRedirects(self.response, 
-            reverse('oportunidades_detail', args=[str(vaga.id)]), 
+            reverse('oportunidades_detail', args=[str(self.vaga.pk)]), 
             status_code=302, target_status_code=200
         )
     
     def test_should_show_success_message(self) -> None:
         """
-        WHEN I submit the data to /oportunidades/new
-        
         THEN it should show a success message confirming the creation of the job opportunity
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, 'Vaga registrada com sucesso.')
