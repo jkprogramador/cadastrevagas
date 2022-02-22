@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from vagas.models import Vaga
 
@@ -11,16 +11,15 @@ class CadastroVagaDeleteTest(TestCase):
     So that I keep the most relevant job opportunities only
     """
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """
         GIVEN a previously registered job opportunity
 
         WHEN I submit a form to /oportunidades/<ID of job opportunity>/delete
 
-        :return: None
+        :rtype: None
         """
-        cls.vaga = Vaga.objects.create(
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -33,18 +32,14 @@ class CadastroVagaDeleteTest(TestCase):
             data_hora_entrevista='07/05/2022 09:08',
         )
 
-        cls.response = Client().post(f'/oportunidades/{cls.vaga.pk}/delete', follow=True)
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.vaga.delete()
-        cls.response = None
+        self.response = self.client.post(f'/oportunidades/{str(self.vaga.pk)}/delete', 
+            follow=True)
     
     def test_should_delete_job_opportunity(self) -> None:
         """
         THEN it should remove the corresponding job opportunity
 
-        :return: None
+        :rtype: None
         """
         with self.assertRaises(Vaga.DoesNotExist):
             Vaga.objects.get(pk=self.vaga.pk)
@@ -53,7 +48,7 @@ class CadastroVagaDeleteTest(TestCase):
         """
         THEN it should redirect to the homepage
 
-        :return: None
+        :rtype: None
         """
         self.assertRedirects(self.response,
             reverse('homepage'), status_code=302, target_status_code=200
@@ -63,6 +58,6 @@ class CadastroVagaDeleteTest(TestCase):
         """
         THEN it should show a success message confirming the removal of the job opportunity
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, 'Vaga removida com sucesso.')
