@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 from datetime import datetime as dt
@@ -14,16 +14,15 @@ class CadastroVagaUpdateTest(TestCase):
     So that I have the most up-to-date information
     """
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """
         GIVEN a previously registered job opportunity
 
         WHEN I submit new data to /oportunidades/<ID of job opportunity>/edit
 
-        :return: None
+        :rtype: None
         """
-        cls.vaga = Vaga.objects.create(
+        self.vaga = Vaga.objects.create(
             empresa_nome='Minha empresa',
             empresa_endereco='Meu endereço',
             empresa_email='meuemail@email.com',
@@ -36,7 +35,7 @@ class CadastroVagaUpdateTest(TestCase):
             data_hora_entrevista='07/05/2022 09:08',
         )
 
-        cls.new_data = {
+        self.new_data = {
             'empresa_nome': 'Nossa empresa',
             'empresa_endereco': 'Nosso endereço',
             'empresa_email': 'nossoemail@email.com',
@@ -49,18 +48,14 @@ class CadastroVagaUpdateTest(TestCase):
             'data_hora_entrevista': '19/07/2022 16:38',
         }
 
-        cls.response = Client().post(f'/oportunidades/{cls.vaga.pk}/edit', data=cls.new_data, follow=True)
-    
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.vaga.delete()
-        cls.response = None
+        self.response = self.client.post(f'/oportunidades/{str(self.vaga.pk)}/edit', 
+            data=self.new_data, follow=True)
     
     def test_should_update_job_opportunity(self) -> None:
         """
         THEN the existing job opportunity should be updated with the new data
 
-        :return: None
+        :rtype: None
         """
         vaga = Vaga.objects.get(pk=self.vaga.pk)
         self.assertEqual(self.new_data['empresa_nome'], vaga.empresa_nome)
@@ -83,7 +78,7 @@ class CadastroVagaUpdateTest(TestCase):
         """
         THEN it should redirect to the detail page of the job opportunity
 
-        :return: None
+        :rtype: None
         """
         self.assertRedirects(self.response, 
             reverse('oportunidades_detail', args=[str(self.vaga.pk)]), 
@@ -94,6 +89,6 @@ class CadastroVagaUpdateTest(TestCase):
         """
         THEN it should show a success message confirming the update of the job opportunity
 
-        :return: None
+        :rtype: None
         """
         self.assertContains(self.response, 'Vaga atualizada com sucesso.')
