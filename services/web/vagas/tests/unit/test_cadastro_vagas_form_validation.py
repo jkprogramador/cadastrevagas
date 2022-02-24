@@ -181,3 +181,29 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
         """
         form = CadastroVagasForm({'data_hora_entrevista': ''})
         self.assertNotIn('data_hora_entrevista', form.errors)
+    
+    def test_data_hora_entrevista_is_valid_datetime(self) -> None:
+        """
+        Ensure that data_hora_entrevista is a valid datetime in the correct format.
+
+        :rtype: None
+        """
+        expected_error_message = 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+
+        form = CadastroVagasForm({'data_hora_entrevista': 'abc123'})
+        self.assertIn(expected_error_message, form.errors['data_hora_entrevista'])
+
+        form = CadastroVagasForm({'data_hora_entrevista': '32/02/2022 15:11'})
+        self.assertIn(expected_error_message, form.errors['data_hora_entrevista'])
+
+        form = CadastroVagasForm({'data_hora_entrevista': '2022/10/02 09:06'})
+        self.assertIn(expected_error_message, form.errors['data_hora_entrevista'])
+
+        form = CadastroVagasForm({'data_hora_entrevista': '14/05/22 06:01'})
+        self.assertIn(expected_error_message, form.errors['data_hora_entrevista'])
+
+        form = CadastroVagasForm({'data_hora_entrevista': '03/12/2022 14:05'})
+        self.assertNotIn('data_hora_entrevista', form.errors)
+
+        form = CadastroVagasForm({'data_hora_entrevista': '17/08/2022 9:45'})
+        self.assertNotIn('data_hora_entrevista', form.errors)
