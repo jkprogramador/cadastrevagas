@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('cargo_titulo', models.CharField(max_length=50)),
                 ('cargo_descricao', models.TextField()),
                 ('site_referencia', models.URLField()),
-                ('data_hora_entrevista', vagas.models.DataHoraField()),
+                ('data_hora_entrevista', models.DateTimeField()),
             ],
         ),
     ]

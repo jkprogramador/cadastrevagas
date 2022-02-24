@@ -32,7 +32,7 @@ class CadastroVagaUpdateTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='07/05/2022 09:08',
+            data_hora_entrevista=timezone.now(),
         )
 
         self.new_data = {

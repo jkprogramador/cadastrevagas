@@ -30,7 +30,7 @@ class CadastroVagaDetailViewTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='06/04/2022 09:35',
+            data_hora_entrevista=timezone.now(),
         )
 
         self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}')
@@ -113,7 +113,8 @@ class CadastroVagaDetailViewTest(TestCase):
 
         :rtype: None
         """
-        self.assertContains(self.response, self.vaga.data_hora_entrevista)
+        local_datetime = timezone.localtime(self.vaga.data_hora_entrevista)
+        self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
     
     def test_should_see_data_e_hora_do_cadastro(self) -> None:
         """

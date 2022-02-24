@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils import timezone
 from django.forms import CharField, EmailField, URLField, Textarea
 from vagas.models import Vaga
 
@@ -29,7 +30,7 @@ class CadastroVagaEditViewTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='06/04/2022 09:35',
+            data_hora_entrevista=timezone.now(),
         )
 
         self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}/edit')
@@ -127,7 +128,8 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertEqual('datetime', self.form.fields['data_hora_entrevista'].widget.input_type)
-        self.assertEqual(self.vaga.data_hora_entrevista, self.form.cleaned_data['data_hora_entrevista'])
+        local_datetime = timezone.localtime(self.vaga.data_hora_entrevista)
+        self.assertEqual(local_datetime.strftime('%d/%m/%Y %H:%M'), self.form.data['data_hora_entrevista'])
     
     def test_should_have_a_button_to_submit_the_form(self) -> None:
         """

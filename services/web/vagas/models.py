@@ -1,12 +1,6 @@
 from django.db import models
-from django.utils import timezone
-from datetime import datetime as dt
 from typing import Any
 import re
-
-class DataHoraField(models.DateTimeField):
-    def get_prep_value(self, value: Any) -> Any:
-        return timezone.make_aware(dt.strptime(value, "%d/%m/%Y %H:%M"))
 
 class TelefoneField(models.CharField):
     def get_prep_value(self, value: Any) -> Any:
@@ -25,7 +19,7 @@ class Vaga(models.Model):
     cargo_titulo = models.CharField(max_length=50)
     cargo_descricao = models.TextField()
     site_referencia = models.URLField()
-    data_hora_entrevista = DataHoraField()
+    data_hora_entrevista = models.DateTimeField()
     data_hora_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

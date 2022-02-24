@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+from django.utils import timezone
 from vagas.models import Vaga
 from vagas.views import detail_view
 
@@ -17,7 +18,7 @@ class OportunidadesDetailViewTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='20/01/2022 15:30',
+            data_hora_entrevista=timezone.now(),
         )
         url = reverse('oportunidades_detail', args=[str(self.vaga.pk)])
         self.response = self.client.get(url)

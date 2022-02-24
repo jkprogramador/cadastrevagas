@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.forms import Form
 from vagas.models import Vaga
+from django.utils import timezone
 from vagas.views import edit_view
 
 class OportunidadesEditViewTest(TestCase):
@@ -18,7 +19,7 @@ class OportunidadesEditViewTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='04/05/2022 9:52',
+            data_hora_entrevista=timezone.now(),
         )
         url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
         self.response = self.client.get(url)

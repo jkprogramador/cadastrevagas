@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils import timezone
 from django.urls import reverse
 from vagas.models import Vaga
 
@@ -29,7 +30,7 @@ class CadastroVagaDeleteTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='07/05/2022 09:08',
+            data_hora_entrevista=timezone.now(),
         )
 
         self.response = self.client.post(f'/oportunidades/{str(self.vaga.pk)}/delete', 

@@ -77,8 +77,12 @@ class CadastroVagasForm(forms.Form):
         }
     )
 
-    data_hora_entrevista = forms.CharField(
-        widget=forms.DateTimeInput(attrs={'type': 'datetime'}),
-        label='Entrevista em',
-        required=False
+    data_hora_entrevista = forms.DateTimeField(
+        input_formats=['%d/%m/%Y %H:%M'],
+        widget=forms.DateTimeInput(attrs={'type': 'datetime'}, format='%d/%m/%Y %H:%M'),
+        label='Data e hora da entrevista',
+        required=False,
+        error_messages={
+            'invalid': 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+        }
     )

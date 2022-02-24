@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from datetime import datetime as dt
 from vagas.models import Vaga
 
 class HomePageTest(TestCase):
@@ -31,7 +32,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 1',
                 'cargo_descricao': 'Cargo descrição 1',
                 'site_referencia': 'www.sitereferencia1.com.br',
-                'data_hora_entrevista': '04/07/2022 08:01',
+                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=7, day=4, hour=8, minute=1)),
             },
             {
                 'empresa_nome': 'Minha empresa 2',
@@ -43,7 +44,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 2',
                 'cargo_descricao': 'Cargo descrição 2',
                 'site_referencia': 'https://www.sitereferencia2.com.br',
-                'data_hora_entrevista': '03/04/2022 09:54',
+                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=4, day=3, hour=9, minute=54)),
             },
             {
                 'empresa_nome': 'Minha empresa 3',
@@ -55,7 +56,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 3',
                 'cargo_descricao': 'Cargo descrição 3',
                 'site_referencia': 'http://sitereferencia3.com.br',
-                'data_hora_entrevista': '19/10/2022 15:43',
+                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=10, day=19, hour=15, minute=43)),
             },
         ]
 
@@ -104,12 +105,13 @@ class HomePageTest(TestCase):
     
     def test_should_display_data_hora_entrevista(self) -> None:
         """
-        THEN it should display the corresponding date and time of each job interviews
+        THEN it should display the corresponding date and time of each job interview
 
         :rtype: None
         """
         for data in self.data:
-            self.assertContains(self.response, data['data_hora_entrevista'])
+            data_hora_entrevista = data['data_hora_entrevista'].strftime('%d/%m/%Y %H:%M')
+            self.assertContains(self.response, data_hora_entrevista)
     
     def test_should_display_data_hora_cadastro(self) -> None:
         """

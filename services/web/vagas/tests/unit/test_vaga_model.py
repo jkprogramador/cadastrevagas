@@ -17,7 +17,7 @@ class VagaModelTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='20/01/2022 15:30',
+            data_hora_entrevista=timezone.now(),
         )
     
     def test_str_representation(self) -> None:
@@ -47,7 +47,7 @@ class VagaModelTest(TestCase):
     
     def test_empresa_telefone_comercial_is_stored_with_digits_only(self) -> None:
         """
-        Ensure that field empresa_telefone_comercial is store with digits only.
+        Ensure that field empresa_telefone_comercial is stored with digits only.
 
         :rtype: None
         """

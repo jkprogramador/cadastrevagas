@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+from django.utils import timezone
 from vagas.models import Vaga
 from vagas.views import delete_view
 
@@ -17,7 +18,7 @@ class OportunidadesDeleteViewTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista='04/05/2022 09:03',
+            data_hora_entrevista=timezone.now(),
         )
         url = reverse('oportunidades_delete', args=[str(self.vaga.pk)])
         self.response = self.client.get(url)
