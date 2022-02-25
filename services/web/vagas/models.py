@@ -1,5 +1,6 @@
 from django.db import models
-from typing import Any
+from django.core.validators import RegexValidator
+from typing import Any, Optional
 import re
 
 class TelefoneField(models.CharField):
@@ -10,16 +11,91 @@ class TelefoneField(models.CharField):
 class Vaga(models.Model):
     """A job opportunity model."""
 
-    empresa_nome = models.CharField(max_length=100)
-    empresa_endereco = models.CharField(max_length=200)
-    empresa_email = models.EmailField()
-    empresa_site = models.URLField()
-    empresa_telefone_celular = TelefoneField(max_length=11)
-    empresa_telefone_comercial = TelefoneField(max_length=10)
-    cargo_titulo = models.CharField(max_length=50)
-    cargo_descricao = models.TextField()
-    site_referencia = models.URLField()
-    data_hora_entrevista = models.DateTimeField()
+    empresa_nome = models.CharField(
+        max_length=100,
+        blank=False,
+        error_messages={
+            'blank': 'O campo Nome da empresa é obrigatório.',
+            'max_length': 'O campo Nome da empresa pode conter no máximo %(limit_value)s caracteres.'
+        }
+    )
+
+    empresa_endereco = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        error_messages={
+            'max_length': 'O campo Endereço da empresa pode conter no máximo %(limit_value)s caracteres.'
+        }
+    )
+
+    empresa_email = models.EmailField(
+        null=True,
+        blank=True,
+        error_messages={
+            'invalid': 'O campo Email da empresa deve conter um email válido.'
+        }
+    )
+    
+    empresa_site = models.URLField(
+        blank=False,
+        error_messages={
+            'blank': 'O campo Site da empresa é obrigatório.',
+            'invalid': 'O campo Site da empresa deve conter um endereço web válido.'
+        }
+    )
+    empresa_telefone_celular = TelefoneField(
+        max_length=15,
+        null=True,
+        blank=True,
+        validators=[RegexValidator(
+            regex=r'^\(\d{2}\) 9\d{4}-\d{4}$',
+            message='O campo Telefone celular da empresa deve conter um número válido. Ex.: (DDD) 99999-9999',
+            code='invalid'
+        )]
+    )
+
+    empresa_telefone_comercial = TelefoneField(
+        max_length=14,
+        null=True,
+        blank=True,
+        validators=[RegexValidator(
+            regex=r'^\(\d{2}\) \d{4}-\d{4}$',
+            message='O campo Telefone comercial da empresa deve conter um número válido. Ex.: (DDD) 9999-9999',
+            code='invalid'
+        )]
+    )
+
+    cargo_titulo = models.CharField(
+        max_length=50,
+        blank=False,
+        error_messages={
+            'blank': 'O campo Título do cargo é obrigatório.',
+            'max_length': 'O campo Título do cargo pode conter no máximo %(limit_value)s caracteres.'
+        }
+    )
+
+    cargo_descricao = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    site_referencia = models.URLField(
+        blank=False,
+        error_messages={
+            'blank': 'O campo Site de referência é obrigatório.',
+            'invalid': 'O campo Site de referência deve conter um endereço web válido.'
+        }
+    )
+    
+    data_hora_entrevista = models.DateTimeField(
+        null=True,
+        blank=True,
+        error_messages={
+            'invalid_datetime': 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+        }
+    )
+
     data_hora_cadastro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
