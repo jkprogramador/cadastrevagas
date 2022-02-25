@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from typing import Any, Optional
+from typing import Any
 import re
 
 class TelefoneField(models.CharField):

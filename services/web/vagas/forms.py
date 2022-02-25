@@ -4,14 +4,22 @@ from django.core.validators import RegexValidator
 class CadastroVagasForm(forms.Form):
     """Form for submitting job opportunities."""
     empresa_nome = forms.CharField(
-        label='Nome da empresa', 
-        required=True, 
-        error_messages={'required': 'O campo Nome da empresa é obrigatório.'}
+        label='Nome da empresa',
+        required=True,
+        max_length=100,
+        error_messages={
+            'required': 'O campo Nome da empresa é obrigatório.',
+            'max_length': 'O campo Nome da empresa pode conter no máximo %(limit_value)s caracteres.'
+        }
     )
 
     empresa_endereco = forms.CharField(
         label='Endereço da empresa',
-        required=False
+        required=False,
+        max_length=200,
+        error_messages={
+            'max_length': 'O campo Endereço da empresa pode conter no máximo %(limit_value)s caracteres.'
+        }
     )
 
     empresa_email = forms.EmailField(
@@ -60,7 +68,11 @@ class CadastroVagasForm(forms.Form):
     cargo_titulo = forms.CharField(
         label='Título do cargo',
         required=True,
-        error_messages={'required': 'O campo Título do cargo é obrigatório.'}
+        max_length=50,
+        error_messages={
+            'required': 'O campo Título do cargo é obrigatório.',
+            'max_length': 'O campo Título do cargo pode conter no máximo %(limit_value)s caracteres.'
+        }
     )
 
     cargo_descricao = forms.CharField(
