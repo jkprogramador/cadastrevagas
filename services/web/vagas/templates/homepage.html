@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>cadastrevagas</title>
-</head>
-<body>
-    {% if messages %}
-        {% for message in messages %}
-        <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-            {{ message }}
+{% extends '_base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+        {% if messages %}
+            {% for message in messages %}
+            <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <h2>Oportunidades de vagas</h2>
+
+        {% for vaga in vagas %}
+        <div>
+            <h3><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></h3>
+            <p><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></p>
+            <p>Entrevista em: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
+            <p>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
+            <p><a href="{% url 'oportunidades_edit' vaga.pk %}">Alterar</a></p>
+            <p><a href="{% url 'oportunidades_delete' vaga.pk %}">Remover</a></p>
         </div>
         {% endfor %}
-    {% endif %}
-    <h1><a href="{% url 'homepage' %}">CadastreVagas</a></h1>
-    <h2>Oportunidades de vagas</h2>
-
-    <a href="{% url 'oportunidades_new' %}">Cadastrar</a>
-
-    {% for vaga in vagas %}
-    <div>
-        <h3><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></h3>
-        <p><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></p>
-        <p>Entrevista em: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
-        <p>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
-        <p><a href="{% url 'oportunidades_edit' vaga.pk %}">Alterar</a></p>
-        <p><a href="{% url 'oportunidades_delete' vaga.pk %}">Remover</a></p>
+        </div>
     </div>
-    {% endfor %}
-</body>
-</html>
+{% endblock %}

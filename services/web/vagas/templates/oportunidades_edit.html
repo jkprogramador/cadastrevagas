@@ -1,7 +1,17 @@
-<form action method=post>
-    {% csrf_token %}
+{% extends '_base.html' %}
 
-    {{ form.as_p }}
+{% block title%}Atualizar vaga - {% endblock %}
 
-    <input type=submit value=Atualizar>
-</form>
+{% block content %}
+<div class="row">
+    <div class="col">
+        <form action method=post>
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type=submit value=Atualizar>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,33 +1,43 @@
-{% if messages %}
-    {% for message in messages %}
-    <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-    {% endfor %}
-{% endif %}
+{% extends '_base.html' %}
 
-{% load vagas_template_extras %}
+{% block title %}Detalhes da vaga - {% endblock %}
 
-{{ vaga.empresa_nome }}
+{% block content %}
+<div class="row">
+    <div class="col">
+        {% if messages %}
+            {% for message in messages %}
+            <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-{{ vaga.empresa_endereco }}
+        {% load vagas_template_extras %}
 
-{{ vaga.empresa_email | urlize }}
+        {{ vaga.empresa_nome }}
 
-{{ vaga.empresa_site | urlize }}
+        {{ vaga.empresa_endereco }}
 
-{{ vaga.empresa_telefone_celular | phone_formatter }}
+        {{ vaga.empresa_email | urlize }}
 
-{{ vaga.empresa_telefone_comercial | phone_formatter }}
+        {{ vaga.empresa_site | urlize }}
 
-{{ vaga.cargo_titulo }}
+        {{ vaga.empresa_telefone_celular | phone_formatter }}
 
-{{ vaga.cargo_descricao }}
+        {{ vaga.empresa_telefone_comercial | phone_formatter }}
 
-{{ vaga.site_referencia | urlize}}
+        {{ vaga.cargo_titulo }}
 
-{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
+        {{ vaga.cargo_descricao }}
 
-Oportunidade cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+        {{ vaga.site_referencia | urlize}}
 
-<a href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+        {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
 
-<a href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+        Oportunidade cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+
+        <a href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+
+        <a href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+    </div>
+</div>
+{% endblock %}
