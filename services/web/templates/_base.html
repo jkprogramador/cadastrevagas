@@ -17,11 +17,8 @@
             </button>
             <div class="collapse navbar-collapse" id=navbarSupportedContent>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class=nav-item>
-                        <a class="nav-link active" aria-current=page href="{% url 'homepage' %}">Página inicial</a>
-                    </li>
                     <li class="nav-item">
-                        <a class=nav-link href="{% url 'oportunidades_new' %}">Cadastro</a>
+                        <a class="nav-link {% if 'oportunidades_new' == request.resolver_match.url_name %}active{% endif %}" href="{% url 'oportunidades_new' %}">Cadastro</a>
                     </li>
                 </ul>
             </div>
