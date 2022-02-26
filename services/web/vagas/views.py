@@ -25,6 +25,19 @@ def delete_view(request, pk: int):
 
 def edit_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)
+    form = CadastroVagasForm({
+        'empresa_nome': vaga.empresa_nome,
+        'empresa_endereco': vaga.empresa_endereco,
+        'empresa_email': vaga.empresa_email,
+        'empresa_site': vaga.empresa_site,
+        'empresa_telefone_celular': phone_formatter(vaga.empresa_telefone_celular),
+        'empresa_telefone_comercial': phone_formatter(vaga.empresa_telefone_comercial),
+        'cargo_titulo': vaga.cargo_titulo,
+        'cargo_descricao': vaga.cargo_descricao,
+        'site_referencia': vaga.site_referencia,
+        'data_hora_entrevista': dt.strftime(timezone.localtime(vaga.data_hora_entrevista), 
+            '%d/%m/%Y %H:%M'),
+    })
 
     if request.method == 'POST':
         form = CadastroVagasForm(request.POST)
@@ -44,20 +57,6 @@ def edit_view(request, pk: int):
             messages.add_message(request, messages.SUCCESS, 'Vaga atualizada com sucesso.')
 
             return redirect(reverse('oportunidades_detail', args=[str(vaga.pk)]))
-
-    form = CadastroVagasForm({
-        'empresa_nome': vaga.empresa_nome,
-        'empresa_endereco': vaga.empresa_endereco,
-        'empresa_email': vaga.empresa_email,
-        'empresa_site': vaga.empresa_site,
-        'empresa_telefone_celular': phone_formatter(vaga.empresa_telefone_celular),
-        'empresa_telefone_comercial': phone_formatter(vaga.empresa_telefone_comercial),
-        'cargo_titulo': vaga.cargo_titulo,
-        'cargo_descricao': vaga.cargo_descricao,
-        'site_referencia': vaga.site_referencia,
-        'data_hora_entrevista': dt.strftime(timezone.localtime(vaga.data_hora_entrevista), 
-            '%d/%m/%Y %H:%M'),
-    })
 
     return render(request, 'oportunidades_edit.html', {'form': form})
 
