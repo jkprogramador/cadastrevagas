@@ -92,7 +92,7 @@ class Vaga(models.Model):
         null=True,
         blank=True,
         error_messages={
-            'invalid_datetime': 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+            'invalid_datetime': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
     )
 

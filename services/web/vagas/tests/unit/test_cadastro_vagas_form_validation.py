@@ -242,7 +242,7 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
 
         :rtype: None
         """
-        expected_error_message = 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+        expected_error_message = 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
 
         form1 = CadastroVagasForm({'data_hora_entrevista': 'abc123'})
         self.assertIn(expected_error_message, form1.errors['data_hora_entrevista'])

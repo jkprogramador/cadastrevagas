@@ -169,7 +169,7 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
 
         :rtype: None
         """
-        expected_error_message = 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+        expected_error_message = 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         response = self.client.post(self.url, data={'data_hora_entrevista': '32/02/2022 09:03'})
         self.assertContains(response, expected_error_message)
 

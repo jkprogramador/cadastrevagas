@@ -294,7 +294,7 @@ class VagaModelValidationTest(SimpleTestCase):
         with self.assertRaises(ValidationError) as ctx1:
             vaga1.full_clean(exclude=self.all_fields - {'data_hora_entrevista'})
         
-        self.assertIn('O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii',
+        self.assertIn('O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos',
             ctx1.exception.message_dict['data_hora_entrevista'])
         
         a_datetime = timezone.now()
