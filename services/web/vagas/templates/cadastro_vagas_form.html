@@ -48,6 +48,7 @@
             {% endif %}
         </div>
 
+        {% if field.field.required or field.help_text %}
         <div class="col-md-3 col-xl-4">
             <div class="form-text">
                 {% if field.field.required %}
@@ -58,6 +59,7 @@
                 {% endif %}
             </div>
         </div>
+        {% endif %}
     </div>
 {% endfor %}
 <div class="d-flex justify-content-center py-4">
