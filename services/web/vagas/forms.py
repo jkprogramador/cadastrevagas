@@ -134,7 +134,7 @@ class CadastroVagasForm(forms.Form):
             'aria-describedby': '#data_hora_entrevista_help'
         }, format='%d/%m/%Y %H:%M'),
         label='Data e hora da entrevista',
-        help_text='Ex.: dd/mm/YYYY HH:ii',
+        help_text='Ex.: dia/mês/ano horas:minutos',
         required=False,
         error_messages={
             'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
