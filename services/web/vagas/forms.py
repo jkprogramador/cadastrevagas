@@ -131,7 +131,7 @@ class CadastroVagasForm(forms.Form):
             'class': 'form-control',
             'aria-describedby': 'data_hora_entrevista_help'
         }, format='%d/%m/%Y %H:%M'),
-        label='Data e hora da entrevista',
+        label='Data e horário da entrevista',
         help_text='Ex.: dia/mês/ano horas:minutos',
         required=False,
         error_messages={
