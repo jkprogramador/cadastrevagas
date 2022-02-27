@@ -9,7 +9,7 @@ class CadastroVagasForm(forms.Form):
         label='Nome da empresa',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'aria-describedby': '#empresa_nome_required'
+            'aria-describedby': 'empresa_nome_required'
         }),
         required=True,
         max_length=100,
@@ -46,7 +46,7 @@ class CadastroVagasForm(forms.Form):
         widget=forms.URLInput(attrs={
             'class': 'form-control',
             'placeholder': 'Ex.: https://empresa.com.br',
-            'aria-describedby': '#empresa_site_required'
+            'aria-describedby': 'empresa_site_required'
         }),
         required=True,
         error_messages={
@@ -58,8 +58,7 @@ class CadastroVagasForm(forms.Form):
     empresa_telefone_celular = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': '(DDD) 99999-9999',
-            'aria-describedby': '#empresa_telefone_celular_help'
+            'placeholder': '(DDD) 99999-9999'
         }),
         label='Telefone celular da empresa',
         required=False,
@@ -76,7 +75,6 @@ class CadastroVagasForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '(DDD) 9999-9999',
-            'aria-describedby': '#empresa_telefone_comercial_help'
         }),
         label='Telefone comercial da empresa',
         required=False,
@@ -93,7 +91,7 @@ class CadastroVagasForm(forms.Form):
         label='Título do cargo',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'aria-describedby': '#cargo_titulo_required'
+            'aria-describedby': 'cargo_titulo_required'
         }),
         required=True,
         max_length=50,
@@ -116,7 +114,7 @@ class CadastroVagasForm(forms.Form):
         widget=forms.URLInput(attrs={
             'class': 'form-control',
             'placeholder': 'https://sitedereferencia.com.br',
-            'aria-describedby': '#site_referencia_help #site_referencia_required'
+            'aria-describedby': 'site_referencia_help site_referencia_required'
         }),
         help_text='O website onde a vaga foi encontrada',
         required=True,
@@ -131,7 +129,7 @@ class CadastroVagasForm(forms.Form):
         widget=forms.DateTimeInput(attrs={
             'type': 'datetime',
             'class': 'form-control',
-            'aria-describedby': '#data_hora_entrevista_help'
+            'aria-describedby': 'data_hora_entrevista_help'
         }, format='%d/%m/%Y %H:%M'),
         label='Data e hora da entrevista',
         help_text='Ex.: dia/mês/ano horas:minutos',
