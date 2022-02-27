@@ -7,7 +7,10 @@ class CadastroVagasForm(forms.Form):
 
     empresa_nome = forms.CharField(
         label='Nome da empresa',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'aria-describedby': '#empresa_nome_required'
+        }),
         required=True,
         max_length=100,
         error_messages={
@@ -28,7 +31,10 @@ class CadastroVagasForm(forms.Form):
 
     empresa_email = forms.EmailField(
         label='Email da empresa',
-        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ex.: empresa@email.com.br'
+        }),
         required=False,
         error_messages={
             'invalid': 'O campo Email da empresa deve conter um email válido.'
@@ -39,7 +45,8 @@ class CadastroVagasForm(forms.Form):
         label='Site da empresa',
         widget=forms.URLInput(attrs={
             'class': 'form-control',
-            'placeholder': 'https://empresa.com.br'
+            'placeholder': 'Ex.: https://empresa.com.br',
+            'aria-describedby': '#empresa_site_required'
         }),
         required=True,
         error_messages={
@@ -51,10 +58,10 @@ class CadastroVagasForm(forms.Form):
     empresa_telefone_celular = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
+            'placeholder': '(DDD) 99999-9999',
             'aria-describedby': '#empresa_telefone_celular_help'
         }),
         label='Telefone celular da empresa',
-        help_text='Ex.: (DDD) 99999-9999',
         required=False,
         validators=[
             RegexValidator(
@@ -68,10 +75,10 @@ class CadastroVagasForm(forms.Form):
     empresa_telefone_comercial = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
+            'placeholder': '(DDD) 9999-9999',
             'aria-describedby': '#empresa_telefone_comercial_help'
         }),
         label='Telefone comercial da empresa',
-        help_text='Ex.: (DDD) 9999-9999',
         required=False,
         validators=[
             RegexValidator(
@@ -84,7 +91,10 @@ class CadastroVagasForm(forms.Form):
 
     cargo_titulo = forms.CharField(
         label='Título do cargo',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'aria-describedby': '#cargo_titulo_required'
+        }),
         required=True,
         max_length=50,
         error_messages={
@@ -94,7 +104,9 @@ class CadastroVagasForm(forms.Form):
     )
 
     cargo_descricao = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'form-control'}),
+        widget=forms.Textarea(attrs={
+            'class': 'form-control'
+        }),
         label='Descrição do cargo',
         required=False
     )
@@ -104,7 +116,7 @@ class CadastroVagasForm(forms.Form):
         widget=forms.URLInput(attrs={
             'class': 'form-control',
             'placeholder': 'https://sitedereferencia.com.br',
-            'aria-describedby': '#site_referencia_help'
+            'aria-describedby': '#site_referencia_help #site_referencia_required'
         }),
         help_text='O website onde a vaga foi encontrada',
         required=True,
@@ -125,6 +137,6 @@ class CadastroVagasForm(forms.Form):
         help_text='Ex.: dd/mm/YYYY HH:ii',
         required=False,
         error_messages={
-            'invalid': 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'
+            'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
     )

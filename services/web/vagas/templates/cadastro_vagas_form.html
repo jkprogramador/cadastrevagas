@@ -1,0 +1,66 @@
+{% for field in form %}
+    <div class="row mb-5 align-items-start">
+        <label for="{{ field.id_for_label }}" class="col-md-2 col-xl-3 col-form-label">{{ field.label }}</label>
+
+        <div class="col-md-7 col-xl-4">
+
+            {% if 'textarea' == field.widget_type %}
+            <textarea
+            id="{{ field.id_for_label }}"
+            name="{{ field.html_name }}"
+            {% if field.field.required %}required{% endif %}
+            {% for key, value in field.field.widget.attrs.items %}
+            {{ key }}="{{ value }}"
+            {% endfor %}
+            >{% if form.is_bound %}{{ field.data }}{% else %}{{ field.initial|default_if_none:'' }}{% endif %}</textarea>
+
+            {% else %}
+
+            <input
+            name="{{ field.html_name }}"
+            type="{{ field.widget_type }}"
+            id="{{ field.id_for_label }}"
+            {% if field.field.required %}required{% endif %}
+            {% for key, value in field.field.widget.attrs.items %}
+                {% if 'class' == key and field.errors %}
+                    {{ key }}="{{ value }} is-invalid"
+                {% elif 'aria-describedby' == key and field.errors %}
+                    {{ key }}="{{ value }} #{{ field.html_name }}_error"
+                {% else %}
+                    {{ key }}="{{ value }}"
+                {% endif %}
+            {% endfor %}
+            {% if form.is_bound %}
+                value="{{ field.data }}"
+            {% else %}
+                value="{{ field.initial|default_if_none:'' }}"
+            {% endif %}
+            >
+
+            {% endif %}
+
+            {% if field.errors %}
+                {% for error in field.errors %}
+                <div id="{{ field.html_name }}_error" class="invalid-feedback">
+                    {{ error|escape }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-3 col-xl-4">
+            <div class="form-text">
+                {% if field.field.required %}
+                <span id="{{ field.html_name }}_required" class="d-block text-muted">* Campo obrigatório</span>
+                {% endif %}
+                {% if field.help_text %}
+                <span id="{{ field.html_name }}_help" class="d-block">{{ field.help_text|safe }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<div class="d-flex justify-content-center py-4">
+    <input type=reset value="Limpar tudo" class="btn btn-outline-secondary btn-lg mx-3">
+    <input type=submit value="Cadastrar oportunidade" class="btn btn-primary btn-lg mx-3">
+</div>
