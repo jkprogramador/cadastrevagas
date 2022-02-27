@@ -3,8 +3,11 @@ from django.core.validators import RegexValidator
 
 class CadastroVagasForm(forms.Form):
     """Form for submitting job opportunities."""
+    template_name = 'cadastro_vagas_form.html'
+
     empresa_nome = forms.CharField(
         label='Nome da empresa',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=True,
         max_length=100,
         error_messages={
@@ -15,6 +18,7 @@ class CadastroVagasForm(forms.Form):
 
     empresa_endereco = forms.CharField(
         label='Endereço da empresa',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=False,
         max_length=200,
         error_messages={
@@ -24,6 +28,7 @@ class CadastroVagasForm(forms.Form):
 
     empresa_email = forms.EmailField(
         label='Email da empresa',
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
         required=False,
         error_messages={
             'invalid': 'O campo Email da empresa deve conter um email válido.'
@@ -32,6 +37,10 @@ class CadastroVagasForm(forms.Form):
 
     empresa_site = forms.URLField(
         label='Site da empresa',
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'https://empresa.com.br'
+        }),
         required=True,
         error_messages={
             'required': 'O campo Site da empresa é obrigatório.',
@@ -40,8 +49,12 @@ class CadastroVagasForm(forms.Form):
     )
 
     empresa_telefone_celular = forms.CharField(
-        widget=forms.TextInput(attrs={'type': 'tel'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'aria-describedby': '#empresa_telefone_celular_help'
+        }),
         label='Telefone celular da empresa',
+        help_text='Ex.: (DDD) 99999-9999',
         required=False,
         validators=[
             RegexValidator(
@@ -53,8 +66,12 @@ class CadastroVagasForm(forms.Form):
     )
 
     empresa_telefone_comercial = forms.CharField(
-        widget=forms.TextInput(attrs={'type': 'tel'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'aria-describedby': '#empresa_telefone_comercial_help'
+        }),
         label='Telefone comercial da empresa',
+        help_text='Ex.: (DDD) 9999-9999',
         required=False,
         validators=[
             RegexValidator(
@@ -67,6 +84,7 @@ class CadastroVagasForm(forms.Form):
 
     cargo_titulo = forms.CharField(
         label='Título do cargo',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=True,
         max_length=50,
         error_messages={
@@ -76,12 +94,19 @@ class CadastroVagasForm(forms.Form):
     )
 
     cargo_descricao = forms.CharField(
-        widget=forms.Textarea, label='Descrição do cargo',
+        widget=forms.Textarea(attrs={'class': 'form-control'}),
+        label='Descrição do cargo',
         required=False
     )
 
     site_referencia = forms.URLField(
         label='Site de referência',
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'https://sitedereferencia.com.br',
+            'aria-describedby': '#site_referencia_help'
+        }),
+        help_text='O website onde a vaga foi encontrada',
         required=True,
         error_messages={
             'required': 'O campo Site de referência é obrigatório.',
@@ -91,8 +116,13 @@ class CadastroVagasForm(forms.Form):
 
     data_hora_entrevista = forms.DateTimeField(
         input_formats=['%d/%m/%Y %H:%M'],
-        widget=forms.DateTimeInput(attrs={'type': 'datetime'}, format='%d/%m/%Y %H:%M'),
+        widget=forms.DateTimeInput(attrs={
+            'type': 'datetime',
+            'class': 'form-control',
+            'aria-describedby': '#data_hora_entrevista_help'
+        }, format='%d/%m/%Y %H:%M'),
         label='Data e hora da entrevista',
+        help_text='Ex.: dd/mm/YYYY HH:ii',
         required=False,
         error_messages={
             'invalid': 'O campo Data e hora da entrevista deve conter uma data e horário válidos. Ex.: dd/mm/YYYY HH:ii'

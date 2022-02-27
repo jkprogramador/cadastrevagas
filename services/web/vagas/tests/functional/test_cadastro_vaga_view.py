@@ -53,14 +53,13 @@ class CadastroVagaViewTest(SimpleTestCase):
         """
         self.assertIsInstance(self.form.fields['empresa_site'], URLField)
 
-    def test_should_have_phone_field_for_telefone_celular_da_empresa(self) -> None:
+    def test_should_have_text_field_for_telefone_celular_da_empresa(self) -> None:
         """
-        THEN it should have a phone field for the company's mobile phone
+        THEN it should have a text field for the company's mobile phone
 
         :rtype: None
         """
-        self.assertEqual('tel', 
-            self.form.fields['empresa_telefone_celular'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_celular'], CharField)
 
     def test_should_have_phone_field_for_telefone_comercial_da_empresa(self) -> None:
         """
@@ -68,8 +67,7 @@ class CadastroVagaViewTest(SimpleTestCase):
 
         :rtype: None
         """
-        self.assertEqual('tel', 
-            self.form.fields['empresa_telefone_comercial'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_comercial'], CharField)
 
     def test_should_have_text_field_for_titulo_do_cargo(self) -> None:
         """

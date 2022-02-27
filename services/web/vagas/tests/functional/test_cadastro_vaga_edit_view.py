@@ -79,7 +79,7 @@ class CadastroVagaEditViewTest(TestCase):
 
         :rtype: None
         """
-        self.assertEqual('tel', self.form.fields['empresa_telefone_celular'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_celular'], CharField)
         self.assertEqual(self.vaga.empresa_telefone_celular, self.form.cleaned_data['empresa_telefone_celular'])
     
     def test_should_have_phone_field_filled_with_telefone_comercial_da_empresa(self) -> None:
@@ -89,7 +89,7 @@ class CadastroVagaEditViewTest(TestCase):
 
         :rtype: None
         """
-        self.assertEqual('tel', self.form.fields['empresa_telefone_comercial'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_comercial'], CharField)
         self.assertEqual(self.vaga.empresa_telefone_comercial, self.form.cleaned_data['empresa_telefone_comercial'])
     
     def test_should_have_text_field_filled_with_titulo_do_cargo(self) -> None:

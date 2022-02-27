@@ -47,7 +47,7 @@ class CadastroVagasFormTest(unittest.TestCase):
 
         :rtype: None
         """
-        self.assertEqual('tel', self.form.fields['empresa_telefone_celular'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_celular'], CharField)
 
     def test_has_phone_field_empresa_telefone_comercial(self) -> None:
         """
@@ -55,7 +55,7 @@ class CadastroVagasFormTest(unittest.TestCase):
 
         :rtype: None
         """
-        self.assertEqual('tel', self.form.fields['empresa_telefone_comercial'].widget.input_type)
+        self.assertIsInstance(self.form.fields['empresa_telefone_comercial'], CharField)
 
     def test_has_text_field_cargo_titulo(self) -> None:
         """
