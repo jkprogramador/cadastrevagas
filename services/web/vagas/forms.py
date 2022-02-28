@@ -8,7 +8,7 @@ class CadastroVagasForm(forms.Form):
     empresa_nome = forms.CharField(
         label='Nome da empresa',
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'aria-describedby': 'empresa_nome_required'
         }),
         required=True,
@@ -21,7 +21,9 @@ class CadastroVagasForm(forms.Form):
 
     empresa_endereco = forms.CharField(
         label='Endereço da empresa',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control shadow-sm'
+        }),
         required=False,
         max_length=200,
         error_messages={
@@ -32,7 +34,7 @@ class CadastroVagasForm(forms.Form):
     empresa_email = forms.EmailField(
         label='Email da empresa',
         widget=forms.EmailInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'placeholder': 'Ex.: empresa@email.com.br'
         }),
         required=False,
@@ -44,7 +46,7 @@ class CadastroVagasForm(forms.Form):
     empresa_site = forms.URLField(
         label='Site da empresa',
         widget=forms.URLInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'placeholder': 'Ex.: https://empresa.com.br',
             'aria-describedby': 'empresa_site_required'
         }),
@@ -57,7 +59,7 @@ class CadastroVagasForm(forms.Form):
 
     empresa_telefone_celular = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'placeholder': '(DDD) 99999-9999'
         }),
         label='Telefone celular da empresa',
@@ -73,7 +75,7 @@ class CadastroVagasForm(forms.Form):
 
     empresa_telefone_comercial = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'placeholder': '(DDD) 9999-9999',
         }),
         label='Telefone comercial da empresa',
@@ -90,7 +92,7 @@ class CadastroVagasForm(forms.Form):
     cargo_titulo = forms.CharField(
         label='Título do cargo',
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'aria-describedby': 'cargo_titulo_required'
         }),
         required=True,
@@ -103,7 +105,7 @@ class CadastroVagasForm(forms.Form):
 
     cargo_descricao = forms.CharField(
         widget=forms.Textarea(attrs={
-            'class': 'form-control'
+            'class': 'form-control shadow-sm'
         }),
         label='Descrição do cargo',
         required=False
@@ -112,7 +114,7 @@ class CadastroVagasForm(forms.Form):
     site_referencia = forms.URLField(
         label='Site de referência',
         widget=forms.URLInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'placeholder': 'https://sitedereferencia.com.br',
             'aria-describedby': 'site_referencia_help site_referencia_required'
         }),
@@ -128,7 +130,7 @@ class CadastroVagasForm(forms.Form):
         input_formats=['%d/%m/%Y %H:%M'],
         widget=forms.DateTimeInput(attrs={
             'type': 'datetime',
-            'class': 'form-control',
+            'class': 'form-control shadow-sm',
             'aria-describedby': 'data_hora_entrevista_help'
         }, format='%d/%m/%Y %H:%M'),
         label='Data e horário da entrevista',
