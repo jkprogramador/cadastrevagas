@@ -56,8 +56,10 @@ def edit_view(request, pk: int):
             messages.add_message(request, messages.SUCCESS, 'Vaga atualizada com sucesso.')
 
             return redirect(reverse('oportunidades_detail', args=[str(vaga.pk)]))
+        else:
+            messages.add_message(request, messages.ERROR, 'Ocorreu um erro ao atualizar o cadastro. Por favor, verifique os dados preenchidos.')
 
-    return render(request, 'oportunidades_edit.html', {'form': form, 'vaga': vaga})
+    return render(request, 'oportunidades_edit.html', {'form': form})
 
 def detail_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)

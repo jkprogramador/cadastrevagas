@@ -14,7 +14,7 @@ class CadastroVagaUpdateValidationTest(TestCase):
     
     def setUp(self) -> None:
         """
-        GIVEN a previously registered job opportunity
+        GIVEN a previously registered job opportunity and an existing page for updating said entry
 
         :rtype: None
         """
@@ -31,6 +31,17 @@ class CadastroVagaUpdateValidationTest(TestCase):
             data_hora_entrevista=timezone.now(),
         )
         self.url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
+    
+    def test_should_display_general_validation_error(self) -> None:
+        """
+        WHEN I submit any invalid data
+
+        THEN it should display a general validation error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url)
+        self.assertContains(response, 'Ocorreu um erro ao atualizar o cadastro. Por favor, verifique os dados preenchidos.')
     
     def test_should_display_empresa_nome_is_required(self) -> None:
         """

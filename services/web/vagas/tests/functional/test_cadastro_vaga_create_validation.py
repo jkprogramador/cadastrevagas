@@ -18,6 +18,17 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
         """
         self.url = reverse('oportunidades_new')
     
+    def test_should_display_general_validation_error(self) -> None:
+        """
+        WHEN I submit any invalid data
+
+        THEN it should display a general validation error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url)
+        self.assertContains(response, 'Ocorreu um erro no cadastro. Por favor, verifique os dados preenchidos.')
+    
     def test_should_display_empresa_nome_is_required(self) -> None:
         """
         WHEN I submit an empty value for the company's name
