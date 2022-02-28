@@ -5,7 +5,6 @@ from django.utils import timezone
 from datetime import datetime as dt
 from .forms import CadastroVagasForm
 from .models import Vaga
-from vagas.templatetags.vagas_template_extras import phone_formatter
 
 def index(request):
     vagas = Vaga.objects.all()
@@ -30,13 +29,13 @@ def edit_view(request, pk: int):
         'empresa_endereco': vaga.empresa_endereco,
         'empresa_email': vaga.empresa_email,
         'empresa_site': vaga.empresa_site,
-        'empresa_telefone_celular': phone_formatter(vaga.empresa_telefone_celular),
-        'empresa_telefone_comercial': phone_formatter(vaga.empresa_telefone_comercial),
+        'empresa_telefone_celular': vaga.empresa_telefone_celular,
+        'empresa_telefone_comercial': vaga.empresa_telefone_comercial,
         'cargo_titulo': vaga.cargo_titulo,
         'cargo_descricao': vaga.cargo_descricao,
         'site_referencia': vaga.site_referencia,
         'data_hora_entrevista': dt.strftime(timezone.localtime(vaga.data_hora_entrevista), 
-            '%d/%m/%Y %H:%M'),
+            '%d/%m/%Y %H:%M') if vaga.data_hora_entrevista is not None else '',
     })
 
     if request.method == 'POST':
@@ -58,7 +57,7 @@ def edit_view(request, pk: int):
 
             return redirect(reverse('oportunidades_detail', args=[str(vaga.pk)]))
 
-    return render(request, 'oportunidades_edit.html', {'form': form})
+    return render(request, 'oportunidades_edit.html', {'form': form, 'vaga': vaga})
 
 def detail_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)

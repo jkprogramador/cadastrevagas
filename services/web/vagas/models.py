@@ -4,9 +4,20 @@ from typing import Any
 import re
 
 class TelefoneField(models.CharField):
+    
     def get_prep_value(self, value: Any) -> Any:
         regex = re.compile('\D+')
+
         return regex.sub('', str(value))
+    
+    def from_db_value(self, value: Any, expression, connection):
+        if value:
+            phone_regex = re.compile(r'^(\d{2})(\d{1,})(\d{4})$')
+            p1, p2, p3 = phone_regex.search(value).groups()
+            
+            return f'({p1}) {p2}-{p3}'
+        
+        return value
 
 class Vaga(models.Model):
     """A job opportunity model."""

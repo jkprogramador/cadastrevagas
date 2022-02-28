@@ -5,33 +5,46 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        {% load vagas_template_extras %}
+        <h2>Detalhes da vaga</h2>
 
-        {{ vaga.empresa_nome }}
+        <p>Nome da empresa: {{ vaga.empresa_nome }}</p>
 
-        {{ vaga.empresa_endereco }}
+        {% if vaga.empresa_endereco %}
+        <p>Endereço da empresa: {{ vaga.empresa_endereco }}</p>
+        {% endif %}
 
-        {{ vaga.empresa_email | urlize }}
+        {% if vaga.empresa_email %}
+        <p>Email da empresa: {{ vaga.empresa_email | urlize }}</p>
+        {% endif %}
 
-        {{ vaga.empresa_site | urlize }}
+        <p>Site da empresa: {{ vaga.empresa_site | urlize }}</p>
 
-        {{ vaga.empresa_telefone_celular | phone_formatter }}
+        {% if vaga.empresa_telefone_celular %}
+        <p>Telefone celular da empresa: {{ vaga.empresa_telefone_celular }}</p>
+        {% endif %}
 
-        {{ vaga.empresa_telefone_comercial | phone_formatter }}
+        {% if vaga.empresa_telefone_comercial %}
+        <p>Telefone comercial da empresa: {{ vaga.empresa_telefone_comercial }}</p>
+        {% endif %}
 
-        {{ vaga.cargo_titulo }}
 
-        {{ vaga.cargo_descricao }}
+        <p>Título do cargo: {{ vaga.cargo_titulo }}</p>
 
-        {{ vaga.site_referencia | urlize}}
+        {% if vaga.cargo_descricao %}
+        <p>Descrição do cargo: {{ vaga.cargo_descricao }}</p>
+        {% endif %}
 
-        {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
+        <p>Site de referência: {{ vaga.site_referencia | urlize}}</p>
 
-        Oportunidade cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+        {% if vaga.data_hora_entrevista %}
+        <p>Data e horário da entrevista: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
+        {% endif %}
 
-        <a href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+        <p>Vaga cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
 
-        <a href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+        <a class="btn btn-primary btn-lg" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+
+        <a class="btn btn-danger btn-lg" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
     </div>
 </div>
 {% endblock %}

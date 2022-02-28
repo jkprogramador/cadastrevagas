@@ -129,7 +129,6 @@ class CadastroVagasForm(forms.Form):
     data_hora_entrevista = forms.DateTimeField(
         input_formats=['%d/%m/%Y %H:%M'],
         widget=forms.DateTimeInput(attrs={
-            'type': 'datetime',
             'class': 'form-control shadow-sm',
             'aria-describedby': 'data_hora_entrevista_help'
         }, format='%d/%m/%Y %H:%M'),

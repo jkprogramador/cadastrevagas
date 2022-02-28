@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.utils import timezone
-from django.forms import CharField, EmailField, URLField, Textarea
+from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
 from vagas.models import Vaga
 
 class CadastroVagaEditViewTest(TestCase):
@@ -127,7 +127,7 @@ class CadastroVagaEditViewTest(TestCase):
 
         :rtype: None
         """
-        self.assertEqual('datetime', self.form.fields['data_hora_entrevista'].widget.input_type)
+        self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
         local_datetime = timezone.localtime(self.vaga.data_hora_entrevista)
         self.assertEqual(local_datetime.strftime('%d/%m/%Y %H:%M'), self.form.data['data_hora_entrevista'])
     

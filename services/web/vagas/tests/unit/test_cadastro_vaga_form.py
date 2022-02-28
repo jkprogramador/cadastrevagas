@@ -1,6 +1,6 @@
 import unittest
 from vagas.forms import CadastroVagasForm
-from django.forms import CharField, EmailField, URLField, Textarea
+from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
 
 class CadastroVagasFormTest(unittest.TestCase):
     """Test to ensure that the form for submitting job opportunities
@@ -87,7 +87,7 @@ class CadastroVagasFormTest(unittest.TestCase):
 
         :rtype: None
         """
-        self.assertEqual('datetime', self.form.fields['data_hora_entrevista'].widget.input_type)
+        self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
     
     def test_does_not_have_data_e_hora_cadastro_field(self) -> None:
         """

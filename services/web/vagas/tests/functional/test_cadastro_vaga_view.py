@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from django.forms import CharField, EmailField, URLField, Textarea
+from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
 
 class CadastroVagaViewTest(SimpleTestCase):
     """
@@ -99,8 +99,7 @@ class CadastroVagaViewTest(SimpleTestCase):
 
         :rtype: None
         """
-        self.assertEqual('datetime', 
-            self.form.fields['data_hora_entrevista'].widget.input_type)
+        self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
     
     def test_should_have_button_to_submit_form(self) -> None:
         """

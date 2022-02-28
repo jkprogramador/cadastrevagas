@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.urls import reverse
 from vagas.models import Vaga
 from datetime import datetime as dt
-import re
 
 class CadastroVagaCreateTest(TestCase):
     """
@@ -48,11 +47,8 @@ class CadastroVagaCreateTest(TestCase):
         self.assertEqual(self.data['empresa_endereco'], self.vaga.empresa_endereco)
         self.assertEqual(self.data['empresa_email'], self.vaga.empresa_email)
         self.assertEqual(self.data['empresa_site'], self.vaga.empresa_site)
-        tel_regex = re.compile('\D+')
-        telefone_celular = tel_regex.sub('', self.data['empresa_telefone_celular'])
-        self.assertEqual(telefone_celular, self.vaga.empresa_telefone_celular)
-        telefone_comercial = tel_regex.sub('', self.data['empresa_telefone_comercial'])
-        self.assertEqual(telefone_comercial, self.vaga.empresa_telefone_comercial)
+        self.assertEqual(self.data['empresa_telefone_celular'], self.vaga.empresa_telefone_celular)
+        self.assertEqual(self.data['empresa_telefone_comercial'], self.vaga.empresa_telefone_comercial)
         self.assertEqual(self.data['cargo_titulo'], self.vaga.cargo_titulo)
         self.assertEqual(self.data['cargo_descricao'], self.vaga.cargo_descricao)
         self.assertEqual(self.data['site_referencia'], self.vaga.site_referencia)

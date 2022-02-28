@@ -5,8 +5,6 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        {% load vagas_template_extras %}
-
         <h1>Tem certeza que deseja excluir este cadastro?</h1>
 
         {{ vaga.empresa_nome }}
@@ -17,9 +15,9 @@
 
         {{ vaga.empresa_site | urlize }}
 
-        {{ vaga.empresa_telefone_celular | phone_formatter }}
+        {{ vaga.empresa_telefone_celular }}
 
-        {{ vaga.empresa_telefone_comercial | phone_formatter }}
+        {{ vaga.empresa_telefone_comercial }}
 
         {{ vaga.cargo_titulo }}
 
