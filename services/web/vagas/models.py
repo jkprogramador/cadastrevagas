@@ -22,7 +22,7 @@ class Vaga(models.Model):
 
     empresa_endereco = models.CharField(
         max_length=200,
-        null=True,
+        null=False,
         blank=True,
         error_messages={
             'max_length': 'O campo Endereço da empresa pode conter no máximo %(limit_value)s caracteres.'
@@ -30,7 +30,7 @@ class Vaga(models.Model):
     )
 
     empresa_email = models.EmailField(
-        null=True,
+        null=False,
         blank=True,
         error_messages={
             'invalid': 'O campo Email da empresa deve conter um email válido.'
@@ -38,6 +38,7 @@ class Vaga(models.Model):
     )
     
     empresa_site = models.URLField(
+        null=False,
         blank=False,
         error_messages={
             'blank': 'O campo Site da empresa é obrigatório.',
@@ -46,7 +47,7 @@ class Vaga(models.Model):
     )
     empresa_telefone_celular = TelefoneField(
         max_length=15,
-        null=True,
+        null=False,
         blank=True,
         validators=[RegexValidator(
             regex=r'^\(\d{2}\) 9\d{4}-\d{4}$',
@@ -57,7 +58,7 @@ class Vaga(models.Model):
 
     empresa_telefone_comercial = TelefoneField(
         max_length=14,
-        null=True,
+        null=False,
         blank=True,
         validators=[RegexValidator(
             regex=r'^\(\d{2}\) \d{4}-\d{4}$',
@@ -68,6 +69,7 @@ class Vaga(models.Model):
 
     cargo_titulo = models.CharField(
         max_length=50,
+        null=False,
         blank=False,
         error_messages={
             'blank': 'O campo Título do cargo é obrigatório.',
@@ -76,11 +78,12 @@ class Vaga(models.Model):
     )
 
     cargo_descricao = models.TextField(
-        null=True,
+        null=False,
         blank=True
     )
 
     site_referencia = models.URLField(
+        null=False,
         blank=False,
         error_messages={
             'blank': 'O campo Site de referência é obrigatório.',
