@@ -9,36 +9,28 @@
 
         <p>Nome da empresa: {{ vaga.empresa_nome }}</p>
 
-        {% if vaga.empresa_endereco %}
-        <p>Endereço da empresa: {{ vaga.empresa_endereco }}</p>
-        {% endif %}
+        <p>Endereço da empresa: {{ vaga.empresa_endereco|default:'-' }}</p>
 
-        {% if vaga.empresa_email %}
-        <p>Email da empresa: {{ vaga.empresa_email | urlize }}</p>
-        {% endif %}
+        <p>Email da empresa: {% if vaga.empresa_email %}{{ vaga.empresa_email | urlize }}{% else %}-{% endif %}</p>
 
-        <p>Site da empresa: {{ vaga.empresa_site | urlize }}</p>
+        <p>Site da empresa: {% if vaga.empresa_site %}{{ vaga.empresa_site | urlize }}{% else%}-{% endif %}</p>
 
-        {% if vaga.empresa_telefone_celular %}
-        <p>Telefone celular da empresa: {{ vaga.empresa_telefone_celular }}</p>
-        {% endif %}
+        <p>Telefone celular da empresa: {{ vaga.empresa_telefone_celular|default:'-' }}</p>
 
-        {% if vaga.empresa_telefone_comercial %}
-        <p>Telefone comercial da empresa: {{ vaga.empresa_telefone_comercial }}</p>
-        {% endif %}
-
+        <p>Telefone comercial da empresa: {{ vaga.empresa_telefone_comercial|default:'-' }}</p>
 
         <p>Título do cargo: {{ vaga.cargo_titulo }}</p>
 
         {% if vaga.cargo_descricao %}
-        <p>Descrição do cargo: {{ vaga.cargo_descricao }}</p>
+        <p>Descrição do cargo:</p>
+        {{ vaga.cargo_descricao|linebreaks }}
+        {% else %}
+        <p>Descrição do cargo: -</p>
         {% endif %}
 
         <p>Site de referência: {{ vaga.site_referencia | urlize}}</p>
 
-        {% if vaga.data_hora_entrevista %}
-        <p>Data e horário da entrevista: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
-        {% endif %}
+        <p>Data e horário da entrevista: {% if vaga.data_hora_entrevista %}{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
 
         <p>Vaga cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
 

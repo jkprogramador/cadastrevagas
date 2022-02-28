@@ -5,33 +5,38 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h1>Tem certeza que deseja excluir este cadastro?</h1>
+        <h2>Tem certeza que deseja excluir este cadastro?</h2>
 
-        {{ vaga.empresa_nome }}
+        <p>Nome da empresa: {{ vaga.empresa_nome }}</p>
 
-        {{ vaga.empresa_endereco }}
+        <p>Endereço da empresa: {{ vaga.empresa_endereco|default:'-' }}</p>
 
-        {{ vaga.empresa_email | urlize }}
+        <p>Email da empresa: {% if vaga.empresa_email %}{{ vaga.empresa_email | urlize }}{% else %}-{% endif %}</p>
 
-        {{ vaga.empresa_site | urlize }}
+        <p>Site da empresa: {{ vaga.empresa_site | urlize }}</p>
 
-        {{ vaga.empresa_telefone_celular }}
+        <p>Telefone celular da empresa: {{ vaga.empresa_telefone_celular|default:'-' }}</p>
 
-        {{ vaga.empresa_telefone_comercial }}
+        <p>Telefone comercial da empresa: {{ vaga.empresa_telefone_comercial|default:'-' }}</p>
 
-        {{ vaga.cargo_titulo }}
+        <p>Título do cargo: {{ vaga.cargo_titulo }}</p>
 
-        {{ vaga.cargo_descricao }}
+        {% if vaga.cargo_descricao %}
+        <p>Descrição do cargo:</p>
+        {{ vaga.cargo_descricao|linebreaks }}
+        {% else %}
+        <p>Descrição do cargo: -</p>
+        {% endif %}
 
-        {{ vaga.site_referencia | urlize}}
+        <p>Site de referência: {{ vaga.site_referencia | urlize}}</p>
 
-        {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}
+        <p>Data e horário da entrevista: {% if vaga.data_hora_entrevista %}{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
 
-        {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}
+        <p>Data e horário do cadastro: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
 
         <form action method=post>
             {% csrf_token %}
-            <input type=submit value="Excluir cadastro">
+            <input class="btn btn-large btn-danger" type=submit value="Excluir cadastro">
         </form>
     </div>
 </div>
