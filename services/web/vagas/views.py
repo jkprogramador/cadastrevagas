@@ -87,5 +87,7 @@ def create_view(request):
             messages.add_message(request, messages.SUCCESS, 'Vaga registrada com sucesso.')
             
             return redirect(reverse('oportunidades_detail', args=[str(vaga.id)]))
+        else:
+            messages.add_message(request, messages.ERROR, 'Ocorreu um erro no cadastro. Por favor, verifique os dados preenchidos.')
     
     return render(request, 'oportunidades_new.html', {'form': form})
