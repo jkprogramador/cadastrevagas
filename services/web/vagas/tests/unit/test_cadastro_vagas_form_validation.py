@@ -1,4 +1,5 @@
 from django.test import SimpleTestCase
+from django.utils import timezone
 from vagas.forms import CadastroVagasForm
 
 class CadastroVagasFormValidationTest(SimpleTestCase):
@@ -256,8 +257,8 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
         form4 = CadastroVagasForm({'data_hora_entrevista': '14/05/22 06:01'})
         self.assertIn(expected_error_message, form4.errors['data_hora_entrevista'])
 
-        form5 = CadastroVagasForm({'data_hora_entrevista': '03/12/2022 14:05'})
+        form5 = CadastroVagasForm({'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M')})
         self.assertNotIn('data_hora_entrevista', form5.errors)
 
-        form6 = CadastroVagasForm({'data_hora_entrevista': '17/08/2022 9:45'})
+        form6 = CadastroVagasForm({'data_hora_entrevista': timezone.localtime()})
         self.assertNotIn('data_hora_entrevista', form6.errors)

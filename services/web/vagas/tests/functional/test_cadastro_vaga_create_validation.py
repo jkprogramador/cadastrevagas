@@ -1,5 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import reverse
+from django.utils import timezone
+import datetime as dt
 
 class CadastroVagaCreateValidationTest(SimpleTestCase):
     """
@@ -174,7 +176,7 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
     
     def test_should_display_data_hora_entrevista_must_be_valid_date_and_time(self) -> None:
         """
-        WHEN I submit an invalid datetime/datetime in an incorrect format for the date and time of a interview
+        WHEN I submit an invalid datetime/datetime in an incorrect format for the date and time of an interview
 
         THEN it should display an error message
 
@@ -186,3 +188,15 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
 
         response = self.client.post(self.url, data={'data_hora_entrevista': '2022 10 23 08:07'})
         self.assertContains(response, expected_error_message)
+    
+    def test_should_display_data_hora_entrevista_must_be_greater_than_or_equal_current_datetime(self) -> None:
+        """
+        WHEN I submit a datetime prior to the current datetime for the date and time of an interview
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        prior_to_now = timezone.localtime() - dt.timedelta(minutes=30)
+        response = self.client.post(self.url, data={'data_hora_entrevista': prior_to_now})
+        self.assertContains(response, 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.')

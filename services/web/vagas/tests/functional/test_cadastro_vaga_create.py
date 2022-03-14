@@ -31,7 +31,7 @@ class CadastroVagaCreateTest(TestCase):
             'cargo_titulo': 'Título do cargo',
             'cargo_descricao': 'Descrição do cargo',
             'site_referencia': 'https://sitereferencia.com.br',
-            'data_hora_entrevista': '07/04/2022 08:05',
+            'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M'),
         }
 
         self.response = self.client.post('/oportunidades/new', data=self.data, follow=True)

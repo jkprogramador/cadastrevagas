@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from datetime import datetime as dt
+import datetime as dt
 from vagas.models import Vaga
 
 class HomePageTest(TestCase):
@@ -32,7 +32,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 1',
                 'cargo_descricao': 'Cargo descrição 1',
                 'site_referencia': 'www.sitereferencia1.com.br',
-                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=7, day=4, hour=8, minute=1)),
+                'data_hora_entrevista': timezone.localtime(),
             },
             {
                 'empresa_nome': 'Minha empresa 2',
@@ -44,7 +44,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 2',
                 'cargo_descricao': 'Cargo descrição 2',
                 'site_referencia': 'https://www.sitereferencia2.com.br',
-                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=4, day=3, hour=9, minute=54)),
+                'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=2, hours=3),
             },
             {
                 'empresa_nome': 'Minha empresa 3',
@@ -56,7 +56,7 @@ class HomePageTest(TestCase):
                 'cargo_titulo': 'Cargo título 3',
                 'cargo_descricao': 'Cargo descrição 3',
                 'site_referencia': 'http://sitereferencia3.com.br',
-                'data_hora_entrevista': timezone.make_aware(dt(year=2022, month=10, day=19, hour=15, minute=43)),
+                'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=5, hours=7, minutes=30),
             },
         ]
 

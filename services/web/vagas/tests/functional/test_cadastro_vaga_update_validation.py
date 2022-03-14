@@ -28,7 +28,7 @@ class CadastroVagaUpdateValidationTest(TestCase):
             cargo_titulo='Título do cargo',
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista=timezone.now(),
+            data_hora_entrevista=timezone.localtime(),
         )
         self.url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
     

@@ -1,5 +1,17 @@
 from django import forms
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+
+def validate_data_hora_entrevista(value):
+    now = timezone.localtime().replace(second=0, microsecond=0)
+    data_hora_entrevista = value.replace(second=0, microsecond=0)
+    
+    if data_hora_entrevista < now:
+        raise ValidationError([{
+            'data_hora_entrevista': 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.'
+        }])
+
 
 class CadastroVagasForm(forms.Form):
     """Form for submitting job opportunities."""
@@ -140,6 +152,7 @@ class CadastroVagasForm(forms.Form):
         label='Data e horário da entrevista',
         help_text='Ex.: dia/mês/ano horas:minutos',
         required=False,
+        validators=[validate_data_hora_entrevista],
         error_messages={
             'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }

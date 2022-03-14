@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 from typing import Any
 import re
 
@@ -127,3 +129,12 @@ class Vaga(models.Model):
         :return: str
         """
         return f'/oportunidades/{str(self.id)}'
+    
+    def clean(self):
+        now = timezone.localtime().replace(second=0, microsecond=0)
+        value = self.data_hora_entrevista.replace(second=0, microsecond=0)
+
+        if value < now:
+            raise ValidationError({
+                'data_hora_entrevista': 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.'
+            })
