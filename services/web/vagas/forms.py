@@ -22,7 +22,8 @@ class CadastroVagasForm(forms.Form):
     empresa_endereco = forms.CharField(
         label='Endereço da empresa',
         widget=forms.TextInput(attrs={
-            'class': 'form-control shadow-sm'
+            'class': 'form-control shadow-sm',
+            'aria-describedby': ''
         }),
         required=False,
         max_length=200,
@@ -35,7 +36,8 @@ class CadastroVagasForm(forms.Form):
         label='Email da empresa',
         widget=forms.EmailInput(attrs={
             'class': 'form-control shadow-sm',
-            'placeholder': 'Ex.: empresa@email.com.br'
+            'placeholder': 'Ex.: empresa@email.com.br',
+            'aria-describedby': ''
         }),
         required=False,
         error_messages={
@@ -60,7 +62,8 @@ class CadastroVagasForm(forms.Form):
     empresa_telefone_celular = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control shadow-sm',
-            'placeholder': '(DDD) 99999-9999'
+            'placeholder': '(DDD) 99999-9999',
+            'aria-describedby': ''
         }),
         label='Telefone celular da empresa',
         required=False,
@@ -77,6 +80,7 @@ class CadastroVagasForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control shadow-sm',
             'placeholder': '(DDD) 9999-9999',
+            'aria-describedby': ''
         }),
         label='Telefone comercial da empresa',
         required=False,
@@ -105,7 +109,8 @@ class CadastroVagasForm(forms.Form):
 
     cargo_descricao = forms.CharField(
         widget=forms.Textarea(attrs={
-            'class': 'form-control shadow-sm'
+            'class': 'form-control shadow-sm',
+            'aria-describedby': ''
         }),
         label='Descrição do cargo',
         required=False
@@ -139,3 +144,13 @@ class CadastroVagasForm(forms.Form):
             'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
     )
+
+    def clean(self):
+        super().clean()
+
+        for bound_field in self:
+            if bound_field.errors:
+                bound_field.field.widget.attrs.update({
+                    'class': bound_field.field.widget.attrs['class'] + ' is-invalid',
+                    'aria-describedby': ' '.join([bound_field.field.widget.attrs['aria-describedby'], bound_field.html_name + '_error'])
+                })
