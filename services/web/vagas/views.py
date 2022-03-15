@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.utils import timezone
-from datetime import datetime as dt
 from .forms import CadastroVagasForm
 from .models import Vaga
 
@@ -24,7 +23,7 @@ def delete_view(request, pk: int):
 
 def edit_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)
-    form = CadastroVagasForm({
+    form = CadastroVagasForm(initial={
         'empresa_nome': vaga.empresa_nome,
         'empresa_endereco': vaga.empresa_endereco,
         'empresa_email': vaga.empresa_email,
@@ -34,8 +33,7 @@ def edit_view(request, pk: int):
         'cargo_titulo': vaga.cargo_titulo,
         'cargo_descricao': vaga.cargo_descricao,
         'site_referencia': vaga.site_referencia,
-        'data_hora_entrevista': dt.strftime(timezone.localtime(vaga.data_hora_entrevista), 
-            '%d/%m/%Y %H:%M') if vaga.data_hora_entrevista is not None else '',
+        'data_hora_entrevista': timezone.localtime(vaga.data_hora_entrevista).strftime('%d/%m/%Y %H:%M') if vaga.data_hora_entrevista is not None else '',
     })
 
     if request.method == 'POST':

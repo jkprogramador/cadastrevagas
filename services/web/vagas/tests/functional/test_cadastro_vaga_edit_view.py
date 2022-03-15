@@ -43,7 +43,7 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_nome'], CharField)
-        self.assertEqual(self.vaga.empresa_nome, self.form.cleaned_data['empresa_nome'])
+        self.assertEqual(self.vaga.empresa_nome, self.form.initial['empresa_nome'])
     
     def test_should_have_text_field_filled_with_endereco_da_empresa(self) -> None:
         """
@@ -52,7 +52,7 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_endereco'], CharField)
-        self.assertEqual(self.vaga.empresa_endereco, self.form.cleaned_data['empresa_endereco'])
+        self.assertEqual(self.vaga.empresa_endereco, self.form.initial['empresa_endereco'])
     
     def test_should_have_email_field_filled_with_email_da_empresa(self) -> None:
         """
@@ -61,7 +61,7 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_email'], EmailField)
-        self.assertEqual(self.vaga.empresa_email, self.form.cleaned_data['empresa_email'])
+        self.assertEqual(self.vaga.empresa_email, self.form.initial['empresa_email'])
     
     def test_should_have_url_field_filled_with_site_da_empresa(self) -> None:
         """
@@ -70,27 +70,25 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_site'], URLField)
-        self.assertEqual(self.vaga.empresa_site, self.form.cleaned_data['empresa_site'])
+        self.assertEqual(self.vaga.empresa_site, self.form.initial['empresa_site'])
     
     def test_should_have_phone_field_filled_with_telefone_celular_da_empresa(self) -> None:
         """
-        THEN it should have a phone field filled with the corresponding company's
-        cellphone in the correct format
+        THEN it should have a phone field filled with the corresponding company's cellphone in the correct format
 
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_telefone_celular'], CharField)
-        self.assertEqual(self.vaga.empresa_telefone_celular, self.form.cleaned_data['empresa_telefone_celular'])
+        self.assertEqual(self.vaga.empresa_telefone_celular, self.form.initial['empresa_telefone_celular'])
     
     def test_should_have_phone_field_filled_with_telefone_comercial_da_empresa(self) -> None:
         """
-        THEN it should have a phone field filled with the corresponding company's
-        landline in the correct format
+        THEN it should have a phone field filled with the corresponding company's landline in the correct format
 
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['empresa_telefone_comercial'], CharField)
-        self.assertEqual(self.vaga.empresa_telefone_comercial, self.form.cleaned_data['empresa_telefone_comercial'])
+        self.assertEqual(self.vaga.empresa_telefone_comercial, self.form.initial['empresa_telefone_comercial'])
     
     def test_should_have_text_field_filled_with_titulo_do_cargo(self) -> None:
         """
@@ -99,7 +97,7 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['cargo_titulo'], CharField)
-        self.assertEqual(self.vaga.cargo_titulo, self.form.cleaned_data['cargo_titulo'])
+        self.assertEqual(self.vaga.cargo_titulo, self.form.initial['cargo_titulo'])
     
     def test_should_have_text_area_filled_with_descricao_do_cargo(self) -> None:
         """
@@ -108,28 +106,26 @@ class CadastroVagaEditViewTest(TestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['cargo_descricao'].widget, Textarea)
-        self.assertEqual(self.vaga.cargo_descricao, self.form.cleaned_data['cargo_descricao'])
+        self.assertEqual(self.vaga.cargo_descricao, self.form.initial['cargo_descricao'])
     
     def test_should_have_url_field_filled_with_site_referencia(self) -> None:
         """
-        THEN it should have a URL field filled with the corresponding website where
-        the opportunity was found
+        THEN it should have a URL field filled with the corresponding website where the opportunity was found
 
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['site_referencia'], URLField)
-        self.assertEqual(self.vaga.site_referencia, self.form.cleaned_data['site_referencia'])
+        self.assertEqual(self.vaga.site_referencia, self.form.initial['site_referencia'])
     
     def test_should_have_datetime_field_filled_with_data_e_hora_da_entrevista(self) -> None:
         """
-        THEN it should have a datetime field filled with the corresponding date and time
-        of the job interview
+        THEN it should have a datetime field filled with the corresponding date and time of the job interview
 
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
-        local_datetime = timezone.localtime(self.vaga.data_hora_entrevista)
-        self.assertEqual(local_datetime.strftime('%d/%m/%Y %H:%M'), self.form.data['data_hora_entrevista'])
+        local_datetime = self.vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M')
+        self.assertEqual(local_datetime, self.form.initial['data_hora_entrevista'])
     
     def test_should_have_a_button_to_submit_the_form(self) -> None:
         """
