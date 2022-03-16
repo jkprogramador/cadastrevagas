@@ -31,6 +31,7 @@ class CadastroVagaDeleteTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.REJECTED,
         )
 
         self.response = self.client.post(f'/oportunidades/{str(self.vaga.pk)}/delete', 

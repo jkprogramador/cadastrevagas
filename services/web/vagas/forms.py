@@ -1,7 +1,6 @@
 from django import forms
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from vagas.models import Vaga
 
 class CadastroVagasForm(forms.Form):
     """Form for submitting job opportunities."""
@@ -145,6 +144,18 @@ class CadastroVagasForm(forms.Form):
         error_messages={
             'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
+    )
+
+    situacao = forms.ChoiceField(
+        label='Situação',
+        required=True,
+        choices=Vaga.Status.choices,
+        initial=Vaga.Status.WAITING,
+        widget=forms.Select(attrs={
+            'class': 'form-select shadow-sm',
+            'aria-describedby': 'situacao_required',
+            'aria-label': 'Situação do cadastro'
+        }),
     )
 
     def clean(self):

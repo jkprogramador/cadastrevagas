@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from datetime import datetime as dt
+import datetime as dt
 from vagas.models import Vaga
 
 class CadastroVagaUpdateTest(TestCase):
@@ -32,6 +32,7 @@ class CadastroVagaUpdateTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.WAITING,
         )
 
         self.new_data = {
@@ -44,7 +45,8 @@ class CadastroVagaUpdateTest(TestCase):
             'cargo_titulo': 'Título da posição',
             'cargo_descricao': 'Descrição da posição',
             'site_referencia': 'https://nossositereferencia.com.br',
-            'data_hora_entrevista': '19/07/2022 16:38',
+            'data_hora_entrevista': timezone.localtime() + dt.timedelta(hours=4),
+            'situacao': Vaga.Status.REJECTED,
         }
 
         self.response = self.client.post(f'/oportunidades/{str(self.vaga.pk)}/edit', 
@@ -66,9 +68,8 @@ class CadastroVagaUpdateTest(TestCase):
         self.assertEqual(self.new_data['cargo_titulo'], vaga.cargo_titulo)
         self.assertEqual(self.new_data['cargo_descricao'], vaga.cargo_descricao)
         self.assertEqual(self.new_data['site_referencia'], vaga.site_referencia)
-        data_hora_entrevista = timezone.make_aware(dt.strptime(self.new_data['data_hora_entrevista'], 
-            "%d/%m/%Y %H:%M"))
-        self.assertEqual(data_hora_entrevista, vaga.data_hora_entrevista)
+        self.assertEqual(self.new_data['data_hora_entrevista'], timezone.localtime(vaga.data_hora_entrevista))
+        self.assertEqual(self.new_data['situacao'], vaga.situacao)
     
     def test_should_redirect_to_detail_page(self) -> None:
         """

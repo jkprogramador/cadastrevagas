@@ -33,6 +33,7 @@ class HomePageTest(TestCase):
                 'cargo_descricao': 'Cargo descrição 1',
                 'site_referencia': 'www.sitereferencia1.com.br',
                 'data_hora_entrevista': timezone.localtime(),
+                'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
             },
             {
                 'empresa_nome': 'Minha empresa 2',
@@ -45,6 +46,7 @@ class HomePageTest(TestCase):
                 'cargo_descricao': 'Cargo descrição 2',
                 'site_referencia': 'https://www.sitereferencia2.com.br',
                 'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=2, hours=3),
+                'situacao': Vaga.Status.REJECTED,
             },
             {
                 'empresa_nome': 'Minha empresa 3',
@@ -57,6 +59,7 @@ class HomePageTest(TestCase):
                 'cargo_descricao': 'Cargo descrição 3',
                 'site_referencia': 'http://sitereferencia3.com.br',
                 'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=5, hours=7, minutes=30),
+                'situacao': Vaga.Status.WAITING,
             },
         ]
 
@@ -71,7 +74,8 @@ class HomePageTest(TestCase):
                 cargo_titulo=data['cargo_titulo'],
                 cargo_descricao=data['cargo_descricao'],
                 site_referencia=data['site_referencia'],
-                data_hora_entrevista=data['data_hora_entrevista']
+                data_hora_entrevista=data['data_hora_entrevista'],
+                situacao=data['situacao'],
             )
         
         self.response = self.client.get('/')
@@ -121,9 +125,8 @@ class HomePageTest(TestCase):
         """
         for data in self.data:
             vaga = Vaga.objects.get(empresa_nome=data['empresa_nome'])
-            local_data_hora_cadastro = timezone.localtime(vaga.data_hora_cadastro)
-            formatted_data_hora_cadastro = local_data_hora_cadastro.strftime('%d/%m/%Y %H:%M')
-            self.assertContains(self.response, formatted_data_hora_cadastro)
+            local_data_hora_cadastro = timezone.localtime(vaga.data_hora_cadastro).strftime('%d/%m/%Y %H:%M')
+            self.assertContains(self.response, local_data_hora_cadastro)
     
     def test_should_have_link_to_each_company_website(self) -> None:
         """
@@ -230,3 +233,12 @@ class HomePageTest(TestCase):
         """
         for data in self.data:
             self.assertNotContains(self.response, data['site_referencia'])
+    
+    def test_should_display_situacao(self) -> None:
+        """
+        THEN it should display each corresponding status
+
+        :rtype: None
+        """
+        for data in self.data:
+            self.assertContains(self.response, data['situacao'].label)

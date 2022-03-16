@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from django.utils import timezone
 from django.core.exceptions import ValidationError
 from typing import Any
 import re
@@ -24,6 +23,11 @@ class TelefoneField(models.CharField):
 
 class Vaga(models.Model):
     """A job opportunity model."""
+
+    class Status(models.TextChoices):
+        WAITING = 'W', 'Aguardando retorno'
+        INTERVIEW_SCHEDULED = 'S', 'Entrevista agendada'
+        REJECTED = 'R', 'Rejeitado'
 
     empresa_nome = models.CharField(
         max_length=100,
@@ -111,6 +115,14 @@ class Vaga(models.Model):
         error_messages={
             'invalid_datetime': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
+    )
+
+    situacao = models.CharField(
+        null=False,
+        blank=False,
+        max_length=1,
+        choices=Status.choices,
+        default=Status.WAITING
     )
 
     data_hora_cadastro = models.DateTimeField(auto_now_add=True)

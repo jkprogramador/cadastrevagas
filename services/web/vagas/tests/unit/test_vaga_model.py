@@ -68,3 +68,14 @@ class VagaModelTest(TestCase):
         """
         vaga = Vaga.objects.get(pk=self.vaga.pk)
         self.assertGreaterEqual(vaga.data_hora_cadastro, self.now)
+
+    def test_has_selection_of_choices_for_status(self) -> None:
+        """
+        Ensure model has a field for choosing the status of a job opportunity.
+
+        :rtype: None
+        """
+        self.assertIn(('W', 'Aguardando retorno',), Vaga.situacao.field.choices)
+        self.assertIn(('S', 'Entrevista agendada',), Vaga.situacao.field.choices)
+        self.assertIn(('R', 'Rejeitado',), Vaga.situacao.field.choices)
+        self.assertEqual(Vaga.Status.WAITING, Vaga.situacao.field.default)

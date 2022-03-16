@@ -1,6 +1,14 @@
 import unittest
 from vagas.forms import CadastroVagasForm
-from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
+from vagas.models import Vaga
+from django.forms import (
+    CharField,
+    EmailField,
+    URLField,
+    Textarea,
+    DateTimeField,
+    ChoiceField,
+)
 
 class CadastroVagasFormTest(unittest.TestCase):
     """Test to ensure that the form for submitting job opportunities
@@ -97,3 +105,16 @@ class CadastroVagasFormTest(unittest.TestCase):
         """
         with self.assertRaises(KeyError):
             self.form.fields['data_hora_cadastro']
+    
+    def test_has_choice_field_situacao(self) -> None:
+        """
+        Ensure form has choice field for selecting the status of a job interview.
+
+        :rtype: None
+        """
+        field = self.form.fields['situacao']
+        self.assertIsInstance(field, ChoiceField)
+        self.assertIn(('W', 'Aguardando retorno',), field.choices)
+        self.assertIn(('S', 'Entrevista agendada',), field.choices)
+        self.assertIn(('R', 'Rejeitado',), field.choices)
+        self.assertEqual(Vaga.Status.WAITING, field.initial)

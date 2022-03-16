@@ -1,5 +1,13 @@
 from django.test import SimpleTestCase
-from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
+from django.forms import (
+    CharField,
+    EmailField,
+    URLField,
+    Textarea,
+    DateTimeField,
+    ChoiceField,
+)
+from vagas.models import Vaga
 
 class CadastroVagaViewTest(SimpleTestCase):
     """
@@ -100,6 +108,19 @@ class CadastroVagaViewTest(SimpleTestCase):
         :rtype: None
         """
         self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
+    
+    def test_should_have_selection_of_choices_for_situacao(self) -> None:
+        """
+        THEN it should have a selection of options for choosing the status of a job opportunity
+
+        :rtype: None
+        """
+        field = self.form.fields['situacao']
+        self.assertIsInstance(field, ChoiceField)
+        self.assertIn(('W', 'Aguardando retorno',), field.choices)
+        self.assertIn(('S', 'Entrevista agendada'), field.choices)
+        self.assertIn(('R', 'Rejeitado',), field.choices)
+        self.assertEqual(Vaga.Status.WAITING, field.initial)
     
     def test_should_have_button_to_submit_form(self) -> None:
         """

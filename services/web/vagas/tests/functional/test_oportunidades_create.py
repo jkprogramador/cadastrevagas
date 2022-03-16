@@ -32,6 +32,7 @@ class CadastroVagaCreateTest(TestCase):
             'cargo_descricao': 'Descrição do cargo',
             'site_referencia': 'https://sitereferencia.com.br',
             'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M'),
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
         }
 
         self.response = self.client.post('/oportunidades/new', data=self.data, follow=True)
@@ -52,9 +53,8 @@ class CadastroVagaCreateTest(TestCase):
         self.assertEqual(self.data['cargo_titulo'], self.vaga.cargo_titulo)
         self.assertEqual(self.data['cargo_descricao'], self.vaga.cargo_descricao)
         self.assertEqual(self.data['site_referencia'], self.vaga.site_referencia)
-        data_hora_entrevista = timezone.make_aware(dt.strptime(self.data['data_hora_entrevista'], 
-            "%d/%m/%Y %H:%M"))
-        self.assertEqual(data_hora_entrevista, self.vaga.data_hora_entrevista)
+        self.assertEqual(self.data['data_hora_entrevista'], timezone.localtime(self.vaga.data_hora_entrevista).strftime('%d/%m/%Y %H:%M'))
+        self.assertEqual(self.data['situacao'], self.vaga.situacao)
     
     def test_should_redirect_to_detail_page(self) -> None:
         """

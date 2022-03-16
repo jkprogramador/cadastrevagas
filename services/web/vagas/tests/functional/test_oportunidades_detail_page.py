@@ -2,21 +2,21 @@ from django.test import TestCase
 from django.utils import timezone
 from vagas.models import Vaga
 
-class CadastroVagaDeleteViewTest(TestCase):
+class CadastroVagaDetailViewTest(TestCase):
     """
     As a user of the website
 
-    I want a page for confirming the exclusion of a job opportunity
+    I want a page for each job opportunity I've registered
 
-    So that I can safely remove a previously registered opportunity
+    So that I can inspect details of that job opportunity
     """
 
     def setUp(self) -> None:
         """
-        GIVEN a previously registered job opportunity
+        GIVEN a job opportunity I've registered
 
-        WHEN I go to /oportunidades/<ID of job opportunity>/delete
-
+        WHEN I go to /oportunidades/<ID of job opportunity>
+        
         :rtype: None
         """
         self.vaga = Vaga.objects.create(
@@ -30,9 +30,10 @@ class CadastroVagaDeleteViewTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.REJECTED,
         )
 
-        self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}/delete')
+        self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}')
     
     def test_should_see_nome_da_empresa(self) -> None:
         """
@@ -52,7 +53,7 @@ class CadastroVagaDeleteViewTest(TestCase):
     
     def test_should_see_email_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding link to the company's email
+        THEN I should see a corresponding link to the company's email
 
         :rtype: None
         """
@@ -60,7 +61,7 @@ class CadastroVagaDeleteViewTest(TestCase):
     
     def test_should_see_site_da_empresa(self) -> None:
         """
-        THEN I should see the corresponding link to the company's website
+        THEN I should see a corresponding link to the company's website
 
         :rtype: None
         """
@@ -100,7 +101,7 @@ class CadastroVagaDeleteViewTest(TestCase):
     
     def test_should_see_site_referencia(self) -> None:
         """
-        THEN I should see the corresponding link to the website where the opportunity was found
+        THEN I should see a corresponding link to the website where the opportunity was found
 
         :rtype: None
         """
@@ -108,12 +109,11 @@ class CadastroVagaDeleteViewTest(TestCase):
     
     def test_should_see_data_e_hora_da_entrevista(self) -> None:
         """
-        THEN I should see the corresponding date and time of the job interview
+        THEN I should see the corresponding date and time of a job interview
 
         :rtype: None
         """
-        local_datetime = timezone.localtime(self.vaga.data_hora_entrevista)
-        self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
+        self.assertContains(self.response, self.vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M'))
     
     def test_should_see_data_e_hora_do_cadastro(self) -> None:
         """
@@ -124,10 +124,26 @@ class CadastroVagaDeleteViewTest(TestCase):
         local_datetime = timezone.localtime(self.vaga.data_hora_cadastro)
         self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
     
-    def test_should_see_button_for_excluding_job_opportunity(self) -> None:
+    def test_should_see_situacao(self) -> None:
         """
-        THEN I should see a button for excluding the corresponding job opportunity
+        THEN I should see the corresponding status of the job opportunity
 
         :rtype: None
         """
-        self.assertContains(self.response, 'type=submit')
+        self.assertContains(self.response, self.vaga.get_situacao_display())
+    
+    def test_should_see_link_to_update_opportunity(self) -> None:
+        """
+        THEN I should see a link that goes to an update page for the corresponding opportunity
+
+        :rtype: None
+        """
+        self.assertContains(self.response, f'href="/oportunidades/{str(self.vaga.pk)}/edit"')
+    
+    def test_should_see_link_to_delete_opportunity(self) -> None:
+        """
+        THEN I should see a link that goes to a delete page for the corresponding opportunity
+
+        :rtype: None
+        """
+        self.assertContains(self.response, f'/oportunidades/{str(self.vaga.pk)}/delete')

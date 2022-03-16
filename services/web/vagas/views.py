@@ -35,6 +35,7 @@ def edit_view(request, pk: int):
         'cargo_descricao': vaga.cargo_descricao,
         'site_referencia': vaga.site_referencia,
         'data_hora_entrevista': timezone.localtime(vaga.data_hora_entrevista).strftime('%d/%m/%Y %H:%M') if vaga.data_hora_entrevista is not None else '',
+        'situacao': vaga.situacao,
     })
 
     if request.method == 'POST':
@@ -54,6 +55,7 @@ def edit_view(request, pk: int):
             vaga.cargo_descricao = form.cleaned_data['cargo_descricao']
             vaga.site_referencia = form.cleaned_data['site_referencia']
             vaga.data_hora_entrevista = form.cleaned_data['data_hora_entrevista']
+            vaga.situacao = form.cleaned_data['situacao']
             vaga.save()
             messages.add_message(request, messages.SUCCESS, 'Vaga atualizada com sucesso.')
 
@@ -87,6 +89,7 @@ def create_view(request):
                 cargo_descricao=form.cleaned_data['cargo_descricao'],
                 site_referencia=form.cleaned_data['site_referencia'],
                 data_hora_entrevista=form.cleaned_data['data_hora_entrevista'],
+                situacao=form.cleaned_data['situacao'],
             )
             messages.add_message(request, messages.SUCCESS, 'Vaga registrada com sucesso.')
             

@@ -30,6 +30,8 @@
 
         <p>Site de referência: {{ vaga.site_referencia | urlize}}</p>
 
+        <p>Situação: {{ vaga.get_situacao_display }}</p>
+
         <p>Data e horário da entrevista: {% if vaga.data_hora_entrevista %}{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
 
         <p>Vaga cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>

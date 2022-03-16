@@ -1,6 +1,13 @@
 from django.test import TestCase
 from django.utils import timezone
-from django.forms import CharField, EmailField, URLField, Textarea, DateTimeField
+from django.forms import (
+    CharField,
+    EmailField,
+    URLField,
+    Textarea,
+    DateTimeField,
+    ChoiceField,
+)
 from vagas.models import Vaga
 
 class CadastroVagaEditViewTest(TestCase):
@@ -31,6 +38,7 @@ class CadastroVagaEditViewTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
         )
 
         self.response = self.client.get(f'/oportunidades/{str(self.vaga.pk)}/edit')
@@ -126,6 +134,15 @@ class CadastroVagaEditViewTest(TestCase):
         self.assertIsInstance(self.form.fields['data_hora_entrevista'], DateTimeField)
         local_datetime = self.vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M')
         self.assertEqual(local_datetime, self.form.initial['data_hora_entrevista'])
+    
+    def test_should_have_choice_field_with_situacao(self) -> None:
+        """
+        THEN it should have a choice field with the corresponding status of the job interview selected as default
+
+        :rtype: None
+        """
+        self.assertIsInstance(self.form.fields['situacao'], ChoiceField)
+        self.assertEqual(self.vaga.situacao, self.form.initial['situacao'])
     
     def test_should_have_a_button_to_submit_the_form(self) -> None:
         """

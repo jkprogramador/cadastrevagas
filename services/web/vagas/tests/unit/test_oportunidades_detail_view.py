@@ -19,6 +19,7 @@ class OportunidadesDetailViewTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao='R',
         )
         url = reverse('oportunidades_detail', args=[str(self.vaga.pk)])
         self.response = self.client.get(url)
