@@ -1,10 +1,10 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 import datetime as dt
 from vagas.models import Vaga
 
-class VagaModelValidationTest(SimpleTestCase):
+class VagaModelValidationTest(TestCase):
     """Ensure that model Vaga performs the necessary validation."""
 
     def setUp(self) -> None:
@@ -303,9 +303,9 @@ class VagaModelValidationTest(SimpleTestCase):
         vaga2.clean_fields(exclude=self.all_fields - {'data_hora_entrevista'})
         self.assertEqual(a_datetime, vaga2.data_hora_entrevista)
 
-    def test_data_hora_entrevista_must_be_greater_than_or_equal_to_current_datetime(self) -> None:
+    def test_blank_data_hora_entrevista_must_be_equal_to_or_later_than_current_datetime(self) -> None:
         """
-        Ensure that data_hora_entrevista must be greater than or equal to current datetime.
+        Ensure that a blank data_hora_entrevista must be greater than or equal to current datetime.
 
         :rtype: None
         """
@@ -316,3 +316,24 @@ class VagaModelValidationTest(SimpleTestCase):
         
         self.assertIn('O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
             ctx1.exception.message_dict['data_hora_entrevista'])
+    
+    def test_existing_data_hora_entrevista_can_be_any_datetime(self) -> None:
+        """
+        Ensure that an existing data_hora_entrevista can be any datetime.
+
+        :rtype: None
+        """
+        vaga = Vaga.objects.create(
+            empresa_nome='Minha empresa',
+            empresa_site='https://meusite.com.br',
+            cargo_titulo='Título do cargo',
+            site_referencia='https://sitereferencia.com.br',
+            data_hora_entrevista=timezone.localtime(),
+        )
+        before_current_datetime = timezone.localtime() - dt.timedelta(minutes=5)
+        with self.assertRaises(ValidationError) as ctx_1:
+            vaga.empresa_nome = ''
+            vaga.data_hora_entrevista = before_current_datetime
+            vaga.full_clean()
+        
+        self.assertNotIn('data_hora_entrevista', ctx_1.exception.message_dict)

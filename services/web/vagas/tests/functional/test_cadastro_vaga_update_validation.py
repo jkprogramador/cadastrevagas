@@ -188,7 +188,7 @@ class CadastroVagaUpdateValidationTest(TestCase):
     
     def test_should_display_data_hora_entrevista_must_be_valid_date_and_time(self) -> None:
         """
-        WHEN I submit an invalid datetime/datetime in an incorrect format for the date and time of a interview
+        WHEN I submit an invalid datetime/datetime in an incorrect format for the date and time of an interview
 
         THEN it should display an error message
 

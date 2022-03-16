@@ -189,7 +189,7 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
         response = self.client.post(self.url, data={'data_hora_entrevista': '2022 10 23 08:07'})
         self.assertContains(response, expected_error_message)
     
-    def test_should_display_data_hora_entrevista_must_be_greater_than_or_equal_current_datetime(self) -> None:
+    def test_should_display_data_hora_entrevista_must_be_equal_to_or_later_than_current_datetime(self) -> None:
         """
         WHEN I submit a datetime prior to the current datetime for the date and time of an interview
 
