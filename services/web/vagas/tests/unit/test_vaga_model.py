@@ -42,9 +42,10 @@ class VagaModelTest(TestCase):
 
         :rtype: None
         """
+        self.assertIsInstance(Vaga.empresa_telefone_celular.field, TelefoneField)
         field = TelefoneField()
-        actual = field.get_prep_value('(11) 94785-1602')
-        expected = '11947851602'
+        actual = field.get_prep_value(self.vaga.empresa_telefone_celular)
+        expected = '11987653201'
         self.assertEqual(expected, actual)
     
     def test_empresa_telefone_comercial_is_stored_with_digits_only(self) -> None:
@@ -53,9 +54,10 @@ class VagaModelTest(TestCase):
 
         :rtype: None
         """
+        self.assertIsInstance(Vaga.empresa_telefone_celular.field, TelefoneField)
         field = TelefoneField()
-        actual = field.get_prep_value('(11) 4785-1602')
-        expected = '1147851602'
+        actual = field.get_prep_value(self.vaga.empresa_telefone_comercial)
+        expected = '1187653201'
         self.assertEqual(expected, actual)
     
     def test_has_auto_filled_data_hora_cadastro_field(self) -> None:
