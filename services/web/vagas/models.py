@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from typing import Any
 import re
+from vagas.validators import is_equal_to_or_later_than_current_datetime
 
 class TelefoneField(models.CharField):
     
@@ -131,11 +132,10 @@ class Vaga(models.Model):
         return f'/oportunidades/{str(self.id)}'
     
     def clean(self):
-        if self.pk is None:
-            now = timezone.localtime().replace(second=0, microsecond=0)
-            value = self.data_hora_entrevista.replace(second=0, microsecond=0)
-
-            if value < now:
-                raise ValidationError({
-                    'data_hora_entrevista': 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.'
-                })
+        if self.pk is None and not is_equal_to_or_later_than_current_datetime(self.data_hora_entrevista):
+            raise ValidationError({
+                'data_hora_entrevista': ValidationError(
+                    'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
+                    code='invalid_datetime'
+                )
+            })
