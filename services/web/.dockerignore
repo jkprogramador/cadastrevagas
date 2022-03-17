@@ -4,3 +4,5 @@
 
 # Excludes VS Code workspace
 *.code-workspace
+
+**/tests
