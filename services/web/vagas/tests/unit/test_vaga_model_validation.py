@@ -337,3 +337,27 @@ class VagaModelValidationTest(TestCase):
             vaga.full_clean()
         
         self.assertNotIn('data_hora_entrevista', ctx_1.exception.message_dict)
+    
+    def test_situacao_cannot_be_blank(self) -> None:
+        """
+        Ensure that situacao cannot be blank.
+
+        :rtype: None
+        """
+        vaga = Vaga(situacao='')
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.clean_fields(exclude=self.all_fields - {'situacao'})
+        
+        self.assertIn('O campo Situação é obrigatório.', ctx.exception.message_dict['situacao'])
+    
+    def test_situacao_cannot_contain_invalid_value(self) -> None:
+        """
+        Ensure that situacao cannot contain an invalid value.
+
+        :rtype: None
+        """
+        vaga = Vaga(situacao='foo')
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.clean_fields(exclude=self.all_fields - {'situacao'})
+        
+        self.assertIn('O campo Situação contém um valor inválido.', ctx.exception.message_dict['situacao'])

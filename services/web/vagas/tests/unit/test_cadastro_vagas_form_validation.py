@@ -262,3 +262,21 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
 
         form6 = CadastroVagasForm({'data_hora_entrevista': timezone.localtime()})
         self.assertNotIn('data_hora_entrevista', form6.errors)
+    
+    def test_situacao_is_required(self) -> None:
+        """
+        Ensure that situacao is required.
+
+        :rtype: None
+        """
+        form = CadastroVagasForm({'situacao': ''})
+        self.assertIn('O campo Situação é obrigatório.', form.errors['situacao'])
+    
+    def test_situacao_cannot_contain_invalid_value(self) -> None:
+        """
+        Ensure that situacao cannot contain an invalid value
+
+        :rtype: None
+        """
+        form = CadastroVagasForm({'situacao': 'foo'})
+        self.assertIn('O campo Situação contém um valor inválido.', form.errors['situacao'])

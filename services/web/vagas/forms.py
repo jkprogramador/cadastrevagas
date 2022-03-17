@@ -156,6 +156,10 @@ class CadastroVagasForm(forms.Form):
             'aria-describedby': 'situacao_required',
             'aria-label': 'Situação do cadastro'
         }),
+        error_messages={
+            'required': 'O campo Situação é obrigatório.',
+            'invalid_choice': 'O campo Situação contém um valor inválido.',
+        },
     )
 
     def clean(self):

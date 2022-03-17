@@ -122,7 +122,11 @@ class Vaga(models.Model):
         blank=False,
         max_length=1,
         choices=Status.choices,
-        default=Status.WAITING
+        default=Status.WAITING,
+        error_messages={
+            'blank': 'O campo Situação é obrigatório.',
+            'invalid_choice': 'O campo Situação contém um valor inválido.',
+        },
     )
 
     data_hora_cadastro = models.DateTimeField(auto_now_add=True)

@@ -200,3 +200,25 @@ class CadastroVagaUpdateValidationTest(TestCase):
 
         response = self.client.post(self.url, data={'data_hora_entrevista': '2022 10 23 08:07'})
         self.assertContains(response, expected_error_message)
+    
+    def test_should_display_situacao_is_required(self) -> None:
+        """
+        WHEN I submit an empty value for the status of the job opportunity
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url, data={'situacao': ''})
+        self.assertContains(response, 'O campo Situação é obrigatório.')
+
+    def test_should_display_situacao_is_invalid(self) -> None:
+        """
+        WHEN I submit an invalid value for the status of the job opportunity
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url, data={'situacao': 'foo'})
+        self.assertContains(response, 'O campo Situação contém um valor inválido.')
