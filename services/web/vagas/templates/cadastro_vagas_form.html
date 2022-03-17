@@ -1,3 +1,15 @@
+{% if form.non_field_errors %}
+
+<div class="alert alert-danger my-5" role=alert>
+{% for error in form.non_field_errors %}
+
+<p class=m-0>{{ error|safe }}</p>
+
+{% endfor %}
+</div>
+
+{% endif %}
+
 {% for field in form %}
     <div class="row mb-5 align-items-start">
         <label for="{{ field.id_for_label }}" class="col-md-2 col-xl-3 col-form-label">{{ field.label }}</label>
@@ -9,7 +21,7 @@
             {% if field.errors %}
                 {% for error in field.errors %}
                 <div id="{{ field.html_name }}_error" class="invalid-feedback">
-                    {{ error|escape }}
+                    {{ error|safe }}
                 </div>
                 {% endfor %}
             {% endif %}

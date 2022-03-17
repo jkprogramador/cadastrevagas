@@ -29,6 +29,7 @@ class CadastroVagaUpdateValidationTest(TestCase):
             cargo_descricao='Descrição do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
         )
         self.url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
     
@@ -222,3 +223,19 @@ class CadastroVagaUpdateValidationTest(TestCase):
         """
         response = self.client.post(self.url, data={'situacao': 'foo'})
         self.assertContains(response, 'O campo Situação contém um valor inválido.')
+
+    def test_should_display_data_hora_entrevista_must_be_blank(self) -> None:
+        """
+        WHEN I submit the status of the opportunity with a value of 'Aguardando retorno' and a value for the date and time of interview
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url, data={
+            'situacao': Vaga.Status.WAITING,
+            'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M')
+        })
+        self.assertContains(response,
+            "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'."
+        )

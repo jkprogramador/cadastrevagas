@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from vagas.models import Vaga
 
 class CadastroVagasForm(forms.Form):
@@ -164,6 +165,16 @@ class CadastroVagasForm(forms.Form):
 
     def clean(self):
         super().clean()
+
+        if self.cleaned_data.get('situacao') == Vaga.Status.WAITING and self.cleaned_data.get('data_hora_entrevista') is not None:
+            self.add_error('data_hora_entrevista',
+                ValidationError("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.", code='invalid')
+            )
+        
+        if self.cleaned_data.get('situacao') == Vaga.Status.INTERVIEW_SCHEDULED and self.cleaned_data.get('data_hora_entrevista') is None:
+            self.add_error('data_hora_entrevista',
+                ValidationError("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.", code='required')
+            )
 
         for bound_field in self:
             if bound_field.errors:

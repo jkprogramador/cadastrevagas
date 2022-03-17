@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase
 from django.utils import timezone
 from vagas.forms import CadastroVagasForm
+from vagas.models import Vaga
 
 class CadastroVagasFormValidationTest(SimpleTestCase):
     """Ensure CadastroVagasForm performs the necessary validation."""
@@ -280,3 +281,31 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
         """
         form = CadastroVagasForm({'situacao': 'foo'})
         self.assertIn('O campo Situação contém um valor inválido.', form.errors['situacao'])
+    
+    def test_data_hora_entrevista_must_be_blank_if_situacao_is_waiting(self) -> None:
+        """
+        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.WAITING.
+
+        :rtype: None
+        """
+        form = CadastroVagasForm({
+            'situacao': Vaga.Status.WAITING,
+            'data_hora_entrevista': timezone.localtime(),
+        })
+        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+            form.errors['data_hora_entrevista']
+        )
+    
+    def test_data_hora_entrevista_cannot_be_blank_if_situacao_is_interview_scheduled(self) -> None:
+        """
+        Ensure that data_hora_entrevista cannot be blank if situacao has a value of Vaga.Status.INTERVIEW_SCHEDULED.
+
+        :rtype: None
+        """
+        form = CadastroVagasForm({
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
+            'data_hora_entrevista': '',
+        })
+        self.assertIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+            form.errors['data_hora_entrevista']
+        )

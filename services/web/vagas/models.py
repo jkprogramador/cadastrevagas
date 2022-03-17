@@ -148,7 +148,25 @@ class Vaga(models.Model):
         return f'/oportunidades/{str(self.id)}'
     
     def clean(self):
-        if self.pk is None and not is_equal_to_or_later_than_current_datetime(self.data_hora_entrevista):
+        if self.situacao == self.Status.WAITING and self.data_hora_entrevista is not None:
+            raise ValidationError({
+                'data_hora_entrevista': ValidationError(
+                    "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+                    code='invalid_datetime'
+                )
+            })
+        
+        if self.situacao == self.Status.INTERVIEW_SCHEDULED and self.data_hora_entrevista is None:
+            raise ValidationError({
+                'data_hora_entrevista': ValidationError(
+                    "O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+                    code='required'
+                )
+            })
+        
+        if (self.pk is None and
+            self.data_hora_entrevista is not None and
+            not is_equal_to_or_later_than_current_datetime(self.data_hora_entrevista)):
             raise ValidationError({
                 'data_hora_entrevista': ValidationError(
                     'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',

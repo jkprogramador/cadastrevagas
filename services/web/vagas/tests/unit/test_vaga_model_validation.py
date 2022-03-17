@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.utils import timezone
 import datetime as dt
 from vagas.models import Vaga
@@ -309,13 +309,16 @@ class VagaModelValidationTest(TestCase):
 
         :rtype: None
         """
-        prior_to_now1 = timezone.localtime() - dt.timedelta(minutes=5)
-        vaga1 = Vaga(data_hora_entrevista=prior_to_now1)
-        with self.assertRaises(ValidationError) as ctx1:
-            vaga1.full_clean(exclude=self.all_fields - {'data_hora_entrevista'})
+        prior_to_now = timezone.localtime() - dt.timedelta(minutes=5)
+        vaga = Vaga(
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
+            data_hora_entrevista=prior_to_now
+        )
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.full_clean(exclude=self.all_fields)
         
         self.assertIn('O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
-            ctx1.exception.message_dict['data_hora_entrevista'])
+            ctx.exception.message_dict['data_hora_entrevista'])
     
     def test_existing_data_hora_entrevista_can_be_any_datetime(self) -> None:
         """
@@ -329,14 +332,15 @@ class VagaModelValidationTest(TestCase):
             cargo_titulo='Título do cargo',
             site_referencia='https://sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
         )
         before_current_datetime = timezone.localtime() - dt.timedelta(minutes=5)
-        with self.assertRaises(ValidationError) as ctx_1:
+        with self.assertRaises(ValidationError) as ctx:
             vaga.empresa_nome = ''
             vaga.data_hora_entrevista = before_current_datetime
             vaga.full_clean()
         
-        self.assertNotIn('data_hora_entrevista', ctx_1.exception.message_dict)
+        self.assertNotIn('data_hora_entrevista', ctx.exception.message_dict)
     
     def test_situacao_cannot_be_blank(self) -> None:
         """
@@ -361,3 +365,31 @@ class VagaModelValidationTest(TestCase):
             vaga.clean_fields(exclude=self.all_fields - {'situacao'})
         
         self.assertIn('O campo Situação contém um valor inválido.', ctx.exception.message_dict['situacao'])
+    
+    def test_data_hora_entrevista_must_be_blank_if_situacao_is_waiting(self) -> None:
+        """
+        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.WAITING.
+
+        :rtype: None
+        """
+        vaga = Vaga(situacao=Vaga.Status.WAITING, data_hora_entrevista=timezone.localtime())
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.full_clean(exclude=self.all_fields)
+        
+        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+            ctx.exception.message_dict['data_hora_entrevista']
+        )
+    
+    def test_data_hora_entrevista_cannot_be_blank_if_situacao_is_interview_scheduled(self) -> None:
+        """
+        Ensure that data_hora_entrevista cannot be blank if situacao has a value of Vaga.Status.INTERVIEW_SCHEDULED.
+
+        :rtype: None
+        """
+        vaga = Vaga(situacao=Vaga.Status.INTERVIEW_SCHEDULED, data_hora_entrevista=None)
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.full_clean(exclude=self.all_fields)
+        
+        self.assertIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+            ctx.exception.message_dict['data_hora_entrevista']
+        )

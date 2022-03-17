@@ -52,7 +52,6 @@ class CadastroVagaUpdateDataHoraEntrevistaValidationTest(TestCase):
             data_hora_entrevista=timezone.localtime(),
         )
         url = reverse('oportunidades_edit', args=[str(vaga.pk)])
-        error_message = 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.'
-        data_hora_entrevista_1 = timezone.localtime() - dt.timedelta(minutes=3)
-        response_1 = self.client.post(url, data={'data_hora_entrevista': data_hora_entrevista_1})
-        self.assertNotContains(response_1, error_message)
+        data_hora_entrevista = timezone.localtime() - dt.timedelta(minutes=3)
+        response = self.client.post(url, data={'data_hora_entrevista': data_hora_entrevista})
+        self.assertNotContains(response, 'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.')

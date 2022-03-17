@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import reverse
 from django.utils import timezone
 import datetime as dt
+from vagas.models import Vaga
 
 class CadastroVagaCreateValidationTest(SimpleTestCase):
     """
@@ -222,3 +223,35 @@ class CadastroVagaCreateValidationTest(SimpleTestCase):
         """
         response = self.client.post(self.url, data={'situacao': 'foo'})
         self.assertContains(response, 'O campo Situação contém um valor inválido.')
+    
+    def test_should_display_data_hora_entrevista_must_be_blank(self) -> None:
+        """
+        WHEN I submit the status of the opportunity with a value of 'Aguardando retorno' and a value for the date and time of interview
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url, data={
+            'situacao': Vaga.Status.WAITING,
+            'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M')
+        })
+        self.assertContains(response,
+            "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'."
+        )
+    
+    def test_should_display_data_hora_entrevista_cannot_be_blank(self) -> None:
+        """
+        WHEN I submit the status of the opportunity with a value of 'Entrevista agendada' and a blank value for the date and time of interview
+
+        THEN it should display an error message
+
+        :rtype: None
+        """
+        response = self.client.post(self.url, data={
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
+            'data_hora_entrevista': ''
+        })
+        self.assertContains(response,
+            "O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'."
+        )
