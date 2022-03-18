@@ -70,6 +70,7 @@ class CadastroVagaUpdateTest(TestCase):
         self.assertEqual(self.new_data['site_referencia'], vaga.site_referencia)
         self.assertEqual(self.new_data['data_hora_entrevista'], timezone.localtime(vaga.data_hora_entrevista))
         self.assertEqual(self.new_data['situacao'], vaga.situacao)
+        self.assertGreaterEqual(vaga.data_hora_atualizacao, self.vaga.data_hora_atualizacao)
     
     def test_should_redirect_to_detail_page(self) -> None:
         """

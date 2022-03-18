@@ -34,6 +34,7 @@ class CadastroVagaCreateTest(TestCase):
             'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M'),
             'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
         }
+        self.now = timezone.now()
 
         self.response = self.client.post('/oportunidades/new', data=self.data, follow=True)
         self.vaga = Vaga.objects.get(empresa_nome=self.data['empresa_nome'])
@@ -55,6 +56,7 @@ class CadastroVagaCreateTest(TestCase):
         self.assertEqual(self.data['site_referencia'], self.vaga.site_referencia)
         self.assertEqual(self.data['data_hora_entrevista'], timezone.localtime(self.vaga.data_hora_entrevista).strftime('%d/%m/%Y %H:%M'))
         self.assertEqual(self.data['situacao'], self.vaga.situacao)
+        self.assertGreaterEqual(self.vaga.data_hora_cadastro, self.now)
     
     def test_should_redirect_to_detail_page(self) -> None:
         """

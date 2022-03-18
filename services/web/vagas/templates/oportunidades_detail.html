@@ -36,6 +36,8 @@
 
         <p>Vaga cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
 
+        <p>Última atualização: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</p>
+
         <a class="btn btn-primary btn-lg" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
 
         <a class="btn btn-danger btn-lg" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>

@@ -130,6 +130,8 @@ class Vaga(models.Model):
     )
 
     data_hora_cadastro = models.DateTimeField(auto_now_add=True)
+    
+    data_hora_atualizacao = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         """

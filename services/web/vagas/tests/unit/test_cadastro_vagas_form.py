@@ -106,6 +106,15 @@ class CadastroVagasFormTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             self.form.fields['data_hora_cadastro']
     
+    def test_does_not_have_data_e_hora_atualizacao_field(self) -> None:
+        """
+        Ensure form does not have field for the date and time of the last update.
+
+        :rtype: None
+        """
+        with self.assertRaises(KeyError):
+            self.form.fields['data_hora_atualizacao']
+    
     def test_has_choice_field_situacao(self) -> None:
         """
         Ensure form has choice field for selecting the status of a job interview.

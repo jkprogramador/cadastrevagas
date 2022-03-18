@@ -36,6 +36,8 @@
 
         <p>Data e horário do cadastro: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
 
+        <p>Última atualização: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</p>
+
         <form action method=post>
             {% csrf_token %}
             <input class="btn btn-large btn-danger" type=submit value="Excluir cadastro">

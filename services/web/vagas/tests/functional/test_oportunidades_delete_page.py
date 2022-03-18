@@ -121,8 +121,17 @@ class CadastroVagaDeleteViewTest(TestCase):
 
         :rtype: None
         """
-        local_datetime = timezone.localtime(self.vaga.data_hora_cadastro)
-        self.assertContains(self.response, local_datetime.strftime('%d/%m/%Y %H:%M'))
+        local_datetime = timezone.localtime(self.vaga.data_hora_cadastro).strftime('%d/%m/%Y %H:%M')
+        self.assertContains(self.response, f'Data e horário do cadastro: {local_datetime}')
+    
+    def test_should_see_data_hora_atualizacao(self) -> None:
+        """
+        THEN I should see the corresponding date and time of the last update
+
+        :rtype: None
+        """
+        local_datetime = timezone.localtime(self.vaga.data_hora_atualizacao).strftime('%d/%m/%Y %H:%M')
+        self.assertContains(self.response, f'Última atualização: {local_datetime}')
     
     def test_should_see_situacao(self) -> None:
         """

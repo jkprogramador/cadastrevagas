@@ -66,8 +66,15 @@ class VagaModelTest(TestCase):
 
         :rtype: None
         """
-        vaga = Vaga.objects.get(pk=self.vaga.pk)
-        self.assertGreaterEqual(vaga.data_hora_cadastro, self.now)
+        self.assertGreaterEqual(self.vaga.data_hora_cadastro, self.now)
+    
+    def test_has_auto_filled_data_hora_atualizacao_field(self) -> None:
+        """
+        Ensure model has datetime field data_hora_atualizacao which is automatically filled upon saving the model.
+
+        :rtype: None
+        """
+        self.assertGreaterEqual(self.vaga.data_hora_atualizacao, self.now)
 
     def test_has_selection_of_choices_for_status(self) -> None:
         """
