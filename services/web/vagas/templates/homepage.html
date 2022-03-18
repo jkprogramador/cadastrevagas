@@ -10,8 +10,10 @@
             <h3><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></h3>
             <p><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></p>
             <p>Situação: {{ vaga.get_situacao_display }}</p>
+            {% if vaga.data_hora_entrevista %}
             <p>Entrevista em: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
-            <p>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
+            {% endif %}
+            <p>Cadastro em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
             <p><a href="{% url 'oportunidades_edit' vaga.pk %}">Alterar</a></p>
             <p><a href="{% url 'oportunidades_delete' vaga.pk %}">Remover</a></p>
         </div>

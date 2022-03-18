@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-import datetime as dt
 from vagas.models import Vaga
 
 class HomePageTest(TestCase):
@@ -14,231 +13,270 @@ class HomePageTest(TestCase):
     """
 
     def setUp(self) -> None:
-        """
-        GIVEN previously registered job opportunities
-
-        WHEN I go to the homepage
-
-        :rtype: None
-        """
-        self.data = [
-            {
-                'empresa_nome': 'Minha empresa 1',
-                'empresa_endereco': 'Meu endereço 1',
-                'empresa_email': 'empresa1@email.com',
-                'empresa_site': 'empresa1.com.br',
-                'empresa_telefone_celular': '(11) 96712-0302',
-                'empresa_telefone_comercial': '(11) 8067-2511',
-                'cargo_titulo': 'Cargo título 1',
-                'cargo_descricao': 'Cargo descrição 1',
-                'site_referencia': 'www.sitereferencia1.com.br',
-                'data_hora_entrevista': timezone.localtime(),
-                'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
-            },
-            {
-                'empresa_nome': 'Minha empresa 2',
-                'empresa_endereco': 'Meu endereço 2',
-                'empresa_email': 'empresa2@email.com',
-                'empresa_site': 'empresa2.com.br',
-                'empresa_telefone_celular': '(11) 95536-4659',
-                'empresa_telefone_comercial': '(11) 7541-0606',
-                'cargo_titulo': 'Cargo título 2',
-                'cargo_descricao': 'Cargo descrição 2',
-                'site_referencia': 'https://www.sitereferencia2.com.br',
-                'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=2, hours=3),
-                'situacao': Vaga.Status.REJECTED,
-            },
-            {
-                'empresa_nome': 'Minha empresa 3',
-                'empresa_endereco': 'Meu endereço 3',
-                'empresa_email': 'empresa3@email.com',
-                'empresa_site': 'empresa3.com.br',
-                'empresa_telefone_celular': '(11) 90785-9251',
-                'empresa_telefone_comercial': '(11) 6441-2507',
-                'cargo_titulo': 'Cargo título 3',
-                'cargo_descricao': 'Cargo descrição 3',
-                'site_referencia': 'http://sitereferencia3.com.br',
-                'data_hora_entrevista': timezone.localtime() + dt.timedelta(days=5, hours=7, minutes=30),
-                'situacao': Vaga.Status.WAITING,
-            },
-        ]
-
-        for data in self.data:
-            Vaga.objects.create(
-                empresa_nome=data['empresa_nome'],
-                empresa_endereco=data['empresa_endereco'],
-                empresa_email=data['empresa_email'],
-                empresa_site=data['empresa_site'],
-                empresa_telefone_celular=data['empresa_telefone_celular'],
-                empresa_telefone_comercial=data['empresa_telefone_comercial'],
-                cargo_titulo=data['cargo_titulo'],
-                cargo_descricao=data['cargo_descricao'],
-                site_referencia=data['site_referencia'],
-                data_hora_entrevista=data['data_hora_entrevista'],
-                situacao=data['situacao'],
-            )
-        
-        self.response = self.client.get('/')
+        self.url = reverse('homepage')
+        self.vaga = Vaga.objects.create(
+            empresa_nome='Minha empresa',
+            empresa_endereco='Meu endereço',
+            empresa_email='empresa@email.com',
+            empresa_site='empresa.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título',
+            cargo_descricao='Cargo descrição',
+            site_referencia='www.sitereferencia.com.br',
+            data_hora_entrevista=None,
+            situacao=Vaga.Status.REJECTED,
+        )
     
     def test_should_have_link_to_homepage(self) -> None:
         """
+        GIVEN a homepage for the website
+
+        WHEN I visit it
+
         THEN it should have a link to the homepage
 
         :rtype: None
         """
-        url = reverse('homepage')
-        self.assertContains(self.response, f'href="{url}"')
+        response = self.client.get(self.url)
+        self.assertContains(response, f'href="{self.url}"')
     
     def test_should_display_cargo_titulo(self) -> None:
         """
-        THEN it should display the corresponding job titles for registered job opportunities
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should display the corresponding job title
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertContains(self.response, data['cargo_titulo'])
+
+        response = self.client.get(self.url)
+        self.assertContains(response, self.vaga.cargo_titulo)
     
     def test_should_display_empresa_nome(self) -> None:
         """
-        THEN it should display the corresponding companies' names for registered job opportunities
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should display the corresponding name of the company
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertContains(self.response, data['empresa_nome'])
+        response = self.client.get(self.url)
+        self.assertContains(response, self.vaga.empresa_nome)
     
     def test_should_display_data_hora_entrevista(self) -> None:
         """
-        THEN it should display the corresponding date and time of each job interview
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should display the date and time of interview for that opportunity
 
         :rtype: None
         """
-        for data in self.data:
-            data_hora_entrevista = data['data_hora_entrevista'].strftime('%d/%m/%Y %H:%M')
-            self.assertContains(self.response, data_hora_entrevista)
+        vaga = Vaga.objects.create(
+            empresa_nome='Minha empresa',
+            empresa_endereco='Meu endereço',
+            empresa_email='empresa@email.com',
+            empresa_site='empresa.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título',
+            cargo_descricao='Cargo descrição',
+            site_referencia='www.sitereferencia.com.br',
+            data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
+        )
+        response = self.client.get(self.url)
+        self.assertContains(response, vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M'))
+    
+    def test_should_not_display_data_hora_entrevista_label_if_blank(self) -> None:
+        """
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display label for date and time of interview if it is blank
+
+        :rtype: None
+        """
+        response = self.client.get(self.url)
+        self.assertNotContains(response, 'Entrevista em')
     
     def test_should_display_data_hora_cadastro(self) -> None:
         """
-        THEN it should display the corresponding date and time of each registration
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should display the corresponding date and time of registration
 
         :rtype: None
         """
-        for data in self.data:
-            vaga = Vaga.objects.get(empresa_nome=data['empresa_nome'])
-            local_data_hora_cadastro = timezone.localtime(vaga.data_hora_cadastro).strftime('%d/%m/%Y %H:%M')
-            self.assertContains(self.response, local_data_hora_cadastro)
+        response = self.client.get(self.url)
+        data_hora_cadastro = timezone.localtime(self.vaga.data_hora_cadastro).strftime('%d/%m/%Y %H:%M')
+        self.assertContains(response, data_hora_cadastro)
     
-    def test_should_have_link_to_each_company_website(self) -> None:
+    def test_should_have_link_to_company_website(self) -> None:
         """
-        THEN it should have links to the corresponding companies' websites
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should have links to the corresponding website of the company
 
         :rtype: None
         """
-        for data in self.data:
-            url = data['empresa_site']
-            self.assertContains(self.response, f'href="{url}"')
+        response = self.client.get(self.url)
+        self.assertContains(response, f'href="{self.vaga.empresa_site}"')
     
-    def test_should_have_link_to_register_new_opportunities(self) -> None:
+    def test_should_have_link_to_new_registration(self) -> None:
         """
+        GIVEN a homepage for the website
+
+        WHEN I visit it
+
         THEN it should have a link to a page for registering new job opportunities
 
         :rtype: None
         """
+        response = self.client.get(self.url)
         url = reverse('oportunidades_new')
-        self.assertContains(self.response, f'href="{url}"')
+        self.assertContains(response, f'href="{url}"')
     
-    def test_should_have_link_to_each_detail_page(self) -> None:
+    def test_should_have_link_to_detail_page(self) -> None:
         """
-        THEN each job opportunity should have a link to its corresponding detail page
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should have a link to the corresponding detail page of that opportunity
 
         :rtype: None
         """
-        for data in self.data:
-            vaga = Vaga.objects.get(empresa_nome=data['empresa_nome'])
-            url = reverse('oportunidades_detail', args=[str(vaga.pk)])
-            self.assertContains(self.response, f'href="{url}"')
+        response = self.client.get(self.url)
+        url = reverse('oportunidades_detail', args=[str(self.vaga.pk)])
+        self.assertContains(response, f'href="{url}"')            
     
-    def test_should_have_link_to_edit_job_opportunity(self) -> None:
+    def test_should_have_link_to_edit_page(self) -> None:
         """
-        THEN each job opportunity should have a link to edit its corresponding data
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should have a link to the corresponding edit page of that opportunity
 
         :rtype: None
         """
-        for data in self.data:
-            vaga = Vaga.objects.get(empresa_nome=data['empresa_nome'])
-            url = reverse('oportunidades_edit', args=[str(vaga.pk)])
-            self.assertContains(self.response, f'href="{url}"')
+        response = self.client.get(self.url)
+        url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
+        self.assertContains(response, f'href="{url}"')
     
-    def test_should_have_link_to_delete_job_opportunity(self) -> None:
+    def test_should_have_link_to_delete_page(self) -> None:
         """
-        THEN each job opportunity should have a link to delete its entry
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should have a link to the corresponding delete page of that opportunity
 
         :rtype: None
         """
-        for data in self.data:
-            vaga = Vaga.objects.get(empresa_nome=data['empresa_nome'])
-            url = reverse('oportunidades_delete', args=[str(vaga.pk)])
-            self.assertContains(self.response, f'href="{url}"')
+        response = self.client.get(self.url)
+        url = reverse('oportunidades_delete', args=[str(self.vaga.pk)])
+        self.assertContains(response, f'href="{url}"')
     
     def test_should_not_display_empresa_endereco(self) -> None:
         """
-        THEN it should not display the companies' addresses
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the addresss of the company
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['empresa_endereco'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.empresa_endereco)
     
     def test_should_not_display_empresa_email(self) -> None:
         """
-        THEN it should not display the companies' emails
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the email of the company
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['empresa_email'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.empresa_email)            
     
     def test_should_not_display_empresa_telefone_celular(self) -> None:
         """
-        THEN it should not display the companies' cellphone numbers
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the cellphone number of the company
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['empresa_telefone_celular'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.empresa_telefone_celular)
 
     def test_should_not_display_empresa_telefone_comercial(self) -> None:
         """
-        THEN it should not display the companies' landline numbers
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the landline number of the company
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['empresa_telefone_comercial'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.empresa_telefone_comercial)
     
     def test_should_not_display_cargo_descricao(self) -> None:
         """
-        THEN it should not display the job descriptions
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the job description
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['cargo_descricao'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.cargo_descricao)
 
     def test_should_not_display_site_referencia(self) -> None:
         """
-        THEN it should not display the websites where the opportunities were found
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should not display the website where the opportunity was found
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertNotContains(self.response, data['site_referencia'])
+        response = self.client.get(self.url)
+        self.assertNotContains(response, self.vaga.site_referencia)
     
     def test_should_display_situacao(self) -> None:
         """
-        THEN it should display each corresponding status
+        GIVEN a previously registered opportunity
+
+        WHEN I visit the homepage
+
+        THEN it should display the status of the opportunity
 
         :rtype: None
         """
-        for data in self.data:
-            self.assertContains(self.response, data['situacao'].label)
+        response = self.client.get(self.url)
+        self.assertContains(response, self.vaga.situacao.label)
