@@ -30,22 +30,20 @@
                  {% if vaga.empresa_telefone_celular or vaga.empresa_telefone_comercial %}
                  <li class="list-group-item">
                      {% if vaga.empresa_telefone_celular %}
-                     {{ vaga.empresa_telefone_celular }} |
+                     {{ vaga.empresa_telefone_celular }}
                      {% endif %}
                      {% if vaga.empresa_telefone_comercial %}
-                     {{ vaga.empresa_telefone_comercial }}
+                     | {{ vaga.empresa_telefone_comercial }}
                      {% endif %}
                 </li>
                  {% endif %}
 
                  <li class="list-group-item">Referência: {{ vaga.site_referencia | urlize }}</li>
-                 <li class="list-group-item">Situação:
-                     {% if vaga.situacao == 'S' and vaga.data_hora_entrevista %}
-                     entrevista em {{ vaga.data_hora_entrevista | date:"d/m/Y H:i"}}
-                     {% else %}
-                     {{ vaga.get_situacao_display }}
-                     {% endif %}
-                </li>
+                 <li class="list-group-item">Situação: {{ vaga.get_situacao_display }}</li>
+                 
+                 {% if vaga.data_hora_entrevista %}
+                <li class="list-group-item">Entrevista em {{ vaga.data_hora_entrevista | date:"d/m/Y H:i"}}</li>
+                {% endif %}
 
                 <li class="list-group-item">
                     <a class="btn btn-primary btn-lg mx-5" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
@@ -56,7 +54,7 @@
                 <small class=d-block>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</small>
                 <small class=d-block>Última atualização em: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</small>
             </div>
-        </div>       
+        </div>
     </div>
 </div>
 {% endblock %}
