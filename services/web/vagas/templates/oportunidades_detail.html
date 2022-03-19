@@ -7,40 +7,56 @@
     <div class="col">
         <h2 class="my-4">Detalhes da vaga</h2>
 
-        <p>Nome da empresa: {{ vaga.empresa_nome }}</p>
+        <div class="card bg-light">
+            <div class=card-body>
+                <h3 class=card-title>{{ vaga.empresa_nome }}</h3>
+                <h4 class="card-subtitle text-muted">{{ vaga.cargo_titulo }}</h4>
 
-        <p>Endereço da empresa: {{ vaga.empresa_endereco|default:'-' }}</p>
+                {% if vaga.cargo_descricao %}
+                <p class=card-text>{{ vaga.cargo_descricao | linebreaks }}</p>
+                {% endif %}
+            </div>
+            <ul class="list-group list-group-flush text-center">
+                {% if vaga.empresa_endereco %}
+                 <li class="list-group-item">{{ vaga.empresa_endereco }}</li>
+                 {% endif %}
 
-        <p>Email da empresa: {% if vaga.empresa_email %}{{ vaga.empresa_email | urlize }}{% else %}-{% endif %}</p>
+                 {% if vaga.empresa_email %}
+                 <li class="list-group-item">{{ vaga.empresa_email | urlize }}</li>
+                 {% endif %}
 
-        <p>Site da empresa: {% if vaga.empresa_site %}{{ vaga.empresa_site | urlize }}{% else%}-{% endif %}</p>
+                 <li class="list-group-item">{{ vaga.empresa_site | urlize }}</li>
 
-        <p>Telefone celular da empresa: {{ vaga.empresa_telefone_celular|default:'-' }}</p>
+                 {% if vaga.empresa_telefone_celular or vaga.empresa_telefone_comercial %}
+                 <li class="list-group-item">
+                     {% if vaga.empresa_telefone_celular %}
+                     {{ vaga.empresa_telefone_celular }} |
+                     {% endif %}
+                     {% if vaga.empresa_telefone_comercial %}
+                     {{ vaga.empresa_telefone_comercial }}
+                     {% endif %}
+                </li>
+                 {% endif %}
 
-        <p>Telefone comercial da empresa: {{ vaga.empresa_telefone_comercial|default:'-' }}</p>
+                 <li class="list-group-item">Referência: {{ vaga.site_referencia | urlize }}</li>
+                 <li class="list-group-item">Situação:
+                     {% if vaga.situacao == 'S' and vaga.data_hora_entrevista %}
+                     entrevista em {{ vaga.data_hora_entrevista | date:"d/m/Y H:i"}}
+                     {% else %}
+                     {{ vaga.get_situacao_display }}
+                     {% endif %}
+                </li>
 
-        <p>Título do cargo: {{ vaga.cargo_titulo }}</p>
-
-        {% if vaga.cargo_descricao %}
-        <p>Descrição do cargo:</p>
-        {{ vaga.cargo_descricao|linebreaks }}
-        {% else %}
-        <p>Descrição do cargo: -</p>
-        {% endif %}
-
-        <p>Site de referência: {{ vaga.site_referencia | urlize}}</p>
-
-        <p>Situação: {{ vaga.get_situacao_display }}</p>
-
-        <p>Data e horário da entrevista: {% if vaga.data_hora_entrevista %}{{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
-
-        <p>Vaga cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
-
-        <p>Última atualização: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</p>
-
-        <a class="btn btn-primary btn-lg" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
-
-        <a class="btn btn-danger btn-lg" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+                <li class="list-group-item">
+                    <a class="btn btn-primary btn-lg mx-5" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+                    <a class="btn btn-danger btn-lg mx-5" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+                </li>
+            </ul>
+            <div class="card-footer text-muted">
+                <small class=d-block>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</small>
+                <small class=d-block>Última atualização em: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</small>
+            </div>
+        </div>       
     </div>
 </div>
 {% endblock %}

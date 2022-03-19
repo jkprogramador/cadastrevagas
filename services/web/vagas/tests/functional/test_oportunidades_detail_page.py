@@ -122,7 +122,7 @@ class CadastroVagaDetailViewTest(TestCase):
         :rtype: None
         """
         local_datetime = timezone.localtime(self.vaga.data_hora_cadastro).strftime('%d/%m/%Y %H:%M')
-        self.assertContains(self.response, f'Vaga cadastrada em: {local_datetime}')
+        self.assertContains(self.response, f'Cadastrada em: {local_datetime}')
     
     def test_should_see_data_hora_atualizacao(self) -> None:
         """
@@ -131,7 +131,7 @@ class CadastroVagaDetailViewTest(TestCase):
         :rtype: None
         """
         local_datetime = timezone.localtime(self.vaga.data_hora_atualizacao).strftime('%d/%m/%Y %H:%M')
-        self.assertContains(self.response, f'Última atualização: {local_datetime}')
+        self.assertContains(self.response, f'Última atualização em: {local_datetime}')
     
     def test_should_see_situacao(self) -> None:
         """
