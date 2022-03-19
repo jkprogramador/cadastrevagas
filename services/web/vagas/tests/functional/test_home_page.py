@@ -24,7 +24,7 @@ class HomePageTest(TestCase):
             cargo_titulo='Cargo título',
             cargo_descricao='Cargo descrição',
             site_referencia='www.sitereferencia.com.br',
-            data_hora_entrevista=None,
+            data_hora_entrevista=timezone.localtime(),
             situacao=Vaga.Status.REJECTED,
         )
     
@@ -78,34 +78,8 @@ class HomePageTest(TestCase):
 
         :rtype: None
         """
-        vaga = Vaga.objects.create(
-            empresa_nome='Minha empresa',
-            empresa_endereco='Meu endereço',
-            empresa_email='empresa@email.com',
-            empresa_site='empresa.com.br',
-            empresa_telefone_celular='(11) 96712-0302',
-            empresa_telefone_comercial='(11) 8067-2511',
-            cargo_titulo='Cargo título',
-            cargo_descricao='Cargo descrição',
-            site_referencia='www.sitereferencia.com.br',
-            data_hora_entrevista=timezone.localtime(),
-            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
-        )
         response = self.client.get(self.url)
-        self.assertContains(response, vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M'))
-    
-    def test_should_not_display_data_hora_entrevista_label_if_blank(self) -> None:
-        """
-        GIVEN a previously registered opportunity
-
-        WHEN I visit the homepage
-
-        THEN it should not display label for date and time of interview if it is blank
-
-        :rtype: None
-        """
-        response = self.client.get(self.url)
-        self.assertNotContains(response, 'Entrevista em')
+        self.assertContains(response, self.vaga.data_hora_entrevista.strftime('%d/%m/%Y %H:%M'))
     
     def test_should_display_data_hora_cadastro(self) -> None:
         """

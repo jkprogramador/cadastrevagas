@@ -3,21 +3,42 @@
 {% block content %}
     <div class="row">
         <div class="col">
-        <h2 class="my-4">Oportunidades de vagas</h2>
+            <h2 class="my-4">Oportunidades de vagas</h2>
 
-        {% for vaga in vagas %}
-        <div>
-            <h3><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></h3>
-            <p><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></p>
-            <p>Situação: {{ vaga.get_situacao_display }}</p>
-            {% if vaga.data_hora_entrevista %}
-            <p>Entrevista em: {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }}</p>
-            {% endif %}
-            <p>Cadastro em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</p>
-            <p><a href="{% url 'oportunidades_edit' vaga.pk %}">Alterar</a></p>
-            <p><a href="{% url 'oportunidades_delete' vaga.pk %}">Remover</a></p>
-        </div>
-        {% endfor %}
+            <div class=table-responsive>
+                <table class="table table-hover">
+                    <thead class="table-info align-top">
+                        <tr>
+                            <th scope=col>Empresa</th>
+                            <th scope=col>Cargo</th>
+                            <th scope=col>Situação</th>
+                            <th scope=col>Entrevista em</th>
+                            <th scope=col>Cadastrada em</th>
+                            <th scope=col class=text-center>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class=align-middle>
+                        {% for vaga in vagas %}
+                        
+                        {% if vaga.situacao == vaga.Status.WAITING %}
+                        <tr class=table-secondary>
+                        {% elif vaga.situacao == vaga.Status.INTERVIEW_SCHEDULED %}
+                        <tr class=table-success>
+                        {% elif vaga.situacao == vaga.Status.REJECTED %}
+                        <tr class=table-danger>
+                        {% endif %}
+
+                            <td><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></td>
+                            <td><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></td>
+                            <td>{{ vaga.get_situacao_display }}</td>
+                            <td>{% if vaga.data_hora_entrevista %} {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
+                            <td>{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
+                            <td class=text-center><a href="{% url 'oportunidades_edit' vaga.pk %}">Alterar</a> | <a href="{% url 'oportunidades_delete' vaga.pk %}">Remover</a></td>
+                        </tr>
+                        {% endfor %}                    
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}
