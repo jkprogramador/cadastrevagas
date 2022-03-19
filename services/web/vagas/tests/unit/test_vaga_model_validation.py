@@ -291,12 +291,19 @@ class VagaModelValidationTest(TestCase):
 
         :rtype: None
         """
+        error_message = 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
+
         vaga1 = Vaga(data_hora_entrevista='2022-02-32 09:04')
         with self.assertRaises(ValidationError) as ctx1:
             vaga1.clean_fields(exclude=self.all_fields - {'data_hora_entrevista'})
         
-        self.assertIn('O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos',
-            ctx1.exception.message_dict['data_hora_entrevista'])
+        self.assertIn(error_message, ctx1.exception.message_dict['data_hora_entrevista'])
+        
+        vaga2 = Vaga(data_hora_entrevista='dsf455')
+        with self.assertRaises(ValidationError) as ctx2:
+            vaga2.clean_fields(exclude=self.all_fields - {'data_hora_entrevista'})
+        
+        self.assertIn(error_message, ctx2.exception.message_dict['data_hora_entrevista'])
         
         a_datetime = timezone.now()
         vaga2 = Vaga(data_hora_entrevista=a_datetime)
@@ -388,8 +395,26 @@ class VagaModelValidationTest(TestCase):
         """
         vaga = Vaga(situacao=Vaga.Status.INTERVIEW_SCHEDULED, data_hora_entrevista=None)
         with self.assertRaises(ValidationError) as ctx:
-            vaga.full_clean(exclude=self.all_fields)
+            vaga.full_clean(exclude=self.all_fields - {'data_hora_entrevista'})
         
         self.assertIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+            ctx.exception.message_dict['data_hora_entrevista']
+        )
+
+    def test_data_hora_entrevista_does_not_have_cannot_be_blank_if_situacao_is_interview_scheduled_error(self) -> None:
+        """
+        Ensure that data_hora_entrevista does not have cannot be blank if situacao is Vaga.Status.INTERVIEW_SCHEDULED error when providing invalid datetime.
+
+        :rtype: None
+        """
+        vaga = Vaga(
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
+            data_hora_entrevista='sdfsdfew',
+        )
+
+        with self.assertRaises(ValidationError) as ctx:
+            vaga.full_clean(exclude=self.all_fields - {'data_hora_entrevista'})
+        
+        self.assertNotIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
             ctx.exception.message_dict['data_hora_entrevista']
         )

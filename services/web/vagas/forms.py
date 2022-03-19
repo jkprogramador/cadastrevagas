@@ -171,7 +171,7 @@ class CadastroVagasForm(forms.Form):
                 ValidationError("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.", code='invalid')
             )
         
-        if self.cleaned_data.get('situacao') == Vaga.Status.INTERVIEW_SCHEDULED and self.cleaned_data.get('data_hora_entrevista') is None:
+        if 'data_hora_entrevista' not in self.errors and self.cleaned_data.get('situacao') == Vaga.Status.INTERVIEW_SCHEDULED and self.cleaned_data.get('data_hora_entrevista') is None:
             self.add_error('data_hora_entrevista',
                 ValidationError("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.", code='required')
             )

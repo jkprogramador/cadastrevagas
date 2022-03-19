@@ -309,3 +309,17 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
         self.assertIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
             form.errors['data_hora_entrevista']
         )
+    
+    def test_data_hora_entrevista_does_not_have_cannot_be_blank_if_situacao_is_interview_scheduled_error(self) -> None:
+        """
+        Ensure that data_hora_entrevista does not have cannot be blank if situacao is Vaga.Status.INTERVIEW_SCHEDULED error when providing invalid datetime.
+
+        :rtype: None
+        """
+        form = CadastroVagasForm({
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
+            'data_hora_entrevista': 'sdfsdfew',
+        })
+        self.assertNotIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+            form.errors['data_hora_entrevista']
+        )

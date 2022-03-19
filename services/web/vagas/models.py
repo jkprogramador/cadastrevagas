@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from typing import Any
 import re
+from datetime import datetime
 from vagas.validators import is_equal_to_or_later_than_current_datetime
 
 class TelefoneField(models.CharField):
@@ -113,6 +114,7 @@ class Vaga(models.Model):
         null=True,
         blank=True,
         error_messages={
+            'invalid': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos',
             'invalid_datetime': 'O campo Data e horário da entrevista deve conter uma data e horário válidos. Ex.: dia/mês/ano horas:minutos'
         }
     )
@@ -150,14 +152,6 @@ class Vaga(models.Model):
         return f'/oportunidades/{str(self.id)}'
     
     def clean(self):
-        if self.situacao == self.Status.WAITING and self.data_hora_entrevista is not None:
-            raise ValidationError({
-                'data_hora_entrevista': ValidationError(
-                    "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
-                    code='invalid_datetime'
-                )
-            })
-        
         if self.situacao == self.Status.INTERVIEW_SCHEDULED and self.data_hora_entrevista is None:
             raise ValidationError({
                 'data_hora_entrevista': ValidationError(
@@ -166,12 +160,20 @@ class Vaga(models.Model):
                 )
             })
         
-        if (self.pk is None and
-            self.data_hora_entrevista is not None and
-            not is_equal_to_or_later_than_current_datetime(self.data_hora_entrevista)):
-            raise ValidationError({
-                'data_hora_entrevista': ValidationError(
-                    'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
-                    code='invalid_datetime'
-                )
-            })
+        if isinstance(self.data_hora_entrevista, datetime):
+        
+            if self.situacao == self.Status.WAITING:
+                raise ValidationError({
+                    'data_hora_entrevista': ValidationError(
+                        "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+                        code='invalid_datetime'
+                    )
+                })
+        
+            if self.pk is None and not is_equal_to_or_later_than_current_datetime(self.data_hora_entrevista):
+                raise ValidationError({
+                    'data_hora_entrevista': ValidationError(
+                        'O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
+                        code='invalid_datetime'
+                    )
+                })
