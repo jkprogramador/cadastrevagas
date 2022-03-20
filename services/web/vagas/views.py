@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils import timezone
 from vagas.forms import CadastroVagasForm
 from vagas.models import Vaga
-from vagas.validators import validate_data_hora_entrevista
 
 def index(request):
     vagas = Vaga.objects.all()
@@ -41,9 +40,6 @@ def edit_view(request, pk: int):
     if request.method == 'POST':
         form = CadastroVagasForm(request.POST)
 
-        if vaga.data_hora_entrevista is None:
-            form.fields['data_hora_entrevista'].validators += [validate_data_hora_entrevista]
-
         if form.is_valid():
             vaga.empresa_nome = form.cleaned_data['empresa_nome']
             vaga.empresa_endereco = form.cleaned_data['empresa_endereco']
@@ -75,7 +71,6 @@ def create_view(request):
     
     if 'POST' == request.method:
         form = CadastroVagasForm(request.POST)
-        form.fields['data_hora_entrevista'].validators += [validate_data_hora_entrevista]
 
         if form.is_valid():
             vaga = Vaga.objects.create(

@@ -309,45 +309,6 @@ class VagaModelValidationTest(TestCase):
         vaga2 = Vaga(data_hora_entrevista=a_datetime)
         vaga2.clean_fields(exclude=self.all_fields - {'data_hora_entrevista'})
         self.assertEqual(a_datetime, vaga2.data_hora_entrevista)
-
-    def test_blank_data_hora_entrevista_must_be_equal_to_or_later_than_current_datetime(self) -> None:
-        """
-        Ensure that a blank data_hora_entrevista must be greater than or equal to current datetime.
-
-        :rtype: None
-        """
-        prior_to_now = timezone.localtime() - dt.timedelta(minutes=5)
-        vaga = Vaga(
-            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
-            data_hora_entrevista=prior_to_now
-        )
-        with self.assertRaises(ValidationError) as ctx:
-            vaga.full_clean(exclude=self.all_fields)
-        
-        self.assertIn('O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
-            ctx.exception.message_dict['data_hora_entrevista'])
-    
-    def test_existing_data_hora_entrevista_can_be_any_datetime(self) -> None:
-        """
-        Ensure that an existing data_hora_entrevista can be any datetime.
-
-        :rtype: None
-        """
-        vaga = Vaga.objects.create(
-            empresa_nome='Minha empresa',
-            empresa_site='https://meusite.com.br',
-            cargo_titulo='Título do cargo',
-            site_referencia='https://sitereferencia.com.br',
-            data_hora_entrevista=timezone.localtime(),
-            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
-        )
-        before_current_datetime = timezone.localtime() - dt.timedelta(minutes=5)
-        with self.assertRaises(ValidationError) as ctx:
-            vaga.empresa_nome = ''
-            vaga.data_hora_entrevista = before_current_datetime
-            vaga.full_clean()
-        
-        self.assertNotIn('data_hora_entrevista', ctx.exception.message_dict)
     
     def test_situacao_cannot_be_blank(self) -> None:
         """
@@ -401,20 +362,26 @@ class VagaModelValidationTest(TestCase):
             ctx.exception.message_dict['data_hora_entrevista']
         )
 
-    def test_data_hora_entrevista_does_not_have_cannot_be_blank_if_situacao_is_interview_scheduled_error(self) -> None:
+    def test_data_hora_entrevista_must_be_equal_to_or_later_than_current_datetime_if_situacao_is_interview_scheduled(self) -> None:
         """
-        Ensure that data_hora_entrevista does not have cannot be blank if situacao is Vaga.Status.INTERVIEW_SCHEDULED error when providing invalid datetime.
+        Ensure that data_hora_entrevista must be equal to or later than current datetime if situacao has a value of Vaga.Status.INTERVIEW_SCHEDULED.
 
         :rtype: None
         """
-        vaga = Vaga(
-            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
-            data_hora_entrevista='sdfsdfew',
-        )
-
+        before = timezone.localtime() - dt.timedelta(minutes=3)
+        vaga = Vaga(situacao=Vaga.Status.INTERVIEW_SCHEDULED, data_hora_entrevista=before)
         with self.assertRaises(ValidationError) as ctx:
-            vaga.full_clean(exclude=self.all_fields - {'data_hora_entrevista'})
-        
-        self.assertNotIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+            vaga.full_clean(self.all_fields)
+        self.assertIn('O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
             ctx.exception.message_dict['data_hora_entrevista']
         )
+
+        data_hora_entrevista = timezone.localtime()
+        vaga = Vaga(situacao=Vaga.Status.INTERVIEW_SCHEDULED, data_hora_entrevista=data_hora_entrevista)
+        vaga.full_clean(self.all_fields)
+        self.assertEqual(data_hora_entrevista, vaga.data_hora_entrevista)
+
+        after = timezone.localtime() + dt.timedelta(minutes=3)
+        vaga = Vaga(situacao=Vaga.Status.INTERVIEW_SCHEDULED, data_hora_entrevista=after)
+        vaga.full_clean(self.all_fields)
+        self.assertEqual(after, vaga.data_hora_entrevista)

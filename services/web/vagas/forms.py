@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from vagas.models import Vaga
+from vagas.validators import is_equal_to_or_later_than_current_datetime
 
 class CadastroVagasForm(forms.Form):
     """Form for submitting job opportunities."""
@@ -132,7 +133,6 @@ class CadastroVagasForm(forms.Form):
             'invalid': 'O campo Site de referência deve conter um endereço web válido.'
         }
     )
-
     data_hora_entrevista = forms.DateTimeField(
         input_formats=['%d/%m/%Y %H:%M'],
         widget=forms.DateTimeInput(attrs={
@@ -165,15 +165,27 @@ class CadastroVagasForm(forms.Form):
 
     def clean(self):
         super().clean()
+        situacao = self.cleaned_data.get('situacao')
+        data_hora_entrevista = self.cleaned_data.get('data_hora_entrevista')
 
-        if self.cleaned_data.get('situacao') == Vaga.Status.WAITING and self.cleaned_data.get('data_hora_entrevista') is not None:
+        if situacao == Vaga.Status.WAITING and data_hora_entrevista is not None:
             self.add_error('data_hora_entrevista',
                 ValidationError("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.", code='invalid')
             )
         
-        if 'data_hora_entrevista' not in self.errors and self.cleaned_data.get('situacao') == Vaga.Status.INTERVIEW_SCHEDULED and self.cleaned_data.get('data_hora_entrevista') is None:
+        if (situacao == Vaga.Status.INTERVIEW_SCHEDULED and data_hora_entrevista is None):
             self.add_error('data_hora_entrevista',
                 ValidationError("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.", code='required')
+            )
+
+        if (situacao == Vaga.Status.INTERVIEW_SCHEDULED
+            and
+            data_hora_entrevista is not None
+            and
+            not is_equal_to_or_later_than_current_datetime(data_hora_entrevista)
+        ):
+            self.add_error('data_hora_entrevista',
+                ValidationError("O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.", code='invalid_datetime')
             )
 
         for bound_field in self:

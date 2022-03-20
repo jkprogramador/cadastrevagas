@@ -1,5 +1,6 @@
 from django.test import SimpleTestCase
 from django.utils import timezone
+import datetime as dt
 from vagas.forms import CadastroVagasForm
 from vagas.models import Vaga
 
@@ -310,16 +311,30 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
             form.errors['data_hora_entrevista']
         )
     
-    def test_data_hora_entrevista_does_not_have_cannot_be_blank_if_situacao_is_interview_scheduled_error(self) -> None:
+    def test_data_hora_entrevista_must_be_equal_to_or_later_than_current_datetime_if_situacao_is_interview_scheduled(self) -> None:
         """
-        Ensure that data_hora_entrevista does not have cannot be blank if situacao is Vaga.Status.INTERVIEW_SCHEDULED error when providing invalid datetime.
+        Ensure that data_hora_entrevista must be equal to or later than current datetime if situacao has a value of Vaga.Status.INTERVIEW_SCHEDULED.
 
         :rtype: None
         """
+        before = timezone.localtime() - dt.timedelta(minutes=3)
         form = CadastroVagasForm({
             'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
-            'data_hora_entrevista': 'sdfsdfew',
+            'data_hora_entrevista': before,
         })
-        self.assertNotIn("O campo Data e o horário da entrevista deve ser preenchido caso a situação do cadastro seja 'Entrevista agendada'.",
+        self.assertIn('O campo Data e horário da entrevista não pode ser anterior à data e ao horário atuais.',
             form.errors['data_hora_entrevista']
         )
+
+        form = CadastroVagasForm({
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
+            'data_hora_entrevista': timezone.localtime(),
+        })
+        self.assertNotIn('data_hora_entrevista', form.errors)
+
+        after = timezone.localtime() + dt.timedelta(minutes=3)
+        form = CadastroVagasForm({
+            'situacao': Vaga.Status.INTERVIEW_SCHEDULED,
+            'data_hora_entrevista': after,
+        })
+        self.assertNotIn('data_hora_entrevista', form.errors)
