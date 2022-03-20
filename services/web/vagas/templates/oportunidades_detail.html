@@ -9,8 +9,8 @@
 
         <div class="card bg-light">
             <div class=card-body>
-                <h3 class=card-title>{{ vaga.empresa_nome }}</h3>
-                <h4 class="card-subtitle text-muted">{{ vaga.cargo_titulo }}</h4>
+                <h3 class="card-title text-center">{{ vaga.empresa_nome }}</h3>
+                <h4 class="card-subtitle text-muted text-center">{{ vaga.cargo_titulo }}</h4>
 
                 {% if vaga.cargo_descricao %}
                 <p class=card-text>{{ vaga.cargo_descricao | linebreaks }}</p>

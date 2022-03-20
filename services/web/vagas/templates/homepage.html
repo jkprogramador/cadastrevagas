@@ -33,7 +33,7 @@
                             <td>{{ vaga.get_situacao_display }}</td>
                             <td>{% if vaga.data_hora_entrevista %} {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
                             <td>{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
-                            <td><a class="btn btn-primary m-2" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a class="btn btn-danger" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
+                            <td><a class="btn btn-primary m-2 ms-0" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a class="btn btn-danger" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
                         </tr>
                         {% endfor %}                    
                     </tbody>
