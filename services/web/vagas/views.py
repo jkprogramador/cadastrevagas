@@ -6,7 +6,7 @@ from vagas.forms import CadastroVagasForm
 from vagas.models import Vaga
 
 def index(request):
-    vagas = Vaga.objects.all()
+    vagas = Vaga.objects.order_by('-data_hora_cadastro')
 
     return render(request, 'homepage.html', {'vagas': vagas})
 

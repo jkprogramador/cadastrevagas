@@ -254,3 +254,44 @@ class HomePageTest(TestCase):
         """
         response = self.client.get(self.url)
         self.assertContains(response, self.vaga.situacao.label)
+    
+    def test_should_display_by_data_hora_cadastro_in_descending_order(self) -> None:
+        """
+        GIVEN registered opportunities
+
+        WHEN I visit the homepage
+
+        THEN it should display them by the date and time of registration in descending order
+
+        :rtype: None
+        """
+        Vaga.objects.create(
+            empresa_nome='Minha empresa 2',
+            empresa_endereco='Meu endereço 2',
+            empresa_email='empresa2@email.com',
+            empresa_site='empresa2.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título 2',
+            cargo_descricao='Cargo descrição 2',
+            site_referencia='www.sitereferencia2.com.br',
+            data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.WAITING,
+        )
+        Vaga.objects.create(
+            empresa_nome='Minha empresa 3',
+            empresa_endereco='Meu endereço 3',
+            empresa_email='empresa3@email.com',
+            empresa_site='empresa3.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título 3',
+            cargo_descricao='Cargo descrição 3',
+            site_referencia='www.sitereferencia3.com.br',
+            data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
+        )
+        response = self.client.get(self.url)
+        vagas_from_page = list(response.context['vagas'])
+        vagas_from_db = list(Vaga.objects.order_by('-data_hora_cadastro'))
+        self.assertEqual(vagas_from_db, vagas_from_page)
