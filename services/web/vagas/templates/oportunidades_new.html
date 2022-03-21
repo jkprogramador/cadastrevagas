@@ -1,6 +1,13 @@
 {% extends '_base.html' %}
 
+{% load static %}
+
 {% block title %}Cadastro de vaga - {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'fontawesome-5.0.1/css/fontawesome-all.min.css' %}">
+<link rel="stylesheet" href="{% static 'datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -17,4 +24,11 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'datetimepicker/js/locales/bootstrap-datetimepicker.pt-BR.js' %}"></script>
+<script src="{% static 'main.js' %}"></script>
 {% endblock %}

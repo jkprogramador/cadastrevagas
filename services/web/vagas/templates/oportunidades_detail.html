@@ -27,15 +27,12 @@
 
                  <li class="list-group-item">{{ vaga.empresa_site | urlize }}</li>
 
-                 {% if vaga.empresa_telefone_celular or vaga.empresa_telefone_comercial %}
-                 <li class="list-group-item">
-                     {% if vaga.empresa_telefone_celular %}
-                     {{ vaga.empresa_telefone_celular }}
-                     {% endif %}
-                     {% if vaga.empresa_telefone_comercial %}
-                     | {{ vaga.empresa_telefone_comercial }}
-                     {% endif %}
-                </li>
+                 {% if vaga.empresa_telefone_celular %}
+                 <li class="list-group-item">Tel. celular: {{ vaga.empresa_telefone_celular }}</li>
+                 {% endif %}
+
+                 {% if vaga.empresa_telefone_comercial %}
+                 <li class="list-group-item">Tel. comercial: {{ vaga.empresa_telefone_comercial }}</li>
                  {% endif %}
 
                  <li class="list-group-item">Referência: {{ vaga.site_referencia | urlize }}</li>
