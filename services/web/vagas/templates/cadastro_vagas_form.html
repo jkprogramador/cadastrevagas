@@ -14,7 +14,11 @@
     <div class="row mb-5 align-items-start">
         <label for="{{ field.id_for_label }}" class="col-md-2 col-xl-3 col-form-label">{{ field.label }}</label>
 
+        {% if field.html_name == 'cargo_descricao' %}
+        <div class="col-md-10 col-xl-7">
+        {% else %}
         <div class="col-md-7 col-xl-4">
+        {% endif %}
 
             {{ field }}
 
