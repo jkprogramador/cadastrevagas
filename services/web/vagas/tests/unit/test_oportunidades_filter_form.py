@@ -21,3 +21,15 @@ class OportunidadesFilterFormTest(SimpleTestCase):
         self.assertIn(('R', 'Rejeitado',), situacao.choices)
         self.assertIn((None, 'Todas',), situacao.choices)
         self.assertEqual((None, 'Todas',), situacao.initial)
+    
+    def test_has_choice_field_data_hora_cadastro_order(self) -> None:
+        """
+        Ensure form has choice field for ordering job opportunities by data_hora_cadastro.
+
+        :rtype: None
+        """
+        data_hora_cadastro_order = self.form.fields['data_hora_cadastro_order']
+        self.assertIsInstance(data_hora_cadastro_order, ChoiceField)
+        self.assertIn(('A', 'Mais antigas',), data_hora_cadastro_order.choices)
+        self.assertIn(('D', 'Mais recentes',), data_hora_cadastro_order.choices)
+        self.assertEqual(self.form.DataHoraCadastroOrder.NEWEST, data_hora_cadastro_order.initial)

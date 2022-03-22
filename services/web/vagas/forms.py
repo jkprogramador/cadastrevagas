@@ -200,9 +200,13 @@ class CadastroVagasForm(forms.Form):
 class OportunidadesFilterForm(forms.Form):
     """Form for filtering job opportunities."""
 
+    class DataHoraCadastroOrder(models.TextChoices):
+        OLDEST = 'A', 'Mais antigas'
+        NEWEST = 'D', 'Mais recentes'
+
     template_name = 'oportunidades_filter_form.html'
     situacao = forms.ChoiceField(
-        label='Escolha a situação',
+        label='Situação',
         required=False,
         choices=Vaga.Status.choices + [(None, 'Todas'),],
         initial=(None, 'Todas',),
@@ -210,4 +214,15 @@ class OportunidadesFilterForm(forms.Form):
             'class': 'form-select form-select-sm shadow-sm',
             'aria-label': 'Filtro de situação da oportunidade de vaga',
         }),
+    )
+
+    data_hora_cadastro_order = forms.ChoiceField(
+        label='Ordernar por data e hora do cadastro',
+        required=False,
+        choices=DataHoraCadastroOrder.choices,
+        initial=DataHoraCadastroOrder.NEWEST,
+        widget=forms.Select(attrs={
+            'class': 'form-select form-select-sm shadow-sm',
+            'aria-label': 'Filtro para ordenar oportunidades por data e hora do cadastro',
+        })
     )

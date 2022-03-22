@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
+from vagas.forms import OportunidadesFilterForm
 from vagas.models import Vaga
 
 class OportunidadesFilterTest(TestCase):
@@ -146,8 +147,38 @@ class OportunidadesFilterTest(TestCase):
         :rtype: None
         """
         response = self.client.get(f'{self.url}?situacao=')
-        vagas = list(response.context['vagas'])
+        actual = list(response.context['vagas'])
         situacao_field = response.context['form'].fields['situacao']
-        all = list(Vaga.objects.order_by('-data_hora_cadastro'))
+        expected = list(Vaga.objects.order_by('-data_hora_cadastro'))
         self.assertEqual((None, 'Todas',), situacao_field.initial)
-        self.assertEqual(all, vagas)
+        self.assertEqual(expected, actual)
+    
+    def test_should_show_by_oldest_data_hora_cadastro(self) -> None:
+        """
+        WHEN I submit the filter with a value of 'Mais antigas' for the order of the datetime of registration
+
+        THEN the opportunities ordered by oldest datetime of registration should be shown
+
+        :rtype: None
+        """
+        response = self.client.get(f'{self.url}?data_hora_cadastro_order={OportunidadesFilterForm.DataHoraCadastroOrder.OLDEST}')
+        data_hora_cadastro_order = response.context['form'].fields['data_hora_cadastro_order']
+        expected = list(Vaga.objects.order_by('data_hora_cadastro'))
+        actual = list(response.context['vagas'])
+        self.assertEqual(OportunidadesFilterForm.DataHoraCadastroOrder.OLDEST, data_hora_cadastro_order.initial)
+        self.assertEqual(expected, actual)
+
+    def test_should_show_by_newest_data_hora_cadastro(self) -> None:
+        """
+        WHEN I submit the filter with a value of 'Mais recentes' for the order of the datetime of registration
+
+        THEN the opportunities ordered by newest datetime of registration should be shown
+
+        :rtype: None
+        """
+        response = self.client.get(f'{self.url}?data_hora_cadastro_order={OportunidadesFilterForm.DataHoraCadastroOrder.NEWEST}')
+        data_hora_cadastro_order = response.context['form'].fields['data_hora_cadastro_order']
+        expected = list(Vaga.objects.order_by('-data_hora_cadastro'))
+        actual = list(response.context['vagas'])
+        self.assertEqual(OportunidadesFilterForm.DataHoraCadastroOrder.NEWEST, data_hora_cadastro_order.initial)
+        self.assertEqual(expected, actual)

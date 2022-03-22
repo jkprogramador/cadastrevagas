@@ -1,11 +1,13 @@
 <div class="row mb-4 row-cols-sm-auto align-items-center justify-content-sm-end">
     {% for field in form %}
-    <div class="col-12">
-        <label for="{{ field.id_for_label }}" class="visually-hidden">{{ field.label }}</label>
+    <div class="col-auto">
+        <label for="{{ field.id_for_label }}" class="col-form-label-sm">{{ field.label }}</label>
+    </div>
+    <div class="col-auto">
         {{ field }}
     </div>
     {% endfor %}
-    <div class="col-12 mt-4 mt-sm-0">
+    <div class="col-auto">
         <input type=submit value=Filtrar class="btn btn-primary btn-sm">
     </div>
 </div>

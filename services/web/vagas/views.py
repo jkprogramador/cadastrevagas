@@ -7,20 +7,28 @@ from vagas.models import Vaga
 
 def index(request):
     form = OportunidadesFilterForm()
-    situacao_query = request.GET.get('situacao')
     situacoes = {
         Vaga.Status.WAITING.value: Vaga.Status.WAITING,
         Vaga.Status.INTERVIEW_SCHEDULED.value: Vaga.Status.INTERVIEW_SCHEDULED,
         Vaga.Status.REJECTED.value: Vaga.Status.REJECTED,
     }
+    situacao_query = request.GET.get('situacao')
     situacao = situacoes.get(situacao_query)
+    data_hora_cadastro_order = request.GET.get('data_hora_cadastro_order')
 
     if situacao:
         form.fields['situacao'].initial = situacao
-        vagas = Vaga.objects.filter(situacao=situacao).order_by('-data_hora_cadastro')
+        vagas = Vaga.objects.filter(situacao=situacao)
     else:
         form.fields['situacao'].initial = (None, 'Todas',)
-        vagas = Vaga.objects.order_by('-data_hora_cadastro')
+        vagas = Vaga.objects
+    
+    if data_hora_cadastro_order == OportunidadesFilterForm.DataHoraCadastroOrder.OLDEST.value:
+        form.fields['data_hora_cadastro_order'].initial = OportunidadesFilterForm.DataHoraCadastroOrder.OLDEST
+        vagas = vagas.order_by('data_hora_cadastro')
+    else:
+        form.fields['data_hora_cadastro_order'].initial = OportunidadesFilterForm.DataHoraCadastroOrder.NEWEST
+        vagas = vagas.order_by('-data_hora_cadastro')
 
     return render(request, 'homepage.html', {'vagas': vagas, 'form': form})
 

@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.forms import ChoiceField
 from vagas.models import Vaga
+from vagas.forms import OportunidadesFilterForm
 
 class HomePageTest(TestCase):
     """
@@ -256,7 +257,7 @@ class HomePageTest(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, self.vaga.situacao.label)
     
-    def test_should_have_filter_by_status(self) -> None:
+    def test_should_have_filter_by_situacao(self) -> None:
         """
         GIVEN a homepage for the website
 
@@ -274,6 +275,23 @@ class HomePageTest(TestCase):
         self.assertIn(('R', 'Rejeitado',), situacao.choices)
         self.assertIn((None, 'Todas',), situacao.choices)
         self.assertEqual((None, 'Todas',), situacao.initial)
+    
+    def test_should_have_order_by_data_hora_cadastro(self) -> None:
+        """
+        GIVEN a homepage for the website
+
+        WHEN I visit the homepage
+
+        THEN it should have a way to order the opportunities by datetime of registration
+
+        :rtype: None
+        """
+        response = self.client.get(self.url)
+        data_hora_cadastro_order = response.context['form'].fields['data_hora_cadastro_order']
+        self.assertIsInstance(data_hora_cadastro_order, ChoiceField)
+        self.assertIn(('A', 'Mais antigas',), data_hora_cadastro_order.choices)
+        self.assertIn(('D', 'Mais recentes',), data_hora_cadastro_order.choices)
+        self.assertEqual(OportunidadesFilterForm.DataHoraCadastroOrder.NEWEST, data_hora_cadastro_order.initial)
     
     def test_should_display_by_data_hora_cadastro_in_descending_order(self) -> None:
         """
