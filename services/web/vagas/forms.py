@@ -1,4 +1,5 @@
 from django import forms
+from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from vagas.models import Vaga
@@ -194,3 +195,19 @@ class CadastroVagasForm(forms.Form):
                     'class': bound_field.field.widget.attrs['class'] + ' is-invalid',
                     'aria-describedby': ' '.join([bound_field.field.widget.attrs['aria-describedby'], bound_field.html_name + '_error'])
                 })
+
+
+class OportunidadesFilterForm(forms.Form):
+    """Form for filtering job opportunities."""
+
+    template_name = 'oportunidades_filter_form.html'
+    situacao = forms.ChoiceField(
+        label='Escolha a situação',
+        required=False,
+        choices=Vaga.Status.choices + [(None, 'Todas'),],
+        initial=(None, 'Todas',),
+        widget=forms.Select(attrs={
+            'class': 'form-select form-select-sm shadow-sm',
+            'aria-label': 'Filtro de situação da oportunidade de vaga',
+        }),
+    )

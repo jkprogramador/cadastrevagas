@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+from django.forms import Form
 from vagas.views import index
 
 class HomepageViewTest(TestCase):
@@ -24,6 +25,14 @@ class HomepageViewTest(TestCase):
         :rtype: None
         """
         self.assertTemplateUsed(self.response, 'homepage.html')
+    
+    def test_provides_form_object(self) -> None:
+        """
+        Ensure that the view provides a form object to the template.
+
+        :rtype: None
+        """
+        self.assertIsInstance(self.response.context['form'], Form)
     
     def test_url_resolves_to_correct_view(self) -> None:
         """

@@ -11,8 +11,7 @@ from django.forms import (
 )
 
 class CadastroVagasFormTest(unittest.TestCase):
-    """Test to ensure that the form for submitting job opportunities
-    has the required fields."""
+    """Test to ensure that the form for submitting job opportunities has the required fields."""
 
     def setUp(self) -> None:
         self.form = CadastroVagasForm()
@@ -117,7 +116,7 @@ class CadastroVagasFormTest(unittest.TestCase):
     
     def test_has_choice_field_situacao(self) -> None:
         """
-        Ensure form has choice field for selecting the status of a job interview.
+        Ensure form has choice field for selecting the status of a job opportunity.
 
         :rtype: None
         """

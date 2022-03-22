@@ -2,13 +2,27 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.utils import timezone
-from vagas.forms import CadastroVagasForm
+from vagas.forms import CadastroVagasForm, OportunidadesFilterForm
 from vagas.models import Vaga
 
 def index(request):
-    vagas = Vaga.objects.order_by('-data_hora_cadastro')
+    form = OportunidadesFilterForm()
+    situacao_query = request.GET.get('situacao')
+    situacoes = {
+        Vaga.Status.WAITING.value: Vaga.Status.WAITING,
+        Vaga.Status.INTERVIEW_SCHEDULED.value: Vaga.Status.INTERVIEW_SCHEDULED,
+        Vaga.Status.REJECTED.value: Vaga.Status.REJECTED,
+    }
+    situacao = situacoes.get(situacao_query)
 
-    return render(request, 'homepage.html', {'vagas': vagas})
+    if situacao:
+        form.fields['situacao'].initial = situacao
+        vagas = Vaga.objects.filter(situacao=situacao).order_by('-data_hora_cadastro')
+    else:
+        form.fields['situacao'].initial = (None, 'Todas',)
+        vagas = Vaga.objects.order_by('-data_hora_cadastro')
+
+    return render(request, 'homepage.html', {'vagas': vagas, 'form': form})
 
 def delete_view(request, pk: int):
     vaga = get_object_or_404(Vaga, pk=pk)

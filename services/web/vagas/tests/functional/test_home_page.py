@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.forms import ChoiceField
 from vagas.models import Vaga
 
 class HomePageTest(TestCase):
@@ -32,7 +33,7 @@ class HomePageTest(TestCase):
         """
         GIVEN a homepage for the website
 
-        WHEN I visit it
+        WHEN I visit the homepage
 
         THEN it should have a link to the homepage
 
@@ -254,6 +255,25 @@ class HomePageTest(TestCase):
         """
         response = self.client.get(self.url)
         self.assertContains(response, self.vaga.situacao.label)
+    
+    def test_should_have_filter_by_status(self) -> None:
+        """
+        GIVEN a homepage for the website
+
+        WHEN I visit the homepage
+
+        THEN it should have a way to filter the opportunities by status
+
+        :rtype: None
+        """
+        response = self.client.get(self.url)
+        situacao = response.context['form'].fields['situacao']
+        self.assertIsInstance(situacao, ChoiceField)
+        self.assertIn(('W', 'Aguardando retorno',), situacao.choices)
+        self.assertIn(('S', 'Entrevista agendada',), situacao.choices)
+        self.assertIn(('R', 'Rejeitado',), situacao.choices)
+        self.assertIn((None, 'Todas',), situacao.choices)
+        self.assertEqual((None, 'Todas',), situacao.initial)
     
     def test_should_display_by_data_hora_cadastro_in_descending_order(self) -> None:
         """
