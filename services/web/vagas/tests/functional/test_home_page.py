@@ -259,7 +259,7 @@ class HomePageTest(TestCase):
     
     def test_should_have_filter_by_situacao(self) -> None:
         """
-        GIVEN a homepage for the website
+        GIVEN registered opportunities
 
         WHEN I visit the homepage
 
@@ -278,7 +278,7 @@ class HomePageTest(TestCase):
     
     def test_should_have_order_by_data_hora_cadastro(self) -> None:
         """
-        GIVEN a homepage for the website
+        GIVEN registered opportunities
 
         WHEN I visit the homepage
 
@@ -292,6 +292,46 @@ class HomePageTest(TestCase):
         self.assertIn(('A', 'Mais antigas',), data_hora_cadastro_order.choices)
         self.assertIn(('D', 'Mais recentes',), data_hora_cadastro_order.choices)
         self.assertEqual(OportunidadesFilterForm.DataHoraCadastroOrder.NEWEST, data_hora_cadastro_order.initial)
+    
+    def test_should_display_total_number_of_opportunities(self) -> None:
+        """
+        GIVEN registered opportunities
+
+        WHEN I visit the homepage
+
+        THEN it should display the total number of opportunities
+
+        :rtype: None
+        """
+        Vaga.objects.create(
+            empresa_nome='Minha empresa 2',
+            empresa_endereco='Meu endereço 2',
+            empresa_email='empresa2@email.com',
+            empresa_site='empresa2.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título 2',
+            cargo_descricao='Cargo descrição 2',
+            site_referencia='www.sitereferencia2.com.br',
+            data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.WAITING,
+        )
+        Vaga.objects.create(
+            empresa_nome='Minha empresa 3',
+            empresa_endereco='Meu endereço 3',
+            empresa_email='empresa3@email.com',
+            empresa_site='empresa3.com.br',
+            empresa_telefone_celular='(11) 96712-0302',
+            empresa_telefone_comercial='(11) 8067-2511',
+            cargo_titulo='Cargo título 3',
+            cargo_descricao='Cargo descrição 3',
+            site_referencia='www.sitereferencia3.com.br',
+            data_hora_entrevista=timezone.localtime(),
+            situacao=Vaga.Status.INTERVIEW_SCHEDULED,
+        )
+        response = self.client.get(self.url)
+        expected = Vaga.objects.count()
+        self.assertContains(response, f'Total: {expected}')
     
     def test_should_display_by_data_hora_cadastro_in_descending_order(self) -> None:
         """
