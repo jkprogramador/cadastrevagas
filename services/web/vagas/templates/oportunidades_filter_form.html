@@ -1,13 +1,13 @@
-<div class="row mb-4 row-cols-sm-auto align-items-center justify-content-sm-end">
+<div class="row mb-4 row-cols-lg-auto align-items-start align-items-lg-center justify-content-end">
     {% for field in form %}
-    <div class="col-auto">
+    <div class="col-5">
         <label for="{{ field.id_for_label }}" class="col-form-label-sm">{{ field.label }}</label>
     </div>
-    <div class="col-auto">
+    <div class="col-7 mb-3 mb-lg-0">
         {{ field }}
     </div>
     {% endfor %}
-    <div class="col-auto">
+    <div class="col-12">
         <input type=submit value=Filtrar class="btn btn-primary btn-sm">
     </div>
 </div>

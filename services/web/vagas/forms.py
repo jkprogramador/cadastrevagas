@@ -217,7 +217,7 @@ class OportunidadesFilterForm(forms.Form):
     )
 
     data_hora_cadastro_order = forms.ChoiceField(
-        label='Ordernar por data e hora do cadastro',
+        label='Data e hora do cadastro',
         required=False,
         choices=DataHoraCadastroOrder.choices,
         initial=DataHoraCadastroOrder.NEWEST,

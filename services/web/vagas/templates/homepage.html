@@ -16,8 +16,8 @@
                             <th scope=col>Empresa</th>
                             <th scope=col>Cargo</th>
                             <th scope=col>Situação</th>
-                            <th scope=col>Entrevista em</th>
-                            <th scope=col>Cadastrada em</th>
+                            <th scope=col class="d-none d-lg-table-cell">Entrevista em</th>
+                            <th scope=col class="d-none d-lg-table-cell">Cadastrada em</th>
                             <th scope=col class=text-center>Ações</th>
                         </tr>
                     </thead>
@@ -35,9 +35,9 @@
                             <td><a target=_blank href="{{ vaga.empresa_site }}">{{ vaga.empresa_nome }}</a></td>
                             <td><a href="{% url 'oportunidades_detail' vaga.pk %}">{{ vaga.cargo_titulo }}</a></td>
                             <td>{{ vaga.get_situacao_display }}</td>
-                            <td>{% if vaga.data_hora_entrevista %} {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
-                            <td>{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
-                            <td><a class="btn btn-primary m-2 ms-0" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a class="btn btn-danger" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
+                            <td class="d-none d-lg-table-cell">{% if vaga.data_hora_entrevista %} {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
+                            <td class="d-none d-lg-table-cell">{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
+                            <td class="text-center"><a class="btn btn-primary btn-sm m-2" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a class="btn btn-danger btn-sm m-2" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
                         </tr>
                         {% endfor %}                    
                     </tbody>
