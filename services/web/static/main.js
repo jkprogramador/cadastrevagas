@@ -27,4 +27,7 @@ $(function() {
             $data_hora_entrevista_el.prop('disabled', false);
         }
     });
+
+    $('#id_empresa_telefone_celular').mask('(00) 00000-0000', {placeholder: '(DDD) _____-____'});
+    $('#id_empresa_telefone_comercial').mask('(00) 0000-0000', {placeholder: '(DDD) ____-____'});
 });
