@@ -5,12 +5,12 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <h2 class="my-4">Detalhes da vaga</h2>
+        <h2 class="antonio-regular my-4">Detalhes da vaga</h2>
 
         <div class="card bg-light">
             <div class=card-body>
-                <h3 class="card-title text-center">{{ vaga.empresa_nome }}</h3>
-                <h4 class="card-subtitle text-muted text-center">{{ vaga.cargo_titulo }}</h4>
+                <h3 class="card-title text-center antonio-bold">{{ vaga.empresa_nome }}</h3>
+                <h4 class="card-subtitle text-muted glacial-bold text-center">{{ vaga.cargo_titulo }}</h4>
 
                 {% if vaga.cargo_descricao %}
                 <p class=card-text>{{ vaga.cargo_descricao | linebreaks }}</p>
@@ -43,11 +43,11 @@
                 {% endif %}
 
                 <li class="list-group-item">
-                    <a class="btn btn-primary btn-lg mx-5" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
-                    <a class="btn btn-danger btn-lg mx-5" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
+                    <a class="btn btn-primary btn-lg mx-4 my-3" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a>
+                    <a class="btn btn-danger btn-lg mx-4 my-3" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a>
                 </li>
             </ul>
-            <div class="card-footer text-muted">
+            <div class="card-footer glacial-bold text-muted">
                 <small class=d-block>Cadastrada em: {{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</small>
                 <small class=d-block>Última atualização em: {{ vaga.data_hora_atualizacao | date:"d/m/Y H:i" }}</small>
             </div>

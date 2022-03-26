@@ -11,20 +11,20 @@
 {% endif %}
 
 {% for field in form %}
-    <div class="row mb-5 align-items-start">
-        <label for="{{ field.id_for_label }}" class="col-md-2 col-xl-3 col-form-label">{{ field.label }}</label>
+    <div class="row mb-5 align-items-center">
+        <label for="{{ field.id_for_label }}" class="col-md-4 col-xl-3 col-form-label">{{ field.label }}</label>
 
         {% if field.html_name == 'cargo_descricao' %}
-        <div class="col-md-10 col-xl-7">
+        <div class="col-md-8 col-xl-7">
         {% else %}
-        <div class="col-md-7 col-xl-4">
+        <div class="col-md-5 col-xl-4">
         {% endif %}
 
             {{ field }}
 
             {% if field.errors %}
                 {% for error in field.errors %}
-                <div id="{{ field.html_name }}_error" class="invalid-feedback">
+                <div id="{{ field.html_name }}_error" class="invalid-feedback glacial-bold">
                     {{ error|safe }}
                 </div>
                 {% endfor %}

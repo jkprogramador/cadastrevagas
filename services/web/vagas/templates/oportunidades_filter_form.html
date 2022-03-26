@@ -1,13 +1,13 @@
 <div class="row mb-4 row-cols-lg-auto align-items-start align-items-lg-center justify-content-end">
     {% for field in form %}
     <div class="col-5">
-        <label for="{{ field.id_for_label }}" class="col-form-label-sm">{{ field.label }}</label>
+        <label for="{{ field.id_for_label }}" class="col-form-label-sm py-0">{{ field.label }}</label>
     </div>
     <div class="col-7 mb-3 mb-lg-0">
         {{ field }}
     </div>
     {% endfor %}
-    <div class="col-12">
-        <input type=submit value=Filtrar class="btn btn-primary btn-sm">
+    <div class="col-12 mt-3 mt-md-0">
+        <input type=submit value=Filtrar class="btn btn-primary btn-sm glacial-bold">
     </div>
 </div>
