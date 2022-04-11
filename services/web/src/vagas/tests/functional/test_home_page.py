@@ -270,6 +270,7 @@ class HomePageTest(TestCase):
         response = self.client.get(self.url)
         situacao = response.context['form'].fields['situacao']
         self.assertIsInstance(situacao, ChoiceField)
+        self.assertIn(('C', 'Candidatado',), situacao.choices)
         self.assertIn(('W', 'Aguardando retorno',), situacao.choices)
         self.assertIn(('S', 'Entrevista agendada',), situacao.choices)
         self.assertIn(('R', 'Rejeitado',), situacao.choices)
@@ -354,7 +355,7 @@ class HomePageTest(TestCase):
             cargo_descricao='Cargo descrição 2',
             site_referencia='www.sitereferencia2.com.br',
             data_hora_entrevista=timezone.localtime(),
-            situacao=Vaga.Status.WAITING,
+            situacao=Vaga.Status.APPLIED,
         )
         Vaga.objects.create(
             empresa_nome='Minha empresa 3',

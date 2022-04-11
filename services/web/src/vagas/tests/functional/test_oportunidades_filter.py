@@ -19,19 +19,19 @@ class OportunidadesFilterTest(TestCase):
 
         :rtype: None
         """
-        self.waiting = [
+        self.applied = [
             Vaga.objects.create(
-                empresa_nome='Minha empresa 1',
-                empresa_endereco='Meu endereço 1',
-                empresa_email='empresa1@email.com',
-                empresa_site='empresa1.com.br',
-                empresa_telefone_celular='(11) 96712-0302',
-                empresa_telefone_comercial='(11) 8067-2511',
-                cargo_titulo='Cargo título 1',
-                cargo_descricao='Cargo descrição 1',
-                site_referencia='www.sitereferencia1.com.br',
+                empresa_nome='Minha empresa 5',
+                empresa_endereco='Meu endereço 5',
+                empresa_email='empresa5@email.com',
+                empresa_site='empresa5.com.br',
+                empresa_telefone_celular='(11) 90502-1448',
+                empresa_telefone_comercial='(11) 6325-7888',
+                cargo_titulo='Cargo título 5',
+                cargo_descricao='Cargo descrição 5',
+                site_referencia='www.sitereferencia5.com.br',
                 data_hora_entrevista=timezone.localtime(),
-                situacao=Vaga.Status.WAITING,
+                situacao=Vaga.Status.APPLIED,
             ),
             Vaga.objects.create(
                 empresa_nome='Minha empresa 4',
@@ -44,8 +44,8 @@ class OportunidadesFilterTest(TestCase):
                 cargo_descricao='Cargo descrição 4',
                 site_referencia='www.sitereferencia4.com.br',
                 data_hora_entrevista=timezone.localtime(),
-                situacao=Vaga.Status.WAITING,
-            )
+                situacao=Vaga.Status.APPLIED,
+            ),
         ]
         self.interview_scheduled = [
             Vaga.objects.create(
@@ -62,18 +62,46 @@ class OportunidadesFilterTest(TestCase):
                 situacao=Vaga.Status.INTERVIEW_SCHEDULED,
             ),
             Vaga.objects.create(
-                empresa_nome='Minha empresa 5',
-                empresa_endereco='Meu endereço 5',
-                empresa_email='empresa5@email.com',
-                empresa_site='empresa5.com.br',
+                empresa_nome='Minha empresa 9',
+                empresa_endereco='Meu endereço 9',
+                empresa_email='empresa9@email.com',
+                empresa_site='empresa9.com.br',
                 empresa_telefone_celular='(11) 96712-0302',
                 empresa_telefone_comercial='(11) 8067-2511',
-                cargo_titulo='Cargo título 5',
-                cargo_descricao='Cargo descrição 5',
-                site_referencia='www.sitereferencia5.com.br',
+                cargo_titulo='Cargo título 9',
+                cargo_descricao='Cargo descrição 9',
+                site_referencia='www.sitereferencia9.com.br',
                 data_hora_entrevista=timezone.localtime(),
                 situacao=Vaga.Status.INTERVIEW_SCHEDULED,
-            )
+            ),
+        ]
+        self.waiting = [
+            Vaga.objects.create(
+                empresa_nome='Minha empresa 1',
+                empresa_endereco='Meu endereço 1',
+                empresa_email='empresa1@email.com',
+                empresa_site='empresa1.com.br',
+                empresa_telefone_celular='(11) 96712-0302',
+                empresa_telefone_comercial='(11) 8067-2511',
+                cargo_titulo='Cargo título 1',
+                cargo_descricao='Cargo descrição 1',
+                site_referencia='www.sitereferencia1.com.br',
+                data_hora_entrevista=timezone.localtime(),
+                situacao=Vaga.Status.WAITING,
+            ),
+            Vaga.objects.create(
+                empresa_nome='Minha empresa 34',
+                empresa_endereco='Meu endereço 34',
+                empresa_email='empresa34@email.com',
+                empresa_site='empresa34.com.br',
+                empresa_telefone_celular='(11) 93798-1548',
+                empresa_telefone_comercial='(11) 5478-9970',
+                cargo_titulo='Cargo título 34',
+                cargo_descricao='Cargo descrição 34',
+                site_referencia='www.sitereferencia34.com.br',
+                data_hora_entrevista=timezone.localtime(),
+                situacao=Vaga.Status.WAITING,
+            ),
         ]
         self.rejected = [
             Vaga.objects.create(
@@ -88,25 +116,39 @@ class OportunidadesFilterTest(TestCase):
                 site_referencia='www.sitereferencia3.com.br',
                 data_hora_entrevista=timezone.localtime(),
                 situacao=Vaga.Status.REJECTED,
-            )
+            ),
+            Vaga.objects.create(
+                empresa_nome='Minha empresa 67',
+                empresa_endereco='Meu endereço 67',
+                empresa_email='empresa67@email.com',
+                empresa_site='empresa67.com.br',
+                empresa_telefone_celular='(11) 98502-4443',
+                empresa_telefone_comercial='(11) 7845-9513',
+                cargo_titulo='Cargo título 67',
+                cargo_descricao='Cargo descrição 67',
+                site_referencia='www.sitereferencia67.com.br',
+                data_hora_entrevista=timezone.localtime(),
+                situacao=Vaga.Status.REJECTED,
+            ),
         ]
 
         self.url = reverse('homepage')
     
-    def test_should_show_only_status_waiting(self) -> None:
-        """
-        WHEN I submit the filter with a value of Vaga.Status.WAITING for the status of the opportunity
 
-        THEN only the opportunities with a value of Vaga.Status.WAITING for the status, ordered by datetime of registration in descending order, should be shown
+    def test_should_show_only_status_applied(self) -> None:
+        """
+        WHEN I submit the filter with a value of Vaga.Status.APPLIED for the status of the opportunity
+
+        THEN only the opportunities with a value of Vaga.Status.APPLIED for the status, ordered by datetime of registration in descending order, should be shown
 
         :rtype: None
         """
-        response = self.client.get(f'{self.url}?situacao={Vaga.Status.WAITING}')
+        response = self.client.get(f'{self.url}?situacao={Vaga.Status.APPLIED}')
         vagas = list(response.context['vagas'])
         situacao_field = response.context['form'].fields['situacao']
-        self.waiting.reverse()
-        self.assertEqual(Vaga.Status.WAITING, situacao_field.initial)
-        self.assertEqual(self.waiting, vagas)
+        self.applied.reverse()
+        self.assertEqual(Vaga.Status.APPLIED, situacao_field.initial)
+        self.assertEqual(self.applied, vagas)
 
     def test_should_show_only_status_interview_scheduled(self) -> None:
         """
@@ -122,6 +164,21 @@ class OportunidadesFilterTest(TestCase):
         self.interview_scheduled.reverse()
         self.assertEqual(Vaga.Status.INTERVIEW_SCHEDULED, situacao_field.initial)
         self.assertEqual(self.interview_scheduled, vagas)
+
+    def test_should_show_only_status_waiting(self) -> None:
+        """
+        WHEN I submit the filter with a value of Vaga.Status.WAITING for the status of the opportunity
+
+        THEN only the opportunities with a value of Vaga.Status.WAITING for the status, ordered by datetime of registration in descending order, should be shown
+
+        :rtype: None
+        """
+        response = self.client.get(f'{self.url}?situacao={Vaga.Status.WAITING}')
+        vagas = list(response.context['vagas'])
+        situacao_field = response.context['form'].fields['situacao']
+        self.waiting.reverse()
+        self.assertEqual(Vaga.Status.WAITING, situacao_field.initial)
+        self.assertEqual(self.waiting, vagas)
 
     def test_should_show_only_status_rejected(self) -> None:
         """

@@ -82,7 +82,8 @@ class VagaModelTest(TestCase):
 
         :rtype: None
         """
-        self.assertIn(('W', 'Aguardando retorno',), Vaga.situacao.field.choices)
+        self.assertIn(('C', 'Candidatado',), Vaga.situacao.field.choices)
         self.assertIn(('S', 'Entrevista agendada',), Vaga.situacao.field.choices)
+        self.assertIn(('W', 'Aguardando retorno',), Vaga.situacao.field.choices)
         self.assertIn(('R', 'Rejeitado',), Vaga.situacao.field.choices)
-        self.assertEqual(Vaga.Status.WAITING, Vaga.situacao.field.default)
+        self.assertEqual(Vaga.Status.APPLIED, Vaga.situacao.field.default)

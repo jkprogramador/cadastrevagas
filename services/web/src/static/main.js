@@ -1,8 +1,8 @@
-$(function() {
+$(function () {
     const $data_hora_entrevista_el = $('#id_data_hora_entrevista');
     const $situacao_el = $('#id_situacao');
 
-    if ('W' === $situacao_el.val()) {
+    if ('C' === $situacao_el.val()) {
         $data_hora_entrevista_el.prop('disabled', true);
     }
 
@@ -18,16 +18,16 @@ $(function() {
         autoclose: true,
     });
 
-    $situacao_el.change(function(el) {
+    $situacao_el.change(function (el) {
         situacao = el.target.value;
 
-        if ('W' === situacao) {
+        if ('C' === situacao) {
             $data_hora_entrevista_el.prop('disabled', true).val('');
         } else {
             $data_hora_entrevista_el.prop('disabled', false);
         }
     });
 
-    $('#id_empresa_telefone_celular').mask('(00) 00000-0000', {placeholder: '(DDD) _____-____'});
-    $('#id_empresa_telefone_comercial').mask('(00) 0000-0000', {placeholder: '(DDD) ____-____'});
+    $('#id_empresa_telefone_celular').mask('(00) 00000-0000', { placeholder: '(DDD) _____-____' });
+    $('#id_empresa_telefone_comercial').mask('(00) 0000-0000', { placeholder: '(DDD) ____-____' });
 });

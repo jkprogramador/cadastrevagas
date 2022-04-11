@@ -152,7 +152,7 @@ class CadastroVagasForm(forms.Form):
         label='Situação',
         required=True,
         choices=Vaga.Status.choices,
-        initial=Vaga.Status.WAITING,
+        initial=Vaga.Status.APPLIED,
         widget=forms.Select(attrs={
             'class': 'form-select shadow-sm',
             'aria-describedby': 'situacao_required',
@@ -169,9 +169,9 @@ class CadastroVagasForm(forms.Form):
         situacao = self.cleaned_data.get('situacao')
         data_hora_entrevista = self.cleaned_data.get('data_hora_entrevista')
 
-        if situacao == Vaga.Status.WAITING and data_hora_entrevista is not None:
+        if situacao == Vaga.Status.APPLIED and data_hora_entrevista is not None:
             self.add_error('data_hora_entrevista',
-                ValidationError("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.", code='invalid')
+                ValidationError("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Candidatado'.", code='invalid')
             )
         
         if (situacao == Vaga.Status.INTERVIEW_SCHEDULED and data_hora_entrevista is None):

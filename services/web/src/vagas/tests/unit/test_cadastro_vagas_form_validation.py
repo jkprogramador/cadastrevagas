@@ -283,17 +283,17 @@ class CadastroVagasFormValidationTest(SimpleTestCase):
         form = CadastroVagasForm({'situacao': 'foo'})
         self.assertIn('O campo Situação contém um valor inválido.', form.errors['situacao'])
     
-    def test_data_hora_entrevista_must_be_blank_if_situacao_is_waiting(self) -> None:
+    def test_data_hora_entrevista_must_be_blank_if_situacao_is_applied(self) -> None:
         """
-        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.WAITING.
+        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.APPLIED.
 
         :rtype: None
         """
         form = CadastroVagasForm({
-            'situacao': Vaga.Status.WAITING,
+            'situacao': Vaga.Status.APPLIED,
             'data_hora_entrevista': timezone.localtime(),
         })
-        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Candidatado'.",
             form.errors['data_hora_entrevista']
         )
     

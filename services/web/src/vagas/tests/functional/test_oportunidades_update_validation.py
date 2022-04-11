@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
+import datetime as dt
 from vagas.models import Vaga
 
 class CadastroVagaUpdateValidationTest(TestCase):

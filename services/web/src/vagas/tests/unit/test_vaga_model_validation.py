@@ -334,17 +334,17 @@ class VagaModelValidationTest(TestCase):
         
         self.assertIn('O campo Situação contém um valor inválido.', ctx.exception.message_dict['situacao'])
     
-    def test_data_hora_entrevista_must_be_blank_if_situacao_is_waiting(self) -> None:
+    def test_data_hora_entrevista_must_be_blank_if_situacao_is_applied(self) -> None:
         """
-        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.WAITING.
+        Ensure that data_hora_entrevista must be blank if situacao has a value of Vaga.Status.APPLIED.
 
         :rtype: None
         """
-        vaga = Vaga(situacao=Vaga.Status.WAITING, data_hora_entrevista=timezone.localtime())
+        vaga = Vaga(situacao=Vaga.Status.APPLIED, data_hora_entrevista=timezone.localtime())
         with self.assertRaises(ValidationError) as ctx:
             vaga.full_clean(exclude=self.all_fields)
         
-        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+        self.assertIn("O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Candidatado'.",
             ctx.exception.message_dict['data_hora_entrevista']
         )
     

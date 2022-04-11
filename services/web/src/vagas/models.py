@@ -26,6 +26,7 @@ class Vaga(models.Model):
     """A job opportunity model."""
 
     class Status(models.TextChoices):
+        APPLIED = 'C', 'Candidatado'
         WAITING = 'W', 'Aguardando retorno'
         INTERVIEW_SCHEDULED = 'S', 'Entrevista agendada'
         REJECTED = 'R', 'Rejeitado'
@@ -124,7 +125,7 @@ class Vaga(models.Model):
         blank=False,
         max_length=1,
         choices=Status.choices,
-        default=Status.WAITING,
+        default=Status.APPLIED,
         error_messages={
             'blank': 'O campo Situação é obrigatório.',
             'invalid_choice': 'O campo Situação contém um valor inválido.',
@@ -162,10 +163,10 @@ class Vaga(models.Model):
         
         if isinstance(self.data_hora_entrevista, datetime):
         
-            if self.situacao == self.Status.WAITING:
+            if self.situacao == self.Status.APPLIED:
                 raise ValidationError({
                     'data_hora_entrevista': ValidationError(
-                        "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'.",
+                        "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Candidatado'.",
                         code='invalid_datetime'
                     )
                 })

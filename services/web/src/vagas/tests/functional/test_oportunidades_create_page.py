@@ -117,10 +117,11 @@ class CadastroVagaViewTest(SimpleTestCase):
         """
         field = self.form.fields['situacao']
         self.assertIsInstance(field, ChoiceField)
-        self.assertIn(('W', 'Aguardando retorno',), field.choices)
+        self.assertIn(('C', 'Candidatado',), field.choices)
         self.assertIn(('S', 'Entrevista agendada'), field.choices)
+        self.assertIn(('W', 'Aguardando retorno',), field.choices)
         self.assertIn(('R', 'Rejeitado',), field.choices)
-        self.assertEqual(Vaga.Status.WAITING, field.initial)
+        self.assertEqual(Vaga.Status.APPLIED, field.initial)
     
     def test_should_have_button_to_submit_form(self) -> None:
         """

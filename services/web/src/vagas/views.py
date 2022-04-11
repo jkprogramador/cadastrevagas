@@ -8,6 +8,7 @@ from vagas.models import Vaga
 def index(request):
     form = OportunidadesFilterForm()
     situacoes = {
+        Vaga.Status.APPLIED.value: Vaga.Status.APPLIED,
         Vaga.Status.WAITING.value: Vaga.Status.WAITING,
         Vaga.Status.INTERVIEW_SCHEDULED.value: Vaga.Status.INTERVIEW_SCHEDULED,
         Vaga.Status.REJECTED.value: Vaga.Status.REJECTED,

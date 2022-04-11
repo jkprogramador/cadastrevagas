@@ -28,20 +28,20 @@ class CadastroVagaUpdateDataHoraEntrevistaValidationTest(TestCase):
         )
         self.url = reverse('oportunidades_edit', args=[str(self.vaga.pk)])
 
-    def test_must_be_blank_if_situacao_is_waiting(self) -> None:
+    def test_must_be_blank_if_situacao_is_applied(self) -> None:
         """
-        WHEN I submit the status of the opportunity with a value of Vaga.Status.WAITING and a value for the date and time of interview
+        WHEN I submit the status of the opportunity with a value of Vaga.Status.APPLIED and a value for the date and time of interview
 
         THEN it should display an error message
 
         :rtype: None
         """
         response = self.client.post(self.url, data={
-            'situacao': Vaga.Status.WAITING,
+            'situacao': Vaga.Status.APPLIED,
             'data_hora_entrevista': timezone.localtime().strftime('%d/%m/%Y %H:%M'),
         })
         self.assertContains(response,
-            "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Aguardando retorno'."
+            "O campo Data e horário da entrevista deve estar vazio caso a situação do cadastro seja 'Candidatado'."
         )
 
     def test_cannot_be_blank_if_situacao_is_interview_scheduled(self) -> None:
