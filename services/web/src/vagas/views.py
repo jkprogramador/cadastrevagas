@@ -12,6 +12,7 @@ def index(request):
         Vaga.Status.WAITING.value: Vaga.Status.WAITING,
         Vaga.Status.INTERVIEW_SCHEDULED.value: Vaga.Status.INTERVIEW_SCHEDULED,
         Vaga.Status.REJECTED.value: Vaga.Status.REJECTED,
+        Vaga.Status.APPROVED.value: Vaga.Status.APPROVED,
     }
     situacao_query = request.GET.get('situacao')
     situacao = situacoes.get(situacao_query)

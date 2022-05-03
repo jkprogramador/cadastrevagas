@@ -30,6 +30,7 @@ class Vaga(models.Model):
         WAITING = 'W', 'Aguardando retorno'
         INTERVIEW_SCHEDULED = 'S', 'Entrevista agendada'
         REJECTED = 'R', 'Rejeitado'
+        APPROVED = 'A', 'Aprovado'
 
     empresa_nome = models.CharField(
         max_length=100,

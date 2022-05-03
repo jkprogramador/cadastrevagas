@@ -1,49 +1,57 @@
 {% extends '_base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col">
-            <h2 class="antonio-regular my-4">Oportunidades de vagas</h2>
+<div class="row">
+    <div class="col">
+        <h2 class="antonio-regular my-4">Oportunidades de vagas</h2>
 
-            <form action method=get>
-                {{ form }}
-            </form>
+        <form action method=get>
+            {{ form }}
+        </form>
 
-            <div class=table-responsive>
-                <table class="table table-hover caption-top">
-                    <caption class="glacial-bold">Lista de oportunidades de vagas. Total: {{ vagas | length }}</caption>
-                    <thead class="bg-beige align-top antonio-bold">
-                        <tr>
-                            <th scope=col>Empresa</th>
-                            <th scope=col class="d-none d-md-table-cell">Cargo</th>
-                            <th scope=col>Situação</th>
-                            <th scope=col class="d-none d-lg-table-cell">Entrevista em</th>
-                            <th scope=col class="d-none d-lg-table-cell">Cadastrada em</th>
-                            <th scope=col class=text-center>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class=align-middle>
-                        {% for vaga in vagas %}
-                        
-                        {% if vaga.situacao == vaga.Status.WAITING %}
-                        <tr class=table-secondary>
+        <div class=table-responsive>
+            <table class="table table-hover caption-top">
+                <caption class="glacial-bold">Lista de oportunidades de vagas. Total: {{ vagas | length }}</caption>
+                <thead class="bg-beige align-top antonio-bold">
+                    <tr>
+                        <th scope=col>Empresa</th>
+                        <th scope=col class="d-none d-md-table-cell">Cargo</th>
+                        <th scope=col>Situação</th>
+                        <th scope=col class="d-none d-lg-table-cell">Entrevista em</th>
+                        <th scope=col class="d-none d-lg-table-cell">Cadastrada em</th>
+                        <th scope=col class=text-center>Ações</th>
+                    </tr>
+                </thead>
+                <tbody class=align-middle>
+                    {% for vaga in vagas %}
+
+                    {% if vaga.situacao == vaga.Status.WAITING %}
+                    <tr class=table-secondary>
                         {% elif vaga.situacao == vaga.Status.INTERVIEW_SCHEDULED %}
-                        <tr class=table-success>
+                    <tr class=table-info>
+                        {% elif vaga.situacao == vaga.Status.APPROVED %}
+                    <tr class="table-success">
                         {% elif vaga.situacao == vaga.Status.REJECTED %}
-                        <tr class=table-danger>
+                    <tr class=table-danger>
                         {% endif %}
 
-                            <td><a target=_blank href="{{ vaga.empresa_site }}" rel="external" class="link-dark">{{ vaga.empresa_nome }}</a></td>
-                            <td class="d-none d-md-table-cell"><a href="{% url 'oportunidades_detail' vaga.pk %}" class="link-dark">{{ vaga.cargo_titulo }}</a></td>
-                            <td>{{ vaga.get_situacao_display }}</td>
-                            <td class="d-none d-lg-table-cell">{% if vaga.data_hora_entrevista %} {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
-                            <td class="d-none d-lg-table-cell">{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
-                            <td class="text-center glacial-bold"><a class="btn btn-primary btn-sm m-2" href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a class="btn btn-danger btn-sm m-2" href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
-                        </tr>
-                        {% endfor %}                    
-                    </tbody>
-                </table>
-            </div>
+                        <td><a target=_blank href="{{ vaga.empresa_site }}" rel="external"
+                                class="link-dark">{{ vaga.empresa_nome }}</a></td>
+                        <td class="d-none d-md-table-cell"><a href="{% url 'oportunidades_detail' vaga.pk %}"
+                                class="link-dark">{{ vaga.cargo_titulo }}</a></td>
+                        <td>{{ vaga.get_situacao_display }}</td>
+                        <td class="d-none d-lg-table-cell">{% if vaga.data_hora_entrevista %}
+                            {{ vaga.data_hora_entrevista | date:"d/m/Y H:i" }} {% endif %}</td>
+                        <td class="d-none d-lg-table-cell">{{ vaga.data_hora_cadastro | date:"d/m/Y H:i" }}</td>
+                        <td class="text-center glacial-bold"><a class="btn btn-primary btn-sm m-2"
+                                href="{% url 'oportunidades_edit' vaga.pk %}">Atualizar</a><a
+                                class="btn btn-danger btn-sm m-2"
+                                href="{% url 'oportunidades_delete' vaga.pk %}">Excluir</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -27,7 +27,7 @@ class HomePageTest(TestCase):
             cargo_descricao='Cargo descrição',
             site_referencia='www.sitereferencia.com.br',
             data_hora_entrevista=timezone.localtime(),
-            situacao=Vaga.Status.REJECTED,
+            situacao=Vaga.Status.APPROVED,
         )
     
     def test_should_have_link_to_homepage(self) -> None:
@@ -274,6 +274,7 @@ class HomePageTest(TestCase):
         self.assertIn(('W', 'Aguardando retorno',), situacao.choices)
         self.assertIn(('S', 'Entrevista agendada',), situacao.choices)
         self.assertIn(('R', 'Rejeitado',), situacao.choices)
+        self.assertIn(('A', 'Aprovado',), situacao.choices)
         self.assertIn((None, 'Todas',), situacao.choices)
         self.assertEqual((None, 'Todas',), situacao.initial)
     
